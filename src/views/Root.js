@@ -1,10 +1,18 @@
 import React from 'react';
-import Navigation from 'components/Navigation';
+import { ThemeProvider } from 'styled-components';
+import Navigation from 'components/Navigation/Navigation';
+import theme from 'theme/MainTheme';
+import GlobalStyles from 'theme/GlobalStyles';
 
-const Root = () => (
-  <>
-    <Navigation />
-  </>
-);
+const Root = () => {
+  return (
+    <>
+      <GlobalStyles />
+      <ThemeProvider theme={theme}>
+        <Navigation />
+      </ThemeProvider>
+    </>
+  );
+};
 
 export default Root;
