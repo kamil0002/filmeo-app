@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import Button from '@mui/material/Button';
 import MobileNavigation from './MobileNavigation';
 import responsive from 'theme/Responsive';
+import DesktopNavigation from './DesktopNavigation';
 
 const Navigation = () => {
   const [navVisible, setNavVisible] = useState(false);
@@ -16,12 +17,29 @@ const Navigation = () => {
         <Title>Movie Rental</Title>
       </Brand>
       <Actions>
+        <DesktopNavigation>
+          <StyledButton
+            variant="contained"
+            classes={{ root: 'root' }}
+            color="primary"
+            spacing="true"
+          >
+            Log In
+          </StyledButton>
+          <StyledButton
+            variant="contained"
+            classes={{ root: 'root' }}
+            color="primary"
+            spacing="true"
+          >
+            Sign Up
+          </StyledButton>
+        </DesktopNavigation>
         <HamburgerMenu
           classes={{ root: 'root' }}
           onClick={() => setNavVisible(!navVisible)}
         />
       </Actions>
-
       <MobileNavigation visible={navVisible}>
         <StyledButton
           variant="contained"
@@ -46,11 +64,14 @@ export default Navigation;
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.primaryLight};
-  padding: 1rem 2rem;
+  padding: 1.4rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid ${({ theme }) => theme.lightGray};
+  position: fixed;
+  right: 0;
+  left: 0;
 `;
 
 const Brand = styled.div`
@@ -89,5 +110,11 @@ const StyledButton = styled(Button)`
     height: 35px;
     font-size: ${({ theme }) => theme.fontSize.s};
     margin: 1rem 0;
+
+    ${({ spacing }) =>
+      spacing &&
+      css`
+        margin: 0 2rem;
+      `}
   }
 `;
