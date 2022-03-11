@@ -17,7 +17,7 @@ export default createGlobalStyle`
   
   body {
     box-sizing: border-box;
-    font-family: 'Poppins', 'sans-serif';
+    font-family: 'Roboto', 'sans-serif';
     font-weight: 400;
     font-size: 1.6rem;
     background: #f3f3f3;
