@@ -64,7 +64,7 @@ export default Navigation;
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.primaryLight};
-  padding: 1.4rem 2rem;
+  padding: 1.4rem 2rem 1.4rem 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -72,6 +72,7 @@ const Wrapper = styled.div`
   position: fixed;
   right: 0;
   left: 0;
+  z-index: 50;
 `;
 
 const Brand = styled.div`
