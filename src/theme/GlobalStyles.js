@@ -11,15 +11,12 @@ export default createGlobalStyle`
   }
   
   html {
-    font-size: 62.5%;
     color: #040714;
   }
   
   body {
     box-sizing: border-box;
-    font-family: 'Roboto', 'sans-serif';
-    font-weight: 400;
-    font-size: 1.6rem;
+    font-family: 'Poppins', 'sans-serif';
     background: #f3f3f3;
   }  
 `;

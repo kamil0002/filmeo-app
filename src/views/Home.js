@@ -1,22 +1,56 @@
 import React from 'react';
-import { Typography } from '@mui/material';
 import styled from 'styled-components';
+import { Typography } from '@mui/material';
+import { Button } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
+import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilterOutlined';
+import responsive from 'theme/responsive';
+import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
+import moviesData from 'movies-data.json';
 
 const Home = () => {
   return (
     <Wrapper>
       <Header>
-        <Typography
+        <Heading
           paddingTop={15}
+          paddingX={4}
           color="#ECEFF1"
-          align="center"
           variant="h1"
+          align="center"
           fontWeight={700}
           letterSpacing={3}
+          fontFamily="Poppins"
         >
-          Check The Complete Movies Database
-        </Typography>
+          Znajdź Coś Dla Siebie w Naszej Bazie Filmów
+        </Heading>
+        <Actions>
+          <StyledButton
+            sx={{ fontFamily: 'inherit' }}
+            variant="contained"
+            endIcon={<MovieFilterOutlinedIcon />}
+          >
+            Wszystkie Filmy
+          </StyledButton>
+          <StyledButton
+            sx={{ fontFamily: 'inherit' }}
+            variant="contained"
+            endIcon={<LoginIcon />}
+          >
+            Dołącz Do Nas!
+          </StyledButton>
+        </Actions>
       </Header>
+      <MovieCardGrid
+        movies={moviesData.movies.slice(-4)}
+        title="Ostatnio dodane"
+        backgroundColor="#f7f7f7"
+      />
+      <MovieCardGrid
+        movies={moviesData.movies.slice(-4)}
+        title="Najlepiej oceniane"
+        backgroundColor="#C3D1DE"
+      />
     </Wrapper>
   );
 };
@@ -42,4 +76,47 @@ const Header = styled.div`
   width: 100vw;
   background-size: cover;
   background-repeat: no-repeat;
+`;
+
+const Heading = styled(Typography)`
+  && {
+    font-size: ${({ theme }) => theme.fontSize.m};
+
+    @media ${responsive.tablet} {
+      font-size: ${({ theme }) => theme.fontSize.xl};
+    }
+
+    @media ${responsive.laptop} {
+      font-size: ${({ theme }) => theme.fontSize['2xl']};
+    }
+  }
+`;
+
+const StyledButton = styled(Button)`
+  && {
+    margin: 1rem 2rem;
+
+    @media ${responsive.mobile} {
+      margin: 0 1.5rem;
+      font-size: ${({ theme }) => theme.fontSize.xs};
+      padding: 0.4rem 1rem;
+    }
+
+    @media ${responsive.tablet} {
+      padding: 0.8rem 2rem;
+      font-size: ${({ theme }) => theme.fontSize.s};
+      margin: 0 3.5rem;
+    }
+  }
+`;
+
+const Actions = styled.div`
+  flex-direction: column;
+
+  @media ${responsive.mobile} {
+    flex-direction: row;
+  }
+  display: flex;
+  justify-content: center;
+  margin-top: 20vh;
 `;

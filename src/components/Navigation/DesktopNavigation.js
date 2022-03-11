@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import responsive from 'theme/Responsive';
+import responsive from 'theme/responsive';
 
 const DesktopNavigation = ({ children }) => {
   return (
     <Wrapper>
       <NavList>
         <span>
-          <li>Home</li>
+          <li>Strona główna</li>
         </span>
         <span>
-          <li>Movies</li>
+          <li>Filmy</li>
         </span>
       </NavList>
       {children}
@@ -32,13 +32,13 @@ const Wrapper = styled.div`
 
 const NavList = styled.ul`
   display: flex;
-  margin-right: 4rem;
+  margin-right: 1.5rem;
   list-style: none;
   align-items: center;
 
   li {
     margin: 0 0.5rem;
-    padding: 0.4rem 1.2rem;
+    padding: 0.25rem 0.9rem;
     transition: background-color 100ms ease-out;
     cursor: pointer;
 

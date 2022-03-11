@@ -9,10 +9,10 @@ const MobileNavigation = ({ children, visible }) => {
         {children}
         <MobileNavList>
           <span>
-            <li>Home</li>
+            <li>Strona główna</li>
           </span>
           <span>
-            <li>Movies</li>
+            <li>Filmy</li>
           </span>
         </MobileNavList>
       </Wrapper>

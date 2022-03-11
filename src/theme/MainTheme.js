@@ -8,11 +8,12 @@ export default {
   fontLight: 300,
   fontBold: 700,
   fontSize: {
-    xs: '1.1rem',
-    s: '1.6rem',
-    m: '2.1rem',
-    lg: '2.6rem',
-    xl: '3.1rem',
-    xxl: '3.8rem',
+    xs: '0.6rem',
+    s: '1rem',
+    m: '1.4rem',
+    lg: '1.7rem',
+    xl: '2.1rem',
+    ['2xl']: '2.5rem',
+    ['3xl']: '2.9rem',
   },
 };

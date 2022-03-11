@@ -4,8 +4,9 @@ import LiveTvIcon from '@mui/icons-material/LiveTv';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import Button from '@mui/material/Button';
 import MobileNavigation from './MobileNavigation';
-import responsive from 'theme/Responsive';
+import responsive from 'theme/responsive';
 import DesktopNavigation from './DesktopNavigation';
+import { Typography } from '@mui/material';
 
 const Navigation = () => {
   const [navVisible, setNavVisible] = useState(false);
@@ -14,7 +15,14 @@ const Navigation = () => {
     <Wrapper>
       <Brand>
         <LiveTvIcon fontSize="inherit" color="primary" />
-        <Title>Movie Rental</Title>
+        <Title
+          variant="h5"
+          fontWeight="bold"
+          component="h2"
+          marginLeft="1.2rem"
+        >
+          Movie Rental
+        </Title>
       </Brand>
       <Actions>
         <DesktopNavigation>
@@ -24,7 +32,7 @@ const Navigation = () => {
             color="primary"
             spacing="true"
           >
-            Log In
+            Logowanie
           </StyledButton>
           <StyledButton
             variant="contained"
@@ -32,7 +40,7 @@ const Navigation = () => {
             color="primary"
             spacing="true"
           >
-            Sign Up
+            Rejestracja
           </StyledButton>
         </DesktopNavigation>
         <HamburgerMenu
@@ -46,14 +54,14 @@ const Navigation = () => {
           classes={{ root: 'root' }}
           color="primary"
         >
-          Log In
+          Logowanie
         </StyledButton>
         <StyledButton
           variant="contained"
           classes={{ root: 'root' }}
           color="primary"
         >
-          Sign Up
+          Rejestracja
         </StyledButton>
       </MobileNavigation>
     </Wrapper>
@@ -64,7 +72,7 @@ export default Navigation;
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.primaryLight};
-  padding: 1.4rem 2rem 1.4rem 3rem;
+  padding: 1.4rem 0.4rem 1rem 0.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -73,17 +81,30 @@ const Wrapper = styled.div`
   right: 0;
   left: 0;
   z-index: 50;
+
+  @media ${responsive.laptop} {
+    padding: 1.4rem 2rem 1rem 2rem;
+  }
 `;
 
 const Brand = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.xxl};
+  font-size: ${({ theme }) => theme.fontSize.lg};
   display: flex;
   align-items: center;
+
+  @media ${responsive.laptop} {
+    font-size: ${({ theme }) => theme.fontSize.xl};
+  }
 `;
 
-const Title = styled.h1`
-  font-size: 2.2rem;
-  margin-left: 1rem;
+const Title = styled(Typography)`
+  && {
+    font-size: ${({ theme }) => theme.fontSize.s};
+
+    @media ${responsive.laptop} {
+      font-size: ${({ theme }) => theme.fontSize.lg};
+    }
+  }
 `;
 
 const Actions = styled.div`
@@ -95,7 +116,7 @@ const Actions = styled.div`
 
 const HamburgerMenu = styled(MenuRoundedIcon)`
   &.root {
-    font-size: ${({ theme }) => theme.fontSize.xxl};
+    font-size: ${({ theme }) => theme.fontSize.xl};
     cursor: pointer;
 
     @media ${responsive.tablet} {
@@ -107,7 +128,7 @@ const HamburgerMenu = styled(MenuRoundedIcon)`
 const StyledButton = styled(Button)`
   &.root {
     font-family: inherit;
-    width: 100px;
+    width: 140px;
     height: 35px;
     font-size: ${({ theme }) => theme.fontSize.s};
     margin: 1rem 0;
@@ -115,7 +136,11 @@ const StyledButton = styled(Button)`
     ${({ spacing }) =>
       spacing &&
       css`
-        margin: 0 2rem;
+        margin: 0.5rem;
+
+        @media ${responsive.laptop} {
+          margin: 0 1rem;
+        }
       `}
   }
 `;
