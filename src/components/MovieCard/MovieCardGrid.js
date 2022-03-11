@@ -34,6 +34,8 @@ const MovieCardGrid = ({ movies, title, backgroundColor }) => {
             ratingQuantity,
             id,
             description,
+            releaseDate,
+            time,
           }) => (
             <Grid item key={id}>
               <MovieCard
@@ -43,6 +45,8 @@ const MovieCardGrid = ({ movies, title, backgroundColor }) => {
                 ratingAverage={ratingAverage}
                 ratingQuantity={ratingQuantity}
                 description={description}
+                releaseDate={releaseDate}
+                time={time}
               />
             </Grid>
           )
