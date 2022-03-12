@@ -69,7 +69,7 @@ const Register = () => {
             />
           </FormControl>
           <Button
-            sx={{ alignSelf: 'baseline', marginTop: 3 }}
+            sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'inherit' }}
             variant="contained"
           >
             Załóż konto
@@ -126,6 +126,7 @@ const StyledTextField = styled(TextField)`
 
 const Heading = styled(Typography)`
   && {
+    font-family: inherit;
     font-size: ${({ theme }) => theme.fontSize.s};
     font-weight: ${({ theme }) => theme.fontBold};
 

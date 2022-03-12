@@ -36,13 +36,13 @@ const Login = () => {
             />
           </FormControl>
           <Button
-            sx={{ alignSelf: 'baseline', marginTop: 3 }}
+            sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'Poppins' }}
             variant="contained"
           >
             Zaloguj
           </Button>
         </form>
-        <Typography marginTop={5} fontSize={13}>
+        <Typography fontFamily="Poppins" marginTop={5} fontSize={13}>
           Nie masz jeszcze konta?
           <StyledLink to="/rejestracja">Załóż konto!</StyledLink>
         </Typography>

@@ -3,4 +3,5 @@ export default {
   movies: '/filmy',
   login: '/logowanie',
   register: '/rejestracja',
+  dashboard: '/profil',
 };

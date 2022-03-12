@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -23,7 +21,7 @@ const MovieCardItem = ({
   return (
     <Card
       sx={{
-        maxWidth: 270,
+        maxWidth: 255,
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -33,26 +31,27 @@ const MovieCardItem = ({
       elevation={8}
     >
       <CardActionArea>
-        <CardMedia component="img" height="140" image={poster} alt={title} />
-        <CardContent>
+        <CardMedia component="img" height="150" image={poster} alt={title} />
+        <CardContent sx={{ paddingBottom: 0 }}>
           <Typography
             fontFamily="Poppins"
             gutterBottom
             color="#040714"
-            variant="h5"
+            variant="h6"
             component="div"
             fontWeight={700}
             marginBottom={0}
+            marginTop={-0.75}
           >
             {`${title} (${releaseDate})`}
           </Typography>
           <Typography
             color="text.secondary"
-            marginBottom={3}
+            marginBottom={2}
           >{`${genre}, ${time}m`}</Typography>
           <Typography
             fontFamily="Poppins"
-            fontSize={13}
+            fontSize={12.5}
             variant="body2"
             color="text.secondary"
           >
@@ -102,7 +101,7 @@ const RatingWrapper = styled.div`
   align-items: center;
 `;
 
-MovieCardItem.protoTypes = {
+MovieCardItem.propTypes = {
   title: PropTypes.string.isRequired,
   poster: PropTypes.string.isRequired,
   genre: PropTypes.string.isRequired,

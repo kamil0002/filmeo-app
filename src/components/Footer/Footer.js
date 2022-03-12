@@ -1,8 +1,11 @@
-import { lighten, Typography } from '@mui/material';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { lighten, Typography } from '@mui/material';
 import styled from 'styled-components';
 
-const Footer = () => {
+const Footer = ({ dashboardView }) => {
+  if (dashboardView) return '';
+
   return (
     <Wrapper>
       <Typography color="#fff" fontWeight={700} align="center">
@@ -21,3 +24,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+Footer.propTypes = {
+  dashboardView: PropTypes.bool,
+};

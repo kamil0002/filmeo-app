@@ -1,23 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import responsive from 'theme/responsive';
 
 const DesktopNavigation = ({ children }) => {
+  const location = useLocation();
+
   return (
     <Wrapper>
       <NavList>
-        <span>
-          <li>
-            <Link to="/">Strona główna</Link>
-          </li>
-        </span>
-        <span>
-          <li>
-            <Link to="/filmy">Filmy</Link>
-          </li>
-        </span>
+        <ListItem active={location.pathname === '/'}>
+          <Link to="/">Strona główna</Link>
+        </ListItem>
+        <ListItem active={location.pathname === '/filmy'}>
+          <Link to="/filmy">Filmy</Link>
+        </ListItem>
       </NavList>
       {children}
     </Wrapper>
@@ -26,7 +24,7 @@ const DesktopNavigation = ({ children }) => {
 
 export default DesktopNavigation;
 
-const Wrapper = styled.div`
+const Wrapper = styled.nav`
   display: none;
   justify-content: space-between;
 
@@ -40,24 +38,26 @@ const NavList = styled.ul`
   margin-right: 1.5rem;
   list-style: none;
   align-items: center;
+`;
 
-  li {
-    margin: 0 0.5rem;
-    padding: 0.25rem 0.9rem;
-    transition: background-color 100ms ease-out;
-    cursor: pointer;
+const ListItem = styled.li`
+  margin: 0 0.5rem;
+  padding: 0.25rem 0.9rem;
+  transition: background-color 100ms ease-out;
+  cursor: pointer;
+  background: ${({ theme, active }) =>
+    active ? theme.lightBlue : ' transparent'};
 
-    a {
-      text-decoration: none;
-      color: ${({ theme }) => theme.darkBlue};
-    }
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.darkBlue};
+  }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.lightBlue};
-    }
+  &:hover {
+    background-color: ${({ theme }) => theme.lightBlue};
   }
 `;
 
 DesktopNavigation.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.node.isRequired,
 };

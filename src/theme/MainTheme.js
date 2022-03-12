@@ -9,7 +9,7 @@ export default {
   fontLight: 300,
   fontBold: 700,
   fontSize: {
-    xs: '0.6rem',
+    xs: '0.75rem',
     s: '1rem',
     m: '1.4rem',
     lg: '1.7rem',

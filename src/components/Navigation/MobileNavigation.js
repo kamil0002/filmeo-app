@@ -1,24 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MobileNavigation = ({ children, visible }) => {
+  const location = useLocation();
+
   return (
     <>
       <Wrapper visible={visible}>
         {children}
         <MobileNavList>
-          <span>
-            <li>
-              <Link to="/">Strona główna</Link>
-            </li>
-          </span>
-          <span>
-            <li>
-              <Link to="/filmy">Filmy</Link>
-            </li>
-          </span>
+          <ListItem active={location.pathname === '/'}>
+            <Link to="/">Strona główna</Link>
+          </ListItem>
+          <ListItem active={location.pathname === '/filmy'}>
+            <Link to="/filmy">Filmy</Link>
+          </ListItem>
         </MobileNavList>
       </Wrapper>
     </>
@@ -27,7 +25,7 @@ const MobileNavigation = ({ children, visible }) => {
 
 export default MobileNavigation;
 
-const Wrapper = styled.div`
+const Wrapper = styled.nav`
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -52,21 +50,24 @@ const MobileNavList = styled.ul`
   margin-top: 2rem;
   padding: 2rem 0;
   text-align: center;
-  li {
-    margin: 1rem 0;
-    list-style: none;
-    cursor: pointer;
-    padding: 1rem 0;
-    transition: all 250ms ease-in;
+`;
 
-    a {
-      text-decoration: none;
-      color: ${({ theme }) => theme.darkBlue};
-    }
+const ListItem = styled.li`
+  margin: 1rem 0;
+  list-style: none;
+  cursor: pointer;
+  padding: 1rem 0;
+  transition: all 250ms ease-in;
+  background: ${({ theme, active }) =>
+    active ? theme.lightBlue : ' transparent'};
+
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.darkBlue};
   }
 
-  span:hover li {
-    background: ${({ theme }) => theme.lightBlue};
+  &:hover {
+    background-color: ${({ theme }) => theme.lightBlue};
   }
 `;
 

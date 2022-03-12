@@ -23,7 +23,7 @@ const MovieCardGrid = ({ movies, title, backgroundColor }) => {
         rowSpacing={2}
         justifyContent="center"
         marginTop={4}
-        paddingX={5}
+        paddingX={2}
       >
         {movies.map(
           ({
