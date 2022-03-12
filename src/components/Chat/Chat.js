@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import styled from 'styled-components';
-import { darken, lighten, Paper, TextField } from '@mui/material';
+import { darken, Paper, TextField } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import InputAdornment from '@mui/material/InputAdornment';
 import ChatIcon from '@mui/icons-material/Chat';
 import responsive from 'theme/responsive';
-import { css } from 'styled-components';
+import ChatMessage from './ChatMessage';
 
 const Chat = () => {
   return (
@@ -17,46 +17,35 @@ const Chat = () => {
         Chat - podziel się opinią
       </ChatHeading>
       <Messages>
-        <Message variant="body1" as="div" fontSize={14}>
-          <Typography fontSize={10} fontWeight={700}>
-            Kamil, 17:37
-          </Typography>
-          Cześć! To jest test wiadomości
-        </Message>
-        <Message variant="body1" as="div" fontSize={14}>
-          <Typography fontSize={10} fontWeight={700}>
-            Kamil, 17:37
-          </Typography>
-          Cześć! To jest test wiadomości dłuższej wiadomości.Cześć! To jest test
+        <ChatMessage
+          userName="Kamil"
+          date="17:31"
+          text="Cześć! To jest test wiadomości"
+        />
+        <ChatMessage
+          userName="Kamil"
+          date="17:32"
+          text="Cześć! To jest test wiadomości"
+        />
+        <ChatMessage
+          userName="Andrzej"
+          date="17:37"
+          text="Cześć! To jest test wiadomości od Andrzeja"
+          self={true}
+        />
+        <ChatMessage
+          userName="Kamil"
+          date="17:38"
+          text="Cześć! To jest test wiadomości dłuższej wiadomości.Cześć! To jest test
           wiadomości dłuższej wiadomości.Cześć! To jest test wiadomości dłuższej
-          wiadomości.
-        </Message>
-        <Message self="true" variant="body1" as="div" fontSize={14}>
-          <Typography fontSize={10} fontWeight={700}>
-            Kamil, 17:37
-          </Typography>
-          Cześć! To jest test wiadomości
-        </Message>
-        <Message variant="body1" as="div" fontSize={14}>
-          <Typography fontSize={10} fontWeight={700}>
-            Kamil, 17:37
-          </Typography>
-          Cześć! To jest test wiadomości
-        </Message>
-        <Message variant="body1" as="div" fontSize={14}>
-          <Typography fontSize={10} fontWeight={700}>
-            Kamil, 17:37
-          </Typography>
-          Cześć! To jest test wiadomości dłuższej wiadomości.Cześć! To jest test
-          wiadomości dłuższej wiadomości.Cześć! To jest test wiadomości dłuższej
-          wiadomości.
-        </Message>
-        <Message self="true" variant="body1" as="div" fontSize={14}>
-          <Typography fontSize={10} fontWeight={700}>
-            Kamil, 17:37
-          </Typography>
-          Cześć! To jest test wiadomości
-        </Message>
+          wiadomości."
+          self={true}
+        />
+        <ChatMessage
+          userName="Adam"
+          date="17:39"
+          text="Cześć! To jest test wiadomości od Adama"
+        />
       </Messages>
       <Actions>
         <ChatInput
@@ -188,28 +177,6 @@ const SendButton = styled(Button)`
     @media ${responsive.tablet} {
       width: 110px;
       height: 37px;
-    }
-  }
-`;
-
-const Message = styled(Typography)`
-  && {
-    background-color: ${({ theme }) => theme.secondaryLight};
-    width: 70%;
-    font-size: ${({ theme }) => theme.fontSize.xs};
-    margin: ${({ self }) =>
-      self ? '1.2rem 1rem 1.2rem auto' : '1.2rem 3rem 1.2rem 1rem'};
-    padding: 0.6rem 1.2rem;
-    border-radius: 5px;
-    -webkit-box-shadow: 8px 8px 20px 0px rgba(0, 0, 0, 0.17);
-    -moz-box-shadow: 8px 8px 20px 0px rgba(0, 0, 0, 0.17);
-    box-shadow: 8px 8px 20px 0px rgba(0, 0, 0, 0.17);
-
-    @media ${responsive.tablet} {
-      padding: 0.8rem 2rem;
-      margin: ${({ self }) =>
-        self ? '1.3rem 1.5rem 1.3rem auto' : '1.3rem auto 1.3rem 1.5rem'};
-      font-size: ${({ theme }) => theme.fontSize.s};
     }
   }
 `;

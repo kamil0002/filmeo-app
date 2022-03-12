@@ -4,6 +4,7 @@ import theme from 'theme/MainTheme';
 import GlobalStyles from 'theme/GlobalStyles';
 import Navigation from 'components/Navigation/Navigation';
 import Home from 'views/Home';
+import Footer from 'components/Footer/Footer';
 
 const Root = () => {
   return (
@@ -13,6 +14,7 @@ const Root = () => {
         <Navigation />
         <Content>
           <Home />
+          <Footer />
         </Content>
       </ThemeProvider>
     </>
