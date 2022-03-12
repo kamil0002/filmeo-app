@@ -1,71 +1,123 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Pusher from 'pusher-js';
 import { darken, Paper, TextField } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import InputAdornment from '@mui/material/InputAdornment';
 import ChatIcon from '@mui/icons-material/Chat';
+import FormControl from '@mui/material/FormControl';
 import responsive from 'theme/responsive';
 import ChatMessage from './ChatMessage';
+import axios from 'utils/axios';
+
+const username = 'Kamil';
+const allMessages = [];
 
 const Chat = () => {
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState();
+
+  useEffect(() => {
+    Pusher.logToConsole = false;
+
+    const pusher = new Pusher('8fb8f8eb332cab7a0878', {
+      cluster: 'eu',
+    });
+
+    const channel = pusher.subscribe('chat');
+    channel.bind('message', function (data) {
+      allMessages.push(data);
+      setMessages(allMessages);
+      console.log(allMessages, messages);
+      const messagesContainer = document.querySelector('.messages-container');
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+  }, []);
+
+  const sendMessage = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(
+        '/messages',
+        JSON.stringify({
+          username,
+          message,
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+
+    e.target.parentNode.previousSibling.scrollTo(
+      0,
+      e.target.parentNode.previousSibling.scrollHeight
+    );
+
+    setMessage('');
+    setMessage('');
+  };
+
   return (
     <ChatWrapper elevation={8}>
       <ChatHeading fontWeight={700} fontFamily="Poppins">
         Chat - podziel się opinią
       </ChatHeading>
-      <Messages>
-        <ChatMessage
-          userName="Kamil"
-          date="17:31"
-          text="Cześć! To jest test wiadomości"
-        />
-        <ChatMessage
-          userName="Kamil"
-          date="17:32"
-          text="Cześć! To jest test wiadomości"
-        />
-        <ChatMessage
-          userName="Andrzej"
-          date="17:37"
-          text="Cześć! To jest test wiadomości od Andrzeja"
-          self={true}
-        />
-        <ChatMessage
-          userName="Kamil"
-          date="17:38"
-          text="Cześć! To jest test wiadomości dłuższej wiadomości.Cześć! To jest test
-          wiadomości dłuższej wiadomości.Cześć! To jest test wiadomości dłuższej
-          wiadomości."
-          self={true}
-        />
-        <ChatMessage
-          userName="Adam"
-          date="17:39"
-          text="Cześć! To jest test wiadomości od Adama"
-        />
+      <Messages className="messages-container">
+        {messages.map((message, i) => {
+          return (
+            <ChatMessage
+              key={i}
+              userName={message.username}
+              text={message.message}
+              date={new Date().toLocaleDateString('pl-PL', {
+                weekday: 'long',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            />
+          );
+        })}
       </Messages>
       <Actions>
-        <ChatInput
-          hiddenLabel
-          id="filled-hidden-label-small"
-          placeholder="Message"
-          variant="standard"
-          size="medium"
-          color="primary"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <ChatIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <SendButton variant="contained" endIcon={<SendIcon />}>
-          Wyślij
-        </SendButton>
+        <Form onSubmit={(e) => sendMessage(e)}>
+          <FormControl
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
+            <ChatInput
+              hiddenLabel
+              onChange={(e) => setMessage(e.target.value)}
+              type="text"
+              value={message || ''}
+              placeholder="Message"
+              variant="standard"
+              size="medium"
+              color="primary"
+              autoComplete="off"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <ChatIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <SendButton
+              type="submit"
+              variant="contained"
+              endIcon={<SendIcon />}
+            >
+              Wyślij
+            </SendButton>
+          </FormControl>
+        </Form>
       </Actions>
     </ChatWrapper>
   );
@@ -123,6 +175,11 @@ const Messages = styled.div`
   &::-webkit-scrollbar-track {
     background: ${({ theme }) => theme.lightGray};
   }
+`;
+
+const Form = styled.form`
+  display: block;
+  width: 100%;
 `;
 
 const Actions = styled.div`

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import responsive from 'theme/responsive';
@@ -8,10 +9,14 @@ const DesktopNavigation = ({ children }) => {
     <Wrapper>
       <NavList>
         <span>
-          <li>Strona główna</li>
+          <li>
+            <Link to="/">Strona główna</Link>
+          </li>
         </span>
         <span>
-          <li>Filmy</li>
+          <li>
+            <Link to="/filmy">Filmy</Link>
+          </li>
         </span>
       </NavList>
       {children}
@@ -41,6 +46,11 @@ const NavList = styled.ul`
     padding: 0.25rem 0.9rem;
     transition: background-color 100ms ease-out;
     cursor: pointer;
+
+    a {
+      text-decoration: none;
+      color: ${({ theme }) => theme.darkBlue};
+    }
 
     &:hover {
       background-color: ${({ theme }) => theme.lightBlue};

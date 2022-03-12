@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Root from 'views/Root';
+
 ReactDOM.render(
-  <React.StrictMode>
+  <BrowserRouter>
     <Root />
-  </React.StrictMode>,
+  </BrowserRouter>,
   document.getElementById('root')
 );

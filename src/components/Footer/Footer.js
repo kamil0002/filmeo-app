@@ -16,5 +16,8 @@ export default Footer;
 
 const Wrapper = styled.div`
   background: ${({ theme }) => lighten(theme.darkBlue, 0.15)};
-  padding: 1.7rem 1rem;
+  height: ${({ theme }) => theme.footerHeight};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

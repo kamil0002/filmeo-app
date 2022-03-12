@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
@@ -31,6 +32,8 @@ const Navigation = () => {
             classes={{ root: 'root' }}
             color="primary"
             spacing="true"
+            LinkComponent={Link}
+            to="/logowanie"
           >
             Logowanie
           </StyledButton>
@@ -39,6 +42,8 @@ const Navigation = () => {
             classes={{ root: 'root' }}
             color="primary"
             spacing="true"
+            LinkComponent={Link}
+            to="/rejestracja"
           >
             Rejestracja
           </StyledButton>
@@ -53,6 +58,8 @@ const Navigation = () => {
           variant="contained"
           classes={{ root: 'root' }}
           color="primary"
+          LinkComponent={Link}
+          to="/logowanie"
         >
           Logowanie
         </StyledButton>
@@ -60,6 +67,8 @@ const Navigation = () => {
           variant="contained"
           classes={{ root: 'root' }}
           color="primary"
+          LinkComponent={Link}
+          to="/rejestracja"
         >
           Rejestracja
         </StyledButton>
@@ -72,7 +81,7 @@ export default Navigation;
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.primaryLight};
-  padding: 1.4rem 0.4rem 1rem 0.8rem;
+  padding: 0 0.4rem 0 0.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -81,9 +90,10 @@ const Wrapper = styled.div`
   right: 0;
   left: 0;
   z-index: 50;
+  height: ${({ theme }) => theme.navHeight};
 
   @media ${responsive.laptop} {
-    padding: 1.4rem 2rem 1rem 2rem;
+    padding: 0 2rem 0 2rem;
   }
 `;
 

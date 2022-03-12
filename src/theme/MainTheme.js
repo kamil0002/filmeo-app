@@ -17,4 +17,6 @@ export default {
     ['2xl']: '2.5rem',
     ['3xl']: '2.9rem',
   },
+  navHeight: '76px',
+  footerHeight: '70px',
 };

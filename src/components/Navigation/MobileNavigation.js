@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MobileNavigation = ({ children, visible }) => {
@@ -9,10 +10,14 @@ const MobileNavigation = ({ children, visible }) => {
         {children}
         <MobileNavList>
           <span>
-            <li>Strona główna</li>
+            <li>
+              <Link to="/">Strona główna</Link>
+            </li>
           </span>
           <span>
-            <li>Filmy</li>
+            <li>
+              <Link to="/filmy">Filmy</Link>
+            </li>
           </span>
         </MobileNavList>
       </Wrapper>
@@ -53,6 +58,11 @@ const MobileNavList = styled.ul`
     cursor: pointer;
     padding: 1rem 0;
     transition: all 250ms ease-in;
+
+    a {
+      text-decoration: none;
+      color: ${({ theme }) => theme.darkBlue};
+    }
   }
 
   span:hover li {

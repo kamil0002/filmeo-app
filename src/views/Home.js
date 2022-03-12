@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
@@ -34,6 +35,8 @@ const Home = () => {
               sx={{ fontFamily: 'inherit' }}
               variant="contained"
               endIcon={<MovieFilterOutlinedIcon />}
+              LinkComponent={Link}
+              to="/filmy"
             >
               Wszystkie Filmy
             </StyledButton>
@@ -43,6 +46,8 @@ const Home = () => {
               sx={{ fontFamily: 'inherit' }}
               variant="contained"
               endIcon={<LoginIcon />}
+              LinkComponent={Link}
+              to="/rejestracja"
             >
               Dołącz Do Nas!
             </StyledButton>
