@@ -70,7 +70,9 @@ const Home = () => {
           backgroundColor="#e0e0e0"
         />
       </Fade>
-      <Chat />
+      <Fade bottom>
+        <Chat />
+      </Fade>
     </Wrapper>
   );
 };
