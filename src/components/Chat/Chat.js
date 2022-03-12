@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import styled from 'styled-components';
-import { Paper, TextField } from '@mui/material';
+import { darken, lighten, Paper, TextField } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import InputAdornment from '@mui/material/InputAdornment';
 import ChatIcon from '@mui/icons-material/Chat';
 import responsive from 'theme/responsive';
+import { css } from 'styled-components';
 
 const Chat = () => {
   return (
@@ -15,7 +16,48 @@ const Chat = () => {
       <ChatHeading fontWeight={700} fontFamily="Poppins">
         Chat - podziel się opinią
       </ChatHeading>
-      <Messages></Messages>
+      <Messages>
+        <Message variant="body1" as="div" fontSize={14}>
+          <Typography fontSize={10} fontWeight={700}>
+            Kamil, 17:37
+          </Typography>
+          Cześć! To jest test wiadomości
+        </Message>
+        <Message variant="body1" as="div" fontSize={14}>
+          <Typography fontSize={10} fontWeight={700}>
+            Kamil, 17:37
+          </Typography>
+          Cześć! To jest test wiadomości dłuższej wiadomości.Cześć! To jest test
+          wiadomości dłuższej wiadomości.Cześć! To jest test wiadomości dłuższej
+          wiadomości.
+        </Message>
+        <Message self="true" variant="body1" as="div" fontSize={14}>
+          <Typography fontSize={10} fontWeight={700}>
+            Kamil, 17:37
+          </Typography>
+          Cześć! To jest test wiadomości
+        </Message>
+        <Message variant="body1" as="div" fontSize={14}>
+          <Typography fontSize={10} fontWeight={700}>
+            Kamil, 17:37
+          </Typography>
+          Cześć! To jest test wiadomości
+        </Message>
+        <Message variant="body1" as="div" fontSize={14}>
+          <Typography fontSize={10} fontWeight={700}>
+            Kamil, 17:37
+          </Typography>
+          Cześć! To jest test wiadomości dłuższej wiadomości.Cześć! To jest test
+          wiadomości dłuższej wiadomości.Cześć! To jest test wiadomości dłuższej
+          wiadomości.
+        </Message>
+        <Message self="true" variant="body1" as="div" fontSize={14}>
+          <Typography fontSize={10} fontWeight={700}>
+            Kamil, 17:37
+          </Typography>
+          Cześć! To jest test wiadomości
+        </Message>
+      </Messages>
       <Actions>
         <ChatInput
           hiddenLabel
@@ -46,12 +88,16 @@ const ChatWrapper = styled(Paper)`
   && {
     width: 90vw;
     margin: 4rem auto 4rem auto;
-    height: 500px;
+    height: 600px;
     border-radius: 20px;
     background: ${({ theme }) => theme.primaryLight};
 
     @media ${responsive.tablet} {
-      width: 60vw;
+      width: 70vw;
+    }
+
+    @media ${responsive.desktop} {
+      width: 55vw;
     }
   }
 `;
@@ -65,7 +111,29 @@ const ChatHeading = styled(Typography)`
 `;
 
 const Messages = styled.div`
-  height: 70%;
+  overflow-y: scroll;
+  height: 72%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid ${({ theme }) => theme.lightGray};
+
+  &::-webkit-scrollbar {
+    width: 13px;
+    border: 1px solid ${({ theme }) => theme.lightGray};
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => darken(theme.lightBlue, 0.25)};
+    cursor: pointer;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => darken(theme.lightBlue, 0.2)};
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.lightGray};
+  }
 `;
 
 const Actions = styled.div`
@@ -77,6 +145,7 @@ const Actions = styled.div`
   display: flex;
   align-items: center;
   width: 95%;
+  transform: translateY(35%);
 
   @media ${responsive.tablet} {
     width: 80%;
@@ -86,8 +155,12 @@ const Actions = styled.div`
 const ChatInput = styled(TextField)`
   && {
     margin: 0 1.1rem 0 0.8rem;
+    display: flex;
+    align-items: center;
     width: 55%;
+
     @media ${responsive.mobileM} {
+      align-items: stretch;
       width: 64%;
     }
 
@@ -118,11 +191,25 @@ const SendButton = styled(Button)`
     }
   }
 `;
-// const MessageContent = styled.div`
-//   && {
-//     width: 60%;
-//     position: absolute;
-//     bottom: 10px;
-//     left: 20px;
-//   }
-// `;
+
+const Message = styled(Typography)`
+  && {
+    background-color: ${({ theme }) => theme.secondaryLight};
+    width: 70%;
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    margin: ${({ self }) =>
+      self ? '1.2rem 1rem 1.2rem auto' : '1.2rem 3rem 1.2rem 1rem'};
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    -webkit-box-shadow: 8px 8px 20px 0px rgba(0, 0, 0, 0.17);
+    -moz-box-shadow: 8px 8px 20px 0px rgba(0, 0, 0, 0.17);
+    box-shadow: 8px 8px 20px 0px rgba(0, 0, 0, 0.17);
+
+    @media ${responsive.tablet} {
+      padding: 0.8rem 2rem;
+      margin: ${({ self }) =>
+        self ? '1.3rem 1.5rem 1.3rem auto' : '1.3rem auto 1.3rem 1.5rem'};
+      font-size: ${({ theme }) => theme.fontSize.s};
+    }
+  }
+`;
