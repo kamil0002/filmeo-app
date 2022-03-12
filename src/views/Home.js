@@ -8,6 +8,7 @@ import { Zoom, Fade, Slide } from 'react-reveal';
 import responsive from 'theme/responsive';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import moviesData from 'movies-data.json';
+import Chat from 'components/Chat/Chat';
 
 const Home = () => {
   return (
@@ -69,6 +70,7 @@ const Home = () => {
           backgroundColor="#e0e0e0"
         />
       </Fade>
+      <Chat />
     </Wrapper>
   );
 };
