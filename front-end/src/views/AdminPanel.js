@@ -133,14 +133,17 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledTextField = styled(TextField)`
-  @media ${responsive.tablet} {
-    width: 350px;
-  }
+  && {
+    margin-top: 0.7rem;
+    @media ${responsive.tablet} {
+      width: 350px;
+    }
 
-  @media ${responsive.laptop} {
-    width: 425px;
-  }
-  @media ${responsive.desktop} {
-    width: 550px;
+    @media ${responsive.laptop} {
+      width: 425px;
+    }
+    @media ${responsive.desktop} {
+      width: 550px;
+    }
   }
 `;
