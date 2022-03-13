@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
+import Typography from 'components/Typography/Typography';
 import Rating from '@mui/material/Rating';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
@@ -34,7 +34,6 @@ const MovieCardItem = ({
         <CardMedia component="img" height="150" image={poster} alt={title} />
         <CardContent sx={{ paddingBottom: 0 }}>
           <Typography
-            fontFamily="Poppins"
             gutterBottom
             color="#040714"
             variant="h6"
@@ -49,12 +48,7 @@ const MovieCardItem = ({
             color="text.secondary"
             marginBottom={2}
           >{`${genre}, ${time}m`}</Typography>
-          <Typography
-            fontFamily="Poppins"
-            fontSize={12.5}
-            variant="body2"
-            color="text.secondary"
-          >
+          <Typography fontSize={12.5} variant="body2" color="text.secondary">
             {description}
           </Typography>
         </CardContent>
@@ -80,7 +74,6 @@ const MovieCardItem = ({
             color="#3A3D42"
             fontSize={12}
             sx={{ zIndex: 100 }}
-            fontFamily="Poppins"
             marginLeft={1}
           >
             {`(${ratingQuantity})`}

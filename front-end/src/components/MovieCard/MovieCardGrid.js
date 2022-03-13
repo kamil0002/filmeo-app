@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import Typography from 'components/Typography/Typography';
 import MovieCard from './MovieCardItem';
 
 const MovieCardGrid = ({ movies, title, backgroundColor }) => {
@@ -10,7 +11,6 @@ const MovieCardGrid = ({ movies, title, backgroundColor }) => {
       <Typography
         component="h2"
         variant="h4"
-        fontFamily="Poppins"
         fontWeight={700}
         align="center"
         letterSpacing={0.5}

@@ -1,20 +1,26 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
 import AdminPanel from './AdminPanel';
-import UserMovies from './UserMovies';
-import UserReviews from './UserReviews';
-import UserPayments from './UserPayments';
-import UserSettings from './UserSettings';
+import UserMovies from './dashboardViews/UserMovies';
+import UserReviews from './dashboardViews/UserReviews';
+import UserPayments from './dashboardViews/UserPayments';
+import UserSettings from './dashboardViews/UserSettings';
 import DashboardTemplate from 'templates/DashboardTemplate';
 
 const Dashboard = () => {
-  const params = useLocation();
-  console.log(params);
+  const [currentView, setCurrentView] = useState('admin');
+
+  const handleCurrentViewChange = (newView) => setCurrentView(newView);
 
   return (
-    <DashboardTemplate>
-      <AdminPanel />
+    <DashboardTemplate
+      handleViewChange={handleCurrentViewChange}
+      currentView={currentView}
+    >
+      {currentView === 'movies' && <UserMovies />}
+      {currentView === 'reviews' && <UserReviews />}
+      {currentView === 'payments' && <UserPayments />}
+      {currentView === 'settings' && <UserSettings />}
+      {currentView === 'admin' && <AdminPanel />}
     </DashboardTemplate>
   );
 };

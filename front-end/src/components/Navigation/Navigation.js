@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import MobileNavigation from './MobileNavigation';
 import responsive from 'theme/responsive';
 import DesktopNavigation from './DesktopNavigation';
-import { Typography } from '@mui/material';
+import Typography from 'components/Typography/Typography';
 
 const Navigation = () => {
   const [navVisible, setNavVisible] = useState(false);

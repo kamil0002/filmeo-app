@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Typography } from '@mui/material';
+import Typography from 'components/Typography/Typography';
 import { Button } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilterOutlined';
@@ -24,7 +24,6 @@ const Home = () => {
             align="center"
             fontWeight={700}
             letterSpacing={3}
-            fontFamily="Poppins"
           >
             Znajdź Coś Dla Siebie w Naszej Bazie Filmów
           </Heading>

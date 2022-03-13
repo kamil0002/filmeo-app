@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { lighten, Typography } from '@mui/material';
+import { lighten } from '@mui/material';
+import Typography from 'components/Typography/Typography';
 import styled from 'styled-components';
 
 const Footer = ({ dashboardView }) => {

@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Paper, Typography } from '@mui/material';
 import responsive from 'theme/responsive';
 
-const DashboardTemplate = ({ children }) => {
-  const [pageChange, setPageChange] = useState(false);
-
-  const showMenu = () => {
-    setPageChange(true);
-  };
-
-  if (pageChange) return <Navigate to="/profil/filmy" />;
-
+const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   return (
     <StyledPaper>
       <Sidebar>
@@ -25,23 +16,38 @@ const DashboardTemplate = ({ children }) => {
         </User>
         <Navigation>
           <NavigationList>
-            <NavigationItem onClick={showMenu}>
+            <NavigationItem
+              currentView={currentView === 'movies'}
+              onClick={() => handleViewChange('movies')}
+            >
               <img src=".././images/nav-movie.svg" />
               <span>Filmy</span>
             </NavigationItem>
-            <NavigationItem onClick={showMenu}>
+            <NavigationItem
+              currentView={currentView === 'reviews'}
+              onClick={() => handleViewChange('reviews')}
+            >
               <img src=".././images/nav-reviews.svg" />
               <span>Oceny</span>
             </NavigationItem>
-            <NavigationItem onClick={showMenu}>
+            <NavigationItem
+              currentView={currentView === 'payments'}
+              onClick={() => handleViewChange('payments')}
+            >
               <img src=".././images/nav-payments.svg" />
               <span>Wydatki</span>
             </NavigationItem>
-            <NavigationItem onClick={showMenu}>
+            <NavigationItem
+              currentView={currentView === 'settings'}
+              onClick={() => handleViewChange('settings')}
+            >
               <img src=".././images/nav-settings.svg" />
               <span>Ustawienia</span>
             </NavigationItem>
-            <NavigationItem onClick={showMenu}>
+            <NavigationItem
+              currentView={currentView === 'admin'}
+              onClick={() => handleViewChange('admin')}
+            >
               <img src=".././images/nav-admin.svg" />
               <span>Panel Admina</span>
             </NavigationItem>
@@ -59,7 +65,7 @@ const StyledPaper = styled(Paper)`
   && {
     width: 95%;
     margin: 5rem auto;
-    height: 700px;
+    height: 1000px;
     border-radius: 15px;
     background: #ffffff;
     box-shadow: 2px 4px 30px rgba(0, 0, 0, 0.25);
@@ -72,7 +78,7 @@ const StyledPaper = styled(Paper)`
 `;
 
 const Sidebar = styled.div`
-  width: 100px;
+  width: 80px;
   height: 100%;
   background: ${({ theme }) => theme.primaryLight};
   border-radius: 15px 0 0 15px;
@@ -80,6 +86,10 @@ const Sidebar = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
+
+  @media ${responsive.mobile} {
+    width: 100px;
+  }
 
   @media ${responsive.tablet} {
     width: 200px;
@@ -94,19 +104,25 @@ const User = styled.div`
   justify-content: center;
 
   img {
+    width: 40px;
+    height: 40px;
     margin-top: 3rem;
     border-radius: 50%;
     filter: drop-shadow(2px 4px 30px rgba(0, 0, 0, 0.25));
     object-fit: cover;
   }
 
-  @media ${responsive.tablet} {
+  @media ${responsive.mobile} {
+    img {
+      width: 48px;
+      height: 48px;
+    }
   }
 `;
 
 const UserName = styled(Typography)`
   && {
-    font-size: ${({ theme }) => theme.fontSize.xs};
+    font-size: 0.6rem;
 
     @media ${responsive.tablet} {
       font-size: ${({ theme }) => theme.fontSize.s};
@@ -145,11 +161,17 @@ const NavigationItem = styled.li`
     content: '';
     left: 0;
     right: 0;
-    width: 100px;
+    width: 80px;
     position: absolute;
     height: 64px;
     transition: all 250ms ease-out;
     cursor: pointer;
+    border-right: 3px solid transparent;
+    border-right: ${({ currentView }) => currentView && '3px solid #85B6FF'};
+
+    @media ${responsive.mobile} {
+      width: 100px;
+    }
 
     @media ${responsive.tablet} {
       width: 200px;
@@ -164,7 +186,7 @@ const NavigationItem = styled.li`
 `;
 
 const Content = styled.div`
-  padding: 2rem;
+  padding: 2rem 1rem 2rem 1.2rem;
   width: calc(100% - 100px);
 
   @media ${responsive.tablet} {
@@ -174,4 +196,6 @@ const Content = styled.div`
 
 DashboardTemplate.propTypes = {
   children: PropTypes.node.isRequired,
+  handleViewChange: PropTypes.func.isRequired,
+  currentView: PropTypes.string.isRequired,
 };

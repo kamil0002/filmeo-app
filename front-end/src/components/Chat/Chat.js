@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Pusher from 'pusher-js';
 import { darken, Paper, TextField } from '@mui/material';
-import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import InputAdornment from '@mui/material/InputAdornment';
 import ChatIcon from '@mui/icons-material/Chat';
 import FormControl from '@mui/material/FormControl';
+import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import ChatMessage from './ChatMessage';
 import axios from 'utils/axios';
@@ -63,9 +63,7 @@ const Chat = () => {
 
   return (
     <ChatWrapper elevation={8}>
-      <ChatHeading fontWeight={700} fontFamily="Poppins">
-        Chat - podziel się opinią
-      </ChatHeading>
+      <ChatHeading fontWeight={700}>Chat - podziel się opinią</ChatHeading>
       <Messages className="messages-container">
         {messages.map((message, i) => {
           return (

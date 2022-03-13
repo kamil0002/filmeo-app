@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, FormControl, Paper, Typography } from '@mui/material';
+import { Button, FormControl, Paper } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 
 const Register = () => {
@@ -52,7 +53,7 @@ const Register = () => {
           </FormControl>
           <FormControl required={true} margin="normal">
             <StyledTextField
-              id="email-address"
+              id="email"
               label="Adres E-Mail"
               type="email"
               autoComplete="off"
@@ -126,7 +127,6 @@ const StyledTextField = styled(TextField)`
 
 const Heading = styled(Typography)`
   && {
-    font-family: inherit;
     font-size: ${({ theme }) => theme.fontSize.s};
     font-weight: ${({ theme }) => theme.fontBold};
 

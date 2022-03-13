@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, FormControl, Paper, Typography } from '@mui/material';
+import { Button, FormControl, Paper } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 
 const Login = () => {

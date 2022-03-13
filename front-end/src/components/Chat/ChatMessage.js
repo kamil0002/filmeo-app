@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Typography } from '@mui/material';
+import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 
 const ChatMessage = ({ text, userName, date, self }) => {
