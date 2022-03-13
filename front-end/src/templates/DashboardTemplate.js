@@ -118,6 +118,13 @@ const User = styled.div`
       height: 48px;
     }
   }
+
+  @media ${responsive.laptop} {
+    img {
+      width: auto;
+      height: auto;
+    }
+  }
 `;
 
 const UserName = styled(Typography)`

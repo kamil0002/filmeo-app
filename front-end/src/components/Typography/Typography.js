@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Typography as MuiTypography } from '@mui/material';
 
 const Typography = ({ children, ...props }) => {
-  console.log(props);
   return (
     <MuiTypography
       {...props}

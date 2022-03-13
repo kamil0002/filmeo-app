@@ -26,6 +26,7 @@ const AdminPanel = () => {
             id="movie-select"
             value={selectedMovie}
             label="Film"
+            inputProps={{ MenuProps: { disableScrollLock: true } }}
             onChange={(e) => setSelectedMovie(e.target.value)}
           >
             <MenuItem value={'Uncharted'}>Uncharted</MenuItem>
@@ -72,6 +73,7 @@ const AdminPanel = () => {
             id="user-reviews"
             value={selectedReview}
             label="Opinie"
+            inputProps={{ MenuProps: { disableScrollLock: true } }}
             onChange={(e) => setSelectedReview(e.target.value)}
             disabled
           >
