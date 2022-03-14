@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Pusher from 'pusher-js';
@@ -30,7 +29,6 @@ const Chat = () => {
     const channel = pusher.subscribe('chat');
     console.log(channel);
     channel.bind('message', function (data) {
-      console.log('Welcome welcome!');
       allMessages.push(data);
       setMessages(allMessages);
       console.log(allMessages, messages);
@@ -63,73 +61,80 @@ const Chat = () => {
   };
 
   return (
-    <ChatWrapper elevation={8}>
-      <ChatHeading fontWeight={700} color={'#fff'}>
-        Chat - podziel się opinią
-      </ChatHeading>
-      <Messages className="messages-container">
-        {messages.map((message, i) => {
-          return (
-            <ChatMessage
-              key={i}
-              userName={message.username}
-              text={message.message}
-              date={new Date().toLocaleDateString('pl-PL', {
-                weekday: 'long',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            />
-          );
-        })}
-      </Messages>
-      <Actions>
-        <Form onSubmit={(e) => sendMessage(e)}>
-          <FormControl
-            sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-            }}
-          >
-            <ChatInput
-              hiddenLabel
-              onChange={(e) => setMessage(e.target.value)}
-              type="text"
-              value={message || ''}
-              placeholder="Message"
-              variant="standard"
-              size="medium"
-              color="primary"
-              autoComplete="off"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <ChatIcon />
-                  </InputAdornment>
-                ),
+    <Wrapper>
+      <ChatWrapper elevation={8}>
+        <ChatHeading fontWeight={700} color={'#fff'}>
+          Chat - podziel się opinią
+        </ChatHeading>
+        <Messages className="messages-container">
+          {messages.map((message, i) => {
+            return (
+              <ChatMessage
+                key={i}
+                userName={message.username}
+                text={message.message}
+                date={new Date().toLocaleDateString('pl-PL', {
+                  weekday: 'long',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              />
+            );
+          })}
+        </Messages>
+        <Actions>
+          <Form onSubmit={(e) => sendMessage(e)}>
+            <FormControl
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
               }}
-            />
-            <SendButton
-              type="submit"
-              variant="contained"
-              endIcon={<SendIcon />}
             >
-              Wyślij
-            </SendButton>
-          </FormControl>
-        </Form>
-      </Actions>
-    </ChatWrapper>
+              <ChatInput
+                hiddenLabel
+                onChange={(e) => setMessage(e.target.value)}
+                type="text"
+                value={message || ''}
+                placeholder="Message"
+                variant="standard"
+                size="medium"
+                color="primary"
+                autoComplete="off"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <ChatIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <SendButton
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}
+              >
+                Wyślij
+              </SendButton>
+            </FormControl>
+          </Form>
+        </Actions>
+      </ChatWrapper>
+    </Wrapper>
   );
 };
 
 export default Chat;
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 5rem 0;
+`;
+
 const ChatWrapper = styled(Paper)`
   && {
     width: 90vw;
-    margin: 4rem auto 4rem auto;
     height: 600px;
     border-radius: 20px;
     background: ${({ theme }) => theme.primaryLight};
