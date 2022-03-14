@@ -88,19 +88,18 @@ const Register = () => {
 export default Register;
 
 const Wrapper = styled.div`
-  height: calc(100vh - 70px);
+  min-height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  margin: 4rem 0;
 
   @media ${responsive.tablet} {
-    height: calc(100vh - 76px - 70px);
+    min-height: calc(100vh - 76px - 70px);
   }
 `;
 
 const StyledPaper = styled(Paper)`
-  position: fixed;
   padding: 1rem 2rem;
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
   width: 96vw;
 
   @media ${responsive.tablet} {

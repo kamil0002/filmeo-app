@@ -29,7 +29,7 @@ class Message implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return 'chat';
+        return ['chat'];
     }
 
     public function broadcastAs()

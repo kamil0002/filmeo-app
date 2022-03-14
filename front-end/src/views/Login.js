@@ -55,17 +55,16 @@ const Login = () => {
 export default Login;
 
 const Wrapper = styled.div`
-  height: calc(100vh - 76px - 70px);
+  min-height: calc(100vh - 76px - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledPaper = styled(Paper)`
   display: flex;
   flex-direction: column;
-  position: fixed;
-  padding: 1rem 2rem;
-  top: 25%;
-  left: 50%;
-  transform: translateX(-50%);
+  padding: 2rem 3rem;
   width: 96vw;
 
   @media ${responsive.mobile} {

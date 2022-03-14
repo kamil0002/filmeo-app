@@ -19,5 +19,6 @@ class ChatController extends Controller
 
         event(new Message($msgFields['username'], $msgFields['message']));
 
+        return [];
     }
 }

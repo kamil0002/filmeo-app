@@ -4,8 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 
-use App\Models\User;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,8 +19,4 @@ use App\Models\User;
 //     return $request->user();
 // });
 
-Route::post('/messages', [ChatController::class, 'message']);
-
-Route::get('/user', function() {
-  User::factory()->count(3)->create();
-});
+Route::post('/message', [ChatController::class, 'message']);

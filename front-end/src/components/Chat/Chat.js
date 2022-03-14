@@ -21,14 +21,16 @@ const Chat = () => {
   const [message, setMessage] = useState();
 
   useEffect(() => {
-    Pusher.logToConsole = false;
+    Pusher.logToConsole = true;
 
     const pusher = new Pusher('8fb8f8eb332cab7a0878', {
       cluster: 'eu',
     });
 
     const channel = pusher.subscribe('chat');
+    console.log(channel);
     channel.bind('message', function (data) {
+      console.log('Welcome welcome!');
       allMessages.push(data);
       setMessages(allMessages);
       console.log(allMessages, messages);
@@ -42,7 +44,7 @@ const Chat = () => {
 
     try {
       await axios.post(
-        '/messages',
+        '/message',
         JSON.stringify({
           username,
           message,
@@ -57,7 +59,6 @@ const Chat = () => {
       e.target.parentNode.previousSibling.scrollHeight
     );
 
-    setMessage('');
     setMessage('');
   };
 
