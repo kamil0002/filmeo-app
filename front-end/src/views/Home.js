@@ -98,7 +98,7 @@ const Header = styled.div`
       rgba(68, 82, 85, 0.6) 100%
     ),
     url('/images/movies.jpg');
-  height: calc(100vh - 67px);
+  height: calc(100vh - 76px);
   width: 100vw;
   background-size: cover;
   background-repeat: no-repeat;
