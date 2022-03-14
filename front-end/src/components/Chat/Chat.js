@@ -20,14 +20,13 @@ const Chat = () => {
   const [message, setMessage] = useState();
 
   useEffect(() => {
-    Pusher.logToConsole = true;
+    Pusher.logToConsole = false;
 
     const pusher = new Pusher('8fb8f8eb332cab7a0878', {
       cluster: 'eu',
     });
 
     const channel = pusher.subscribe('chat');
-    console.log(channel);
     channel.bind('message', function (data) {
       allMessages.push(data);
       setMessages(allMessages);

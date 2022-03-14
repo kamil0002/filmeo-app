@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -18,6 +19,14 @@ const MovieCardItem = ({
   releaseDate,
   time,
 }) => {
+  const [redirect, setRedirect] = useState(false);
+
+  const handleRedirect = () => {
+    setRedirect(true);
+  };
+
+  if (redirect) return <Navigate to={`/film/${title}`} />;
+
   return (
     <Card
       sx={{
@@ -79,7 +88,12 @@ const MovieCardItem = ({
             {`(${ratingQuantity})`}
           </Typography>
         </RatingWrapper>
-        <Button sx={{ fontFamily: 'inherit' }} size="small" color="primary">
+        <Button
+          onClick={handleRedirect}
+          sx={{ fontFamily: 'inherit' }}
+          size="small"
+          color="primary"
+        >
           Więcej
         </Button>
       </CardActions>

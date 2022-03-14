@@ -4,4 +4,5 @@ export default {
   login: '/logowanie',
   register: '/rejestracja',
   dashboard: '/profil',
+  movieDetails: '/film/:slug',
 };
