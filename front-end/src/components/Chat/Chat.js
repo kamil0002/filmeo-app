@@ -64,7 +64,7 @@ const Chat = () => {
     <Wrapper>
       <ChatWrapper elevation={8}>
         <ChatHeading fontWeight={700} color={'#fff'}>
-          Chat - podziel się opinią
+          Chat - podziel się wrażeniami
         </ChatHeading>
         <Messages className="messages-container">
           {messages.map((message, i) => {

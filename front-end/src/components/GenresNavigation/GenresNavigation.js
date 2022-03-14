@@ -93,7 +93,7 @@ const GenresNavigation = () => {
             {...params}
             label="Szukaj filmu"
             variant="filled"
-            size=""
+            size="small"
             InputProps={{
               ...params.InputProps,
               type: 'search',
