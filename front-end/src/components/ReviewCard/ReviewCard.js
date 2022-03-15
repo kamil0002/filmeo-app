@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Paper, Rating } from '@mui/material';
 import Typography from 'components/Typography/Typography';
 
-const ReviewCard = () => {
+const ReviewCard = ({ profile }) => {
   return (
     <Paper
       sx={{
@@ -29,9 +30,10 @@ const ReviewCard = () => {
           readOnly
           sx={{ display: 'flex', justifyContent: 'flex-end' }}
         />
-        <Button variant="text">Usuń</Button>
+        {profile && <Button variant="text">Usuń</Button>}
+        {!profile && <Typography fontSize={12}>22-04-2022</Typography>}
       </ReviewDetails>
-      <ReviewedMovie>Uncharted</ReviewedMovie>
+      <ReviewCardFooter>{profile ? 'Uncharted' : 'Adam'}</ReviewCardFooter>
     </Paper>
   );
 };
@@ -50,7 +52,7 @@ const ReviewDetails = styled.div`
   align-items: center;
 `;
 
-const ReviewedMovie = styled.div`
+const ReviewCardFooter = styled.div`
   font-weight: 500;
   color: ${({ theme }) => theme.darkBlue};
   background: ${({ theme }) => theme.primaryLight};
@@ -60,3 +62,11 @@ const ReviewedMovie = styled.div`
   align-items: center;
   border-radius: 0 0 4px 4px;
 `;
+
+ReviewCard.propTypes = {
+  profile: PropTypes.bool,
+};
+
+ReviewCard.defaultProps = {
+  profile: true,
+};

@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { Button } from '@mui/material';
+import { Button, Grid, Rating } from '@mui/material';
 import moviesData from 'movies-data.json';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
+import ReviewCard from 'components/ReviewCard/ReviewCard';
 
 const movie = moviesData.movies[0];
 console.log(movie);
@@ -45,6 +46,107 @@ const MovieDetails = () => {
           <ImageOverlay></ImageOverlay>
         </Header>
       </HeaderWrapper>
+      <MovieData>
+        <MovieInformation>
+          <Typography>
+            <strong>Reżyser</strong>: {movie.director}
+          </Typography>
+          <Typography>
+            <strong>Gatunek</strong>: {movie.genre}
+          </Typography>
+          <Typography>
+            <strong>Wiek</strong>: +{movie.ageLimit}
+          </Typography>
+          <Typography>
+            <strong>Ocena</strong>:
+            <Rating
+              sx={{ zIndex: 100 }}
+              readOnly
+              value={movie.ratingAverage}
+              precision={0.1}
+              defaultValue={0.0}
+              size="small"
+            />
+          </Typography>
+        </MovieInformation>
+        <MovieDescription>
+          <Typography marginBottom={3.5} fontWeight="bold">
+            Opis
+          </Typography>
+          <Typography>{movie.description}</Typography>
+        </MovieDescription>
+      </MovieData>
+      <Button
+        sx={{
+          position: 'relative',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          marginTop: 6,
+          backgroundColor: '#FFF',
+        }}
+        variant="outlined"
+        href={movie.link}
+        target="_blank"
+      >
+        Więcej informacji
+      </Button>
+      <Reviews>
+        <ReviewsHeader marginBottom={3.5} fontWeight="bold">
+          Opinie
+        </ReviewsHeader>
+        <Button
+          sx={{ backgroundColor: '#fff', marginBottom: 4, marginLeft: 6 }}
+          variant="outlined"
+        >
+          Dodaj Opinię
+        </Button>
+        <GridContainer container columnSpacing={3} rowSpacing={3}>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <ReviewCard profile={false} />
+          </Grid>
+        </GridContainer>
+      </Reviews>
+      <RentMovie>
+        <StyledTypography fontWeight={700}>
+          Nie czekaj. Oglądaj już teraz!
+        </StyledTypography>
+        <StyledButton size="large" variant="contained">
+          Wypożycz
+        </StyledButton>
+      </RentMovie>
     </Wrapper>
   );
 };
@@ -180,6 +282,105 @@ const HeaderButton = styled(Button)`
 
     @media ${responsive.tablet} {
       font-size: ${({ theme }) => theme.fontSize.m};
+    }
+  }
+`;
+
+const MovieData = styled.div`
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+
+  @media ${responsive.tablet} {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+`;
+const MovieInformation = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5rem;
+  align-items: center;
+
+  p {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+  }
+
+  @media ${responsive.tablet} {
+    margin-bottom: 0;
+  }
+`;
+const MovieDescription = styled.div`
+  padding: 0 0.5rem;
+  text-align: center;
+
+  @media ${responsive.tablet} {
+    width: 50%;
+  }
+`;
+
+const Reviews = styled.div`
+  margin-top: 5rem;
+`;
+
+const ReviewsHeader = styled(Typography)`
+  && {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    margin-left: 3rem;
+    @media ${responsive.tablet} {
+      font-size: ${({ theme }) => theme.fontSize.m};
+    }
+  }
+`;
+
+const GridContainer = styled(Grid)`
+  && {
+    padding: 0;
+    justify-content: center;
+
+    @media only screen and (min-width: 600px) {
+      padding: 0 0.6rem;
+      justify-content: flex-start;
+      padding: 0 3rem;
+    }
+  }
+`;
+
+const RentMovie = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 5rem 0;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+
+  @media ${responsive.tablet} {
+    margin-bottom: 8rem;
+  }
+`;
+
+const StyledTypography = styled(Typography)`
+  && {
+    font-weight: ${({ theme }) => theme.fontBold};
+
+    @media ${responsive.tablet} {
+      font-size: ${({ theme }) => theme.fontSize.xl};
+      margin-bottom: 2rem;
+    }
+  }
+`;
+
+const StyledButton = styled(Button)`
+  && {
+    font-weight: ${({ theme }) => theme.fontBold};
+
+    @media ${responsive.tablet} {
+      font-size: ${({ theme }) => theme.fontSize.xl};
+      width: 320px;
+      height: 70px;
     }
   }
 `;

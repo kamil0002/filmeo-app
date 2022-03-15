@@ -30,7 +30,6 @@ const Chat = () => {
     channel.bind('message', function (data) {
       allMessages.push(data);
       setMessages(allMessages);
-      console.log(allMessages, messages);
       const messagesContainer = document.querySelector('.messages-container');
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
@@ -61,7 +60,7 @@ const Chat = () => {
 
   return (
     <Wrapper>
-      <ChatWrapper elevation={8}>
+      <ChatWrapper elevation={8} className="messages-wrapper">
         <ChatHeading fontWeight={700} color={'#fff'}>
           Chat - podziel się wrażeniami
         </ChatHeading>

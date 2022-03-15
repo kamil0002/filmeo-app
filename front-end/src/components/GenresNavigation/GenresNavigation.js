@@ -26,7 +26,7 @@ const GenresNavigation = () => {
   return (
     <Wrapper square>
       <Menu
-        navWrapped={navWrapped}
+        wrapped={navWrapped ? 1 : 0}
         disablePadding
         onClick={(e) => handleActiveGenre(e)}
       >
@@ -119,14 +119,14 @@ const Wrapper = styled(Paper)`
 const Menu = styled(MenuList)`
   && {
     display: grid;
-    grid-template-rows: ${({ navWrapped }) =>
-      navWrapped ? 'repeat(1, 1fr) ' : 'repeat(3, 1fr)'};
+    grid-template-rows: ${({ wrapped }) =>
+      wrapped ? 'repeat(1, 1fr) ' : 'repeat(3, 1fr)'};
     grid-template-columns: repeat(3, 1fr);
     border-radius: 0;
 
     @media ${responsive.tablet} {
-      grid-template-rows: ${({ navWrapped }) =>
-        navWrapped ? 'repeat(1, 1fr) ' : 'repeat(2, 1fr)'};
+      grid-template-rows: ${({ wrapped }) =>
+        wrapped ? 'repeat(1, 1fr) ' : 'repeat(2, 1fr)'};
       grid-template-columns: repeat(4, 1fr);
     }
 
@@ -135,19 +135,17 @@ const Menu = styled(MenuList)`
       grid-template-columns: repeat(12, 1fr);
     }
   }
-  ${({ navWrapped }) => css`
-    ${console.log(navWrapped)}
-
+  ${({ wrapped }) => css`
     & li:nth-child(n + 4) {
-      display: ${navWrapped ? 'none' : 'grid'};
+      display: ${wrapped ? 'none' : 'grid'};
     }
 
     @media ${responsive.tablet} {
       & li:nth-child(-n + 4) {
-        display: ${navWrapped && 'grid'};
+        display: ${wrapped && 'grid'};
       }
       & li {
-        display: ${navWrapped && 'none'};
+        display: ${wrapped && 'none'};
       }
     }
   `}

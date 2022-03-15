@@ -5,7 +5,7 @@ import { Grid } from '@mui/material';
 import Typography from 'components/Typography/Typography';
 import MovieCard from './MovieCardItem';
 
-const MovieCardGrid = ({ movies, title, backgroundColor, allMovies }) => {
+const MovieCardGrid = ({ movies, heading, backgroundColor, allMovies }) => {
   return (
     <Wrapper backgroundColor={backgroundColor}>
       <Typography
@@ -15,7 +15,7 @@ const MovieCardGrid = ({ movies, title, backgroundColor, allMovies }) => {
         align="center"
         letterSpacing={0.5}
       >
-        {title}
+        {heading}
       </Typography>
       <Grid
         container
@@ -63,9 +63,9 @@ const Wrapper = styled.section`
 `;
 
 MovieCardGrid.propTypes = {
-  movies: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired,
-  backgroundColor: PropTypes.string.isRequired,
+  movies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  heading: PropTypes.string,
+  backgroundColor: PropTypes.string,
   allMovies: PropTypes.bool,
 };
 
