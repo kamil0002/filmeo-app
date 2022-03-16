@@ -8,7 +8,7 @@ const Movies = () => {
   return (
     <Wrapper>
       <GenresNavigation />
-      <MovieCardGrid movies={moviesData.movies} allMovies={true} />
+      <MovieCardGrid movies={moviesData.movies.slice(0, 4)} allMovies={true} />
     </Wrapper>
   );
 };

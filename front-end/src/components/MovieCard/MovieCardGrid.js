@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Grid } from '@mui/material';
 import Typography from 'components/Typography/Typography';
 import MovieCard from './MovieCardItem';
+import responsive from 'theme/responsive';
 
 const MovieCardGrid = ({ movies, heading, backgroundColor, allMovies }) => {
   return (
@@ -17,10 +18,10 @@ const MovieCardGrid = ({ movies, heading, backgroundColor, allMovies }) => {
       >
         {heading}
       </Typography>
-      <Grid
+      <GridContainer
+        allMovies={allMovies ? 1 : 0}
         container
         spacing={4}
-        justifyContent={allMovies ? 'flex-start' : 'center'}
         marginTop={4}
         paddingX={allMovies ? 6 : 2}
       >
@@ -50,7 +51,7 @@ const MovieCardGrid = ({ movies, heading, backgroundColor, allMovies }) => {
             </Grid>
           )
         )}
-      </Grid>
+      </GridContainer>
     </Wrapper>
   );
 };
@@ -60,6 +61,19 @@ export default MovieCardGrid;
 const Wrapper = styled.section`
   background-color: ${({ backgroundColor }) => backgroundColor};
   padding: 3rem 0;
+`;
+
+const GridContainer = styled(Grid)`
+  && {
+    justify-content: center;
+
+    @media ${responsive.tablet} {
+      justify-content: ${({ allMovies }) =>
+        allMovies ? 'flex-start' : 'center'};
+    }
+
+    margin-bottom: ${({ allMovies }) => (allMovies ? '3rem' : 0)};
+  }
 `;
 
 MovieCardGrid.propTypes = {
