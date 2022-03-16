@@ -23,7 +23,7 @@ const Register = () => {
           </FormControl>
           <FormControl required={true} margin="normal">
             <StyledTextField
-              id="surname"
+              id="surname-register"
               label="Nazwisko"
               type="text"
               autoComplete="off"

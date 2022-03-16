@@ -14,14 +14,23 @@ import { Navigate } from 'react-router-dom';
 const movie = moviesData.movies[0];
 
 const MovieDetails = () => {
-  const [redirect, setRedirect] = useState(false);
+  const [redirectToReviews, setRedirectToReviews] = useState(false);
+  const [redirectToOrder, setRedirectToOrder] = useState(false);
+
   const params = useParams();
 
-  const handleRedirect = () => {
-    setRedirect(true);
+  const handleRedirectToReviews = () => {
+    setRedirectToReviews(true);
   };
 
-  if (redirect) return <Navigate to={`/film/${params.slug}/add-review`} />;
+  const handleRedirectToOrder = () => {
+    setRedirectToOrder(true);
+  };
+
+  if (redirectToReviews)
+    return <Navigate to={`/film/${params.slug}/dodaj-opinie`} />;
+
+  if (redirectToOrder) return <Navigate to={`/film/${params.slug}/zamow`} />;
 
   return (
     <Wrapper>
@@ -49,7 +58,9 @@ const MovieDetails = () => {
             </Typography>
           </MovieCost>
           <HeaderAction>
-            <HeaderButton variant="contained">Zamów teraz!</HeaderButton>
+            <HeaderButton onClick={handleRedirectToOrder} variant="contained">
+              Zamów teraz!
+            </HeaderButton>
           </HeaderAction>
           <HeaderImage src={movie.poster} />
           <ImageOverlay></ImageOverlay>
@@ -106,7 +117,7 @@ const MovieDetails = () => {
         <Button
           sx={{ backgroundColor: '#fff', marginBottom: 4, marginLeft: 6 }}
           variant="outlined"
-          onClick={handleRedirect}
+          onClick={handleRedirectToReviews}
         >
           Dodaj Opinię
         </Button>
@@ -153,7 +164,11 @@ const MovieDetails = () => {
         <StyledTypography fontWeight={700}>
           Nie czekaj. Oglądaj już teraz!
         </StyledTypography>
-        <StyledButton size="large" variant="contained">
+        <StyledButton
+          onClick={handleRedirectToOrder}
+          size="large"
+          variant="contained"
+        >
           Wypożycz
         </StyledButton>
       </RentMovie>

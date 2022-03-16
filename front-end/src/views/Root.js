@@ -14,6 +14,7 @@ import Dashboard from './Dashboard';
 import Movies from './Movies';
 import MovieDetails from './MovieDetails';
 import AddReview from './AddReview';
+import RentMovie from './RentMovie';
 
 const Root = () => {
   const location = useLocation();
@@ -32,6 +33,7 @@ const Root = () => {
             <Route path={routes.dashboard} element={<Dashboard />} />
             <Route path={routes.movieDetails} element={<MovieDetails />} />
             <Route path={routes.addReview} element={<AddReview />} />
+            <Route path={routes.rentMovie} element={<RentMovie />} />
           </Routes>
         </Content>
         <Footer dashboardView={location.pathname === '/profil:action'} />

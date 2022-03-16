@@ -21,7 +21,7 @@ const UserSettings = () => {
         </FormControl>
         <FormControl margin="normal">
           <StyledTextField
-            id="surname"
+            id="surname-reset"
             label="Nazwisko"
             type="text"
             autoComplete="off"
