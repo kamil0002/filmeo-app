@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
+use Faker\Factory;
+use App\Models\Movie;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +22,16 @@ use App\Http\Controllers\ChatController;
 //     return $request->user();
 // });
 
+//* Global routes
 Route::post('/message', [ChatController::class, 'message']);
+
+Route::post('/register', [AuthController::class, 'register']);
+
+
+//* Proteced routes
+Route::group(['middleware' => ['auth:sanctum']],
+function () {
+  Route::get('/movies', function() {
+    return Movie::all();
+  });
+});
