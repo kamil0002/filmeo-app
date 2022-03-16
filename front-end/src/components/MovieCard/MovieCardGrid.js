@@ -19,7 +19,7 @@ const MovieCardGrid = ({ movies, heading, backgroundColor, allMovies }) => {
         {heading}
       </Typography>
       <GridContainer
-        allMovies={allMovies ? 1 : 0}
+        allmovies={allMovies ? 1 : 0}
         container
         spacing={4}
         marginTop={4}
@@ -68,11 +68,11 @@ const GridContainer = styled(Grid)`
     justify-content: center;
 
     @media ${responsive.tablet} {
-      justify-content: ${({ allMovies }) =>
-        allMovies ? 'flex-start' : 'center'};
+      justify-content: ${({ allmovies }) =>
+        allmovies ? 'flex-start' : 'center'};
     }
 
-    margin-bottom: ${({ allMovies }) => (allMovies ? '3rem' : 0)};
+    margin-bottom: ${({ allmovies }) => (allmovies ? '3rem' : 0)};
   }
 `;
 

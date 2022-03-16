@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -9,11 +9,20 @@ import moviesData from 'movies-data.json';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import ReviewCard from 'components/ReviewCard/ReviewCard';
+import { Navigate } from 'react-router-dom';
 
 const movie = moviesData.movies[0];
-console.log(movie);
 
 const MovieDetails = () => {
+  const [redirect, setRedirect] = useState(false);
+  const params = useParams();
+
+  const handleRedirect = () => {
+    setRedirect(true);
+  };
+
+  if (redirect) return <Navigate to={`/film/${params.slug}/add-review`} />;
+
   return (
     <Wrapper>
       <HeaderWrapper>
@@ -35,7 +44,7 @@ const MovieDetails = () => {
           </MovieHeaderInfo>
           <MovieCost>
             <MovieCostIcon></MovieCostIcon>
-            <Typography fontWeight={700} color={'#fff'} fontSize={24} y>
+            <Typography fontWeight={700} color={'#fff'} fontSize={24}>
               10zł/7 dni
             </Typography>
           </MovieCost>
@@ -97,6 +106,7 @@ const MovieDetails = () => {
         <Button
           sx={{ backgroundColor: '#fff', marginBottom: 4, marginLeft: 6 }}
           variant="outlined"
+          onClick={handleRedirect}
         >
           Dodaj Opinię
         </Button>

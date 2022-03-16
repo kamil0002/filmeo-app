@@ -13,6 +13,7 @@ import Register from './Register';
 import Dashboard from './Dashboard';
 import Movies from './Movies';
 import MovieDetails from './MovieDetails';
+import AddReview from './AddReview';
 
 const Root = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const Root = () => {
             <Route path={routes.register} element={<Register />} />
             <Route path={routes.dashboard} element={<Dashboard />} />
             <Route path={routes.movieDetails} element={<MovieDetails />} />
+            <Route path={routes.addReview} element={<AddReview />} />
           </Routes>
         </Content>
         <Footer dashboardView={location.pathname === '/profil:action'} />
