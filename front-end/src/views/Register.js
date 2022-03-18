@@ -13,7 +13,7 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ shouldFocusError: false });
 
   const onSubmit = (data) => console.log(data);
 
