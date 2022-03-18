@@ -7,7 +7,9 @@ import responsive from 'theme/responsive';
 const UserSettings = () => {
   return (
     <>
-      <Typography fontWeight={700}>Ustawienia</Typography>
+      <Typography fontSize={24} fontWeight={700}>
+        Ustawienia
+      </Typography>
       <Form>
         <Typography marginTop={3}>Dane użytkownika</Typography>
         <FormControl margin="normal">

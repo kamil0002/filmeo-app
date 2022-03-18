@@ -19,7 +19,6 @@ import WatchMovie from './WatchMovie';
 
 const Root = () => {
   const location = useLocation();
-  console.log(location);
   return (
     <>
       <GlobalStyles movieView={location.pathname.endsWith('ogladaj') ? 1 : 0} />
@@ -52,8 +51,5 @@ const Root = () => {
 export default Root;
 
 const Content = styled.div`
-  /* ${({ movieView }) => console.log(movieView === true)}; */
   padding-top: ${({ theme, movieView }) => (movieView ? 0 : theme.navHeight)};
-  /* padding-top: ${({ theme, movieView }) => theme.navHeight}; */
-  /* height: ${({ movieView }) => (movieView ? '100vh' : 'auto')}; */
 `;

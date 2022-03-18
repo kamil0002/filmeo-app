@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Pusher from 'pusher-js';
 import { darken, Paper, TextField } from '@mui/material';
@@ -15,7 +16,7 @@ import axios from 'utils/axios';
 const username = 'Kamil';
 const allMessages = [];
 
-const Chat = () => {
+const Chat = ({ id }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState();
 
@@ -59,7 +60,7 @@ const Chat = () => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper id={id}>
       <ChatWrapper elevation={8} className="messages-wrapper">
         <ChatHeading fontWeight={700} color={'#fff'}>
           Chat - podziel się wrażeniami
@@ -241,3 +242,7 @@ const SendButton = styled(Button)`
     }
   }
 `;
+
+Chat.propTypes = {
+  id: PropTypes.string.isRequired,
+};

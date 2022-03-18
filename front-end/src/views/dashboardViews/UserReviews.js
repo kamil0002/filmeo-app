@@ -8,7 +8,7 @@ import responsive from 'theme/responsive';
 const UserReviews = () => {
   return (
     <Wrapper>
-      <Typography fontWeight={700} marginBottom={4}>
+      <Typography fontSize={24} fontWeight={700} marginBottom={4}>
         Wystawione Opinie
       </Typography>
       <GridContainer container columnSpacing={3} rowSpacing={3}>

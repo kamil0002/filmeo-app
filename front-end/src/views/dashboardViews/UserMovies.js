@@ -8,17 +8,17 @@ import responsive from 'theme/responsive';
 const UserMovies = () => {
   return (
     <Wrapper>
-      <Typography fontWeight={700} marginBottom={4}>
+      <Typography fontSize={24} fontWeight={700} marginBottom={4}>
         Wypożyczone Filmy
       </Typography>
       <GridContainer container columnSpacing={3} rowSpacing={3}>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.7}>
+        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.5}>
           <RentedMovie />
         </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.7}>
+        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.5}>
           <RentedMovie />
         </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.7}>
+        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.5}>
           <RentedMovie />
         </Grid>
       </GridContainer>
@@ -37,6 +37,7 @@ const Wrapper = styled.div`
     width: 0;
   }
 `;
+
 const GridContainer = styled(Grid)`
   && {
     padding: 0;

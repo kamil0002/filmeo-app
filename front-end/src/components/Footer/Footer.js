@@ -5,7 +5,6 @@ import Typography from 'components/Typography/Typography';
 import styled from 'styled-components';
 
 const Footer = ({ display }) => {
-  console.log(display);
   if (!display) return '';
 
   return (

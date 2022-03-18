@@ -5,14 +5,27 @@ import Typography from 'components/Typography/Typography';
 import { Button } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilterOutlined';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+// import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
 import { Zoom, Fade, Slide } from 'react-reveal';
 import responsive from 'theme/responsive';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import Chat from 'components/Chat/Chat';
 import moviesData from 'movies-data.json';
+
 const Home = () => {
+  const scrollToChat = () => {
+    const chatNode = document.getElementById('chat');
+    chatNode.scrollIntoView({
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <Wrapper>
+      <StartChatting onClick={scrollToChat}>
+        <ChatBubbleIcon sx={{ color: '#FFF', fontSize: 28 }} />
+      </StartChatting>
       <Header>
         <Zoom>
           <Heading
@@ -73,9 +86,7 @@ const Home = () => {
           backgroundColor="#e0e0e0"
         />
       </Fade>
-      <Fade bottom>
-        <Chat />
-      </Fade>
+      <Chat id="chat" />
     </Wrapper>
   );
 };
@@ -86,6 +97,29 @@ const Wrapper = styled.div`
   overflow-x: hidden;
   position: relative;
   min-height: calc(100vh - 67px);
+`;
+
+const StartChatting = styled.div`
+  cursor: pointer;
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  background-color: #2fcc90;
+  z-index: 111;
+  bottom: 2%;
+  right: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 150ms ease-out;
+  -webkit-box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
+  -moz-box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
+  box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
+
+  :hover {
+    transform: scale(1.05);
+  }
 `;
 
 const Header = styled.div`
@@ -101,7 +135,6 @@ const Header = styled.div`
   width: 100vw;
   background-size: cover;
   background-repeat: no-repeat;
-  margin-top: ${({ theme }) => theme.navHeight};
 `;
 
 const Heading = styled(Typography)`
