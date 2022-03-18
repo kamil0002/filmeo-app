@@ -2,13 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, FormControl, Paper } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { Paper } from '@mui/material';
 import Typography from 'components/Typography/Typography';
 import Form from 'components/Form/Form';
 import FormInput from 'components/Form/FormInput';
-import responsive from 'theme/responsive';
 import { useForm } from 'react-hook-form';
+import responsive from 'theme/responsive';
 
 const Login = () => {
   const {
@@ -56,49 +55,6 @@ const Login = () => {
             helperText="Hasło musi zawierać dużą oraz małą literę, cyfrę i mieć długość co najmniej 6 znaków"
           />
         </Form>
-        {/* <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              error={errors.email ? true : false}
-              {...register('email', {
-                required: true,
-                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
-              })}
-              helperText={errors.email ? 'Adres E-mail nie poprawny' : ''}
-              id="email"
-              label="Adres E-mail"
-              type="email"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              {...register('password', {
-                required: true,
-                pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{6,}/,
-              })}
-              error={errors.password ? true : false}
-              helperText={
-                errors.password
-                  ? 'Hasło musi zawierać dużą oraz małą literę, cyfrę i mieć długość co najmniej 6 znaków'
-                  : ''
-              }
-              id="password"
-              label="Hasło"
-              type="password"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl> */}
-        {/* <Button
-          type="submit"
-          sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'Poppins' }}
-          variant="contained"
-        >
-          Zaloguj
-        </Button> */}
-        {/* </Form> */}
         <Typography fontFamily="Poppins" marginTop={5} fontSize={13}>
           Nie masz jeszcze konta?
           <StyledLink to="/rejestracja">Załóż konto!</StyledLink>

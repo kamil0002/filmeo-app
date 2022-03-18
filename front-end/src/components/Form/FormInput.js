@@ -4,11 +4,19 @@ import styled from 'styled-components';
 import { FormControl, TextField } from '@mui/material';
 import responsive from 'theme/responsive';
 
-const FormInput = ({ id, label, type, isValid, helperText, validator }) => {
-  console.log(isValid);
+const FormInput = ({
+  id,
+  label,
+  type,
+  isValid,
+  helperText,
+  validator,
+  ...props
+}) => {
   return (
     <FormControl required={true} margin="normal">
       <StyledTextField
+        {...props}
         error={isValid}
         {...validator}
         id={id}

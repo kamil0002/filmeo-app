@@ -1,80 +1,104 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, FormControl, Paper } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { Paper } from '@mui/material';
+import Form from 'components/Form/Form';
+import FormInput from 'components/Form/FormInput';
+import { useForm } from 'react-hook-form';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
   return (
     <Wrapper>
       <StyledPaper elevation={8}>
         <Heading>Zarejestruj się!</Heading>
-        <Form>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="name"
-              label="Imię"
-              type="text"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="surname-register"
-              label="Nazwisko"
-              type="text"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="address"
-              label="Adres zamieszkania"
-              type="text"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="birth-date"
-              label="Data urodzenia"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              type="date"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="email"
-              label="Adres E-Mail"
-              type="email"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="password"
-              label="Hasło"
-              type="password"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <Button
-            sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'inherit' }}
-            variant="contained"
-          >
-            Załóż konto
-          </Button>
+        <Form submitFn={handleSubmit(onSubmit)} buttonText="Załóż konto">
+          <FormInput
+            validator={{
+              ...register('name', {
+                required: true,
+                minLength: 2,
+              }),
+            }}
+            id="name"
+            label="Imię"
+            isValid={errors.name ? true : false}
+            helperText="Nie podane imienia"
+          />
+          <FormInput
+            validator={{
+              ...register('surname', {
+                required: true,
+                minLength: 2,
+              }),
+            }}
+            id="surname"
+            label="Nazwisko"
+            isValid={errors.surname ? true : false}
+            helperText="Nie podane nazwisko"
+          />
+          <FormInput
+            validator={{
+              ...register('address', {
+                required: true,
+                minLength: 2,
+              }),
+            }}
+            id="address"
+            label="Adres zamieszkania"
+            isValid={errors.address ? true : false}
+            helperText="Nie podane adresu"
+          />
+          <FormInput
+            validator={{
+              ...register('birthDate', {
+                required: true,
+              }),
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            id="birthDate"
+            label="Data urodzenia"
+            type="date"
+            isValid={errors.birthDate ? true : false}
+            helperText="Nie podane daty urodzenia"
+          />
+          <FormInput
+            validator={{
+              ...register('email', {
+                required: true,
+                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
+              }),
+            }}
+            id="email"
+            label="Adres E-Mail"
+            type="email"
+            isValid={errors.email ? true : false}
+            helperText="Adres E-mail nie poprawny"
+          />
+          <FormInput
+            validator={{
+              ...register('password', {
+                required: true,
+                pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{6,}/,
+              }),
+            }}
+            id="password"
+            label="Hasło"
+            type="password"
+            isValid={errors.password ? true : false}
+            helperText="Hasło musi zawierać dużą oraz małą literę, cyfrę i mieć długość co najmniej 6 znaków"
+          />
         </Form>
         <Typography marginTop={5} fontSize={13}>
           Masz już konto?
@@ -110,19 +134,6 @@ const StyledPaper = styled(Paper)`
 
   @media ${responsive.desktop} {
     width: 30vw;
-  }
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledTextField = styled(TextField)`
-  height: 37px;
-  @media ${responsive.tablet} {
-    width: 350px;
-    height: auto;
   }
 `;
 
