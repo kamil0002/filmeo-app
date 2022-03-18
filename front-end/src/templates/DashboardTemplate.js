@@ -65,7 +65,7 @@ const StyledPaper = styled(Paper)`
   && {
     width: 95%;
     margin: 5rem auto;
-    height: 1000px;
+    min-height: 1000px;
     border-radius: 15px;
     background: #ffffff;
     box-shadow: 2px 4px 30px rgba(0, 0, 0, 0.25);
@@ -79,7 +79,7 @@ const StyledPaper = styled(Paper)`
 
 const Sidebar = styled.div`
   width: 80px;
-  height: 100%;
+  min-height: 100%;
   background: ${({ theme }) => theme.primaryLight};
   border-radius: 15px 0 0 15px;
   display: flex;

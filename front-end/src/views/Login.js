@@ -14,7 +14,11 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: 'kamiln022@gmail.com',
+    },
+  });
 
   const onSubmit = (data) => console.log(data);
   return (
