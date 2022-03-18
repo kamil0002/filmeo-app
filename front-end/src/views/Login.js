@@ -88,7 +88,7 @@ const Heading = styled(Typography)`
     }
 
     @media ${responsive.desktop} {
-      font-size: ${({ theme }) => theme.fontSize.lg};
+      font-size: ${({ theme }) => theme.fontSize.md};
     }
   }
 `;
@@ -119,17 +119,6 @@ const StyledPaper = styled(Paper)`
     width: 30vw;
   }
 `;
-
-// const Form = styled.form`
-//   display: flex;
-//   flex-direction: column;
-// `;
-
-// const StyledTextField = styled(TextField)`
-//   @media ${responsive.tablet} {
-//     width: 350px;
-//   }
-// `;
 
 const StyledLink = styled(Link)`
   text-decoration: underline;

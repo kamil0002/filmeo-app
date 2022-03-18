@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
@@ -9,8 +10,10 @@ import responsive from 'theme/responsive';
 import DesktopNavigation from './DesktopNavigation';
 import Typography from 'components/Typography/Typography';
 
-const Navigation = () => {
+const Navigation = ({ display }) => {
   const [navVisible, setNavVisible] = useState(false);
+
+  if (!display) return '';
 
   return (
     <Wrapper>
@@ -154,3 +157,11 @@ const StyledButton = styled(Button)`
       `}
   }
 `;
+
+Navigation.propTypes = {
+  display: PropTypes.bool,
+};
+
+Navigation.defaultProps = {
+  display: true,
+};

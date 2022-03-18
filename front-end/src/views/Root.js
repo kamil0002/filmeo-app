@@ -15,16 +15,17 @@ import Movies from './Movies';
 import MovieDetails from './MovieDetails';
 import AddReview from './AddReview';
 import RentMovie from './RentMovie';
+import WatchMovie from './WatchMovie';
 
 const Root = () => {
   const location = useLocation();
-
+  console.log(location);
   return (
     <>
-      <GlobalStyles />
+      <GlobalStyles movieView={location.pathname.endsWith('ogladaj') ? 1 : 0} />
       <ThemeProvider theme={theme}>
-        <Navigation />
-        <Content>
+        <Navigation display={!location.pathname.endsWith('ogladaj')} />
+        <Content movieView={location.pathname.endsWith('ogladaj') ? 1 : 0}>
           <Routes>
             <Route path={routes.home} element={<Home />} />
             <Route path={routes.movies} element={<Movies />} />
@@ -34,9 +35,15 @@ const Root = () => {
             <Route path={routes.movieDetails} element={<MovieDetails />} />
             <Route path={routes.addReview} element={<AddReview />} />
             <Route path={routes.rentMovie} element={<RentMovie />} />
+            <Route path={routes.watchMovie} element={<WatchMovie />} />
           </Routes>
         </Content>
-        <Footer dashboardView={location.pathname === '/profil:action'} />
+        <Footer
+          display={
+            location.pathname !== '/profil:action' ||
+            !location.pathname.endsWith('ogladaj')
+          }
+        />
       </ThemeProvider>
     </>
   );
@@ -45,5 +52,8 @@ const Root = () => {
 export default Root;
 
 const Content = styled.div`
-  padding-top: ${({ theme }) => theme.navHeight};
+  /* ${({ movieView }) => console.log(movieView === true)}; */
+  padding-top: ${({ theme, movieView }) => (movieView ? 0 : theme.navHeight)};
+  /* padding-top: ${({ theme, movieView }) => theme.navHeight}; */
+  /* height: ${({ movieView }) => (movieView ? '100vh' : 'auto')}; */
 `;

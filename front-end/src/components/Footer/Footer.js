@@ -4,8 +4,9 @@ import { lighten } from '@mui/material';
 import Typography from 'components/Typography/Typography';
 import styled from 'styled-components';
 
-const Footer = ({ dashboardView }) => {
-  if (dashboardView) return '';
+const Footer = ({ display }) => {
+  console.log(display);
+  if (!display) return '';
 
   return (
     <Wrapper>
@@ -18,7 +19,7 @@ const Footer = ({ dashboardView }) => {
 
 export default Footer;
 
-const Wrapper = styled.div`
+const Wrapper = styled.footer`
   background: ${({ theme }) => lighten(theme.darkBlue, 0.15)};
   height: ${({ theme }) => theme.footerHeight};
   display: flex;
@@ -27,5 +28,9 @@ const Wrapper = styled.div`
 `;
 
 Footer.propTypes = {
-  dashboardView: PropTypes.bool,
+  display: PropTypes.bool,
+};
+
+Footer.defaultProps = {
+  display: true,
 };

@@ -10,7 +10,6 @@ import responsive from 'theme/responsive';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import Chat from 'components/Chat/Chat';
 import moviesData from 'movies-data.json';
-
 const Home = () => {
   return (
     <Wrapper>
@@ -102,6 +101,7 @@ const Header = styled.div`
   width: 100vw;
   background-size: cover;
   background-repeat: no-repeat;
+  margin-top: ${({ theme }) => theme.navHeight};
 `;
 
 const Heading = styled(Typography)`

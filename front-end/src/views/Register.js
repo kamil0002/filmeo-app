@@ -147,7 +147,7 @@ const Heading = styled(Typography)`
     }
 
     @media ${responsive.desktop} {
-      font-size: ${({ theme }) => theme.fontSize.lg};
+      font-size: ${({ theme }) => theme.fontSize.md};
     }
   }
 `;
