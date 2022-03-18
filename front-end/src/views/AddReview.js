@@ -103,6 +103,7 @@ const Wrapper = styled.div`
 const StyledPaper = styled(Paper)`
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 2rem 3rem;
   width: 96vw;
 

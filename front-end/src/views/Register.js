@@ -90,7 +90,9 @@ export default Register;
 const Wrapper = styled.div`
   min-height: calc(100vh - 70px);
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin: 4rem 0;
 
   @media ${responsive.tablet} {

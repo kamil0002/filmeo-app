@@ -96,20 +96,9 @@ const MovieDetails = () => {
           <Typography>{movie.description}</Typography>
         </MovieDescription>
       </MovieData>
-      <Button
-        sx={{
-          position: 'relative',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          marginTop: 6,
-          backgroundColor: '#FFF',
-        }}
-        variant="outlined"
-        href={movie.link}
-        target="_blank"
-      >
+      <MovieInfoButton variant="outlined" href={movie.link} target="_blank">
         Więcej informacji
-      </Button>
+      </MovieInfoButton>
       <Reviews>
         <ReviewsHeader marginBottom={3.5} fontWeight="bold">
           Opinie
@@ -178,7 +167,12 @@ const MovieDetails = () => {
 
 export default MovieDetails;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  @media ${responsive.desktop} {
+    width: 85vw;
+    margin: auto;
+  }
+`;
 
 const HeaderWrapper = styled.div`
   width: 100%;
@@ -370,6 +364,30 @@ const GridContainer = styled(Grid)`
       padding: 0 0.6rem;
       justify-content: flex-start;
       padding: 0 3rem;
+    }
+  }
+`;
+
+const MovieInfoButton = styled(Button)`
+  && {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 3rem;
+    background-color: '#FFF';
+    font-weight: ${({ theme }) => theme.fontBold};
+
+    @media ${responsive.tablet} {
+      width: 350px;
+      height: 60px;
+      font-weight: ${({ theme }) => theme.fontBold};
+      font-size: ${({ theme }) => theme.fontSize.lg};
+    }
+    @media ${responsive.desktop} {
+      width: 450px;
+      height: 85px;
+      font-weight: ${({ theme }) => theme.fontBold};
+      font-size: ${({ theme }) => theme.fontSize['xl']};
     }
   }
 `;
