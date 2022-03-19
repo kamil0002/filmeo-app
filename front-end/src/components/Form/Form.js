@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 
-const Form = ({ submitFn, children, buttonText }) => {
+const Form = ({ submitFn, children, buttonText, buttonType }) => {
   return (
     <StyledForm onSubmit={submitFn}>
       {children}
       <Button
         type="submit"
         sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'Poppins' }}
-        variant="contained"
+        variant={buttonType}
       >
         {buttonText}
       </Button>
@@ -29,4 +29,9 @@ Form.propTypes = {
   submitFn: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   buttonText: PropTypes.string.isRequired,
+  buttonType: PropTypes.string,
+};
+
+Form.defaultProps = {
+  buttonType: 'contained',
 };

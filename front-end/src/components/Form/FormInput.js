@@ -11,11 +11,13 @@ const FormInput = ({
   isValid,
   helperText,
   validator,
+  settings,
   ...props
 }) => {
   return (
     <FormControl required={true} margin="normal">
       <StyledTextField
+        settings={settings}
         {...props}
         error={isValid}
         {...validator}
@@ -33,8 +35,18 @@ const FormInput = ({
 export default FormInput;
 
 const StyledTextField = styled(TextField)`
-  @media ${responsive.tablet} {
-    width: 350px;
+  && {
+    @media ${responsive.tablet} {
+      width: 350px;
+    }
+
+    @media ${responsive.laptop} {
+      width: ${({ settings }) => settings && `425px`};
+    }
+
+    @media ${responsive.desktop} {
+      width: ${({ settings }) => settings && `600px`};
+    }
   }
 `;
 
@@ -45,8 +57,10 @@ FormInput.propTypes = {
   validator: PropTypes.any,
   isValid: PropTypes.bool,
   helperText: PropTypes.string.isRequired,
+  settings: PropTypes.string,
 };
 
 FormInput.defaultProps = {
   type: 'text',
+  settings: '',
 };
