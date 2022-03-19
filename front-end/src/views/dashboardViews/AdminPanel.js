@@ -5,18 +5,36 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
+import Form from 'components/Form/Form';
+import FormInput from 'components/Form/FormInput';
+import { useForm } from 'react-hook-form';
 
 const AdminPanel = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [selectedReview, setSelectedReview] = useState('');
 
+  const {
+    register: registerOpinionDelete,
+    handleSubmit: handleSubmitOpinionDelete,
+    formState: { errors: errors1 },
+  } = useForm({ shouldFocusError: false });
+
+  const {
+    register: registerUserBlock,
+    handleSubmit: handleSubmitUserBlock,
+    formState: { errors: errors2 },
+  } = useForm({ shouldFocusError: false });
+
+  const deleteOption = (data) => console.log(data);
+
+  const blockUser = (data) => console.log(data);
+
   return (
     <>
       <Typography fontWeight={700}>Panel Admina</Typography>
-      <Form>
+      <StyledForm>
         <Typography marginTop={3}>Usuwanie Filmów</Typography>
         <FormControl sx={{ marginY: 2 }}>
           <InputLabel id="movie">Film</InputLabel>
@@ -47,24 +65,28 @@ const AdminPanel = () => {
           Uwaga! Film zostanie usunięty łącznie z wszystkimi wypożyczeniami oraz
           recenzjami!
         </Typography>
-      </Form>
-      <Form>
+      </StyledForm>
+      <DeleteReviewWrapper>
         <Typography marginTop={3}>Usuń opinię</Typography>
-        <FormControl margin="none">
-          <StyledTextField
-            id="email"
-            label="E-Mail Użytkownika"
-            type="email"
-            autoComplete="off"
-            variant="standard"
-          />
-        </FormControl>
-        <StyledButton
-          sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'Poppins' }}
-          variant="outlined"
+        <Form
+          submitFn={handleSubmitOpinionDelete(deleteOption())}
+          buttonText="Szukaj"
+          buttonType="outlined"
         >
-          Szukaj
-        </StyledButton>
+          <FormInput
+            validator={{
+              ...registerOpinionDelete('email', {
+                required: true,
+                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
+              }),
+            }}
+            id="email"
+            label="Adres E-Mail"
+            type="email"
+            isValid={errors1.email ? true : false}
+            helperText="Adres E-mail nie poprawny"
+          />
+        </Form>
         <FormControl sx={{ marginY: 3 }}>
           <InputLabel id="review">Opinie</InputLabel>
           <Select
@@ -89,32 +111,36 @@ const AdminPanel = () => {
         >
           Usuń
         </StyledButton>
-      </Form>
-      <Form>
-        <Typography marginTop={5}>Zablokuj użytkownika</Typography>
-        <FormControl sx={{ marginY: 1 }}>
-          <StyledTextField
-            id="email"
-            label="E-Mail Użytkownika"
-            type="email"
-            autoComplete="off"
-            variant="standard"
-          />
-        </FormControl>
-        <StyledButton
-          sx={{ alignSelf: 'baseline', fontFamily: 'Poppins', marginTop: 2 }}
-          variant="outlined"
+      </DeleteReviewWrapper>
+      <BlockUserWrapper>
+        <Typography marginTop={3}>Zablokuj użytkownika</Typography>
+        <Form
+          submitFn={handleSubmitUserBlock(blockUser())}
+          buttonText="Szukaj"
+          buttonType="outlined"
         >
-          Zablokuj
-        </StyledButton>
-      </Form>
+          <FormInput
+            validator={{
+              ...registerUserBlock('email', {
+                required: true,
+                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
+              }),
+            }}
+            id="email"
+            label="Adres E-Mail"
+            type="email"
+            isValid={errors2.email ? true : false}
+            helperText="Adres E-mail nie poprawny"
+          />
+        </Form>
+      </BlockUserWrapper>
     </>
   );
 };
 
 export default AdminPanel;
 
-const Form = styled.form`
+const StyledForm = styled.form`
   margin-left: 1rem;
   display: flex;
   flex-direction: column;
@@ -126,6 +152,7 @@ const Form = styled.form`
 
 const StyledButton = styled(Button)`
   && {
+    display: block;
     font-size: ${({ theme }) => theme.fontSize.xs};
 
     @media ${responsive.mobile} {
@@ -134,18 +161,12 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const StyledTextField = styled(TextField)`
-  && {
-    margin-top: 0.7rem;
-    @media ${responsive.tablet} {
-      width: 350px;
-    }
+const DeleteReviewWrapper = styled.div`
+  margin-left: 1rem;
+  margin-top: 5rem;
+`;
 
-    @media ${responsive.laptop} {
-      width: 425px;
-    }
-    @media ${responsive.desktop} {
-      width: 550px;
-    }
-  }
+const BlockUserWrapper = styled.div`
+  margin-left: 1rem;
+  margin-top: 5rem;
 `;
