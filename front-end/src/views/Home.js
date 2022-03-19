@@ -6,7 +6,6 @@ import { Button } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilterOutlined';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-// import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
 import { Zoom, Fade, Slide } from 'react-reveal';
 import responsive from 'theme/responsive';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';

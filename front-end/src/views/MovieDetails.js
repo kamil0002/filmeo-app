@@ -10,6 +10,8 @@ import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import ReviewCard from 'components/ReviewCard/ReviewCard';
 import { Navigate } from 'react-router-dom';
+import axios from 'utils/axios';
+import { loadStripe } from '@stripe/stripe-js';
 
 const movie = moviesData.movies[0];
 
@@ -25,6 +27,19 @@ const MovieDetails = () => {
 
   const handleRedirectToOrder = () => {
     setRedirectToOrder(true);
+  };
+
+  const orderMovie = async (e) => {
+    e.preventDefault();
+    const stripe = await loadStripe(
+      'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
+    );
+
+    const session = await axios.get('/getSession');
+    console.log(session);
+    await stripe.redirectToCheckout({
+      sessionId: session.data.id,
+    });
   };
 
   if (redirectToReviews)
@@ -58,7 +73,7 @@ const MovieDetails = () => {
             </Typography>
           </MovieCost>
           <HeaderAction>
-            <HeaderButton onClick={handleRedirectToOrder} variant="contained">
+            <HeaderButton onClick={orderMovie} variant="contained">
               Zamów teraz!
             </HeaderButton>
           </HeaderAction>

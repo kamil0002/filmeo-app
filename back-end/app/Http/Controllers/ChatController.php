@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\Message;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Http\Requests\CategoryRequest;
-use Illuminate\Validation\Validator;
 
 class ChatController extends Controller
 {
