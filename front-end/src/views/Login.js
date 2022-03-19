@@ -16,9 +16,6 @@ const Login = () => {
     formState: { errors },
   } = useForm({
     shouldFocusError: false,
-    defaultValues: {
-      email: 'kamiln022@gmail.com',
-    },
   });
 
   const onSubmit = (data) => console.log(data);
