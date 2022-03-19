@@ -31,10 +31,10 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
               <span>Oceny</span>
             </NavigationItem>
             <NavigationItem
-              currentView={currentView === 'payments'}
-              onClick={() => handleViewChange('payments')}
+              currentView={currentView === 'stats'}
+              onClick={() => handleViewChange('stats')}
             >
-              <img src=".././images/nav-payments.svg" />
+              <img src=".././images/nav-stats.svg" />
               <span>Wydatki</span>
             </NavigationItem>
             <NavigationItem

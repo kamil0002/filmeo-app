@@ -2,6 +2,40 @@ import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'bottom',
+      title: {
+        text: 'Kategorie',
+        display: true,
+        position: 'center',
+        padding: {
+          top: 10,
+        },
+        font: {
+          family: 'Poppins, sans-serif',
+          weight: 500,
+          size: 14,
+        },
+      },
+    },
+    title: {
+      display: true,
+      text: 'Najchętniej oglądane gatunki',
+      fullSize: true,
+      align: 'center',
+      font: {
+        family: 'Poppins, sans-serif',
+        weight: 500,
+        size: 14,
+      },
+    },
+  },
+};
+
 const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
@@ -31,34 +65,7 @@ const data = {
 
 const DoughnutChart = () => {
   ChartJS.register(ArcElement, Tooltip, Legend, Title);
-  return (
-    <Doughnut
-      options={{
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            title: {
-              text: 'Kategorie',
-              display: true,
-              position: 'center',
-              padding: {
-                top: 10,
-              },
-            },
-          },
-          title: {
-            display: true,
-            text: 'Najchętniej oglądane gatunki',
-            fullSize: true,
-            align: 'center',
-          },
-        },
-      }}
-      data={data}
-    />
-  );
+  return <Doughnut options={options} data={data} />;
 };
 
 export default DoughnutChart;

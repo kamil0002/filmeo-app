@@ -29,11 +29,16 @@ const options = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: 'top',
+      display: false,
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: 'Wydatki',
+      font: {
+        family: 'Poppins, sans-serif',
+        weight: 500,
+        size: 14,
+      },
     },
   },
 };
@@ -42,7 +47,6 @@ const data = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',

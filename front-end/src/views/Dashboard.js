@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import AdminPanel from './dashboardViews/AdminPanel';
 import UserMovies from './dashboardViews/UserMovies';
 import UserReviews from './dashboardViews/UserReviews';
-import UserPayments from './dashboardViews/UserPayments';
+import UserStats from './dashboardViews/UserStats';
 import UserSettings from './dashboardViews/UserSettings';
 import DashboardTemplate from 'templates/DashboardTemplate';
 
 const Dashboard = () => {
-  const [currentView, setCurrentView] = useState('payments');
+  const [currentView, setCurrentView] = useState('stats');
 
   const handleCurrentViewChange = (newView) => setCurrentView(newView);
 
@@ -18,7 +18,7 @@ const Dashboard = () => {
     >
       {currentView === 'movies' && <UserMovies />}
       {currentView === 'reviews' && <UserReviews />}
-      {currentView === 'payments' && <UserPayments />}
+      {currentView === 'stats' && <UserStats />}
       {currentView === 'settings' && <UserSettings />}
       {currentView === 'admin' && <AdminPanel />}
     </DashboardTemplate>
