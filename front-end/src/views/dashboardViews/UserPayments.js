@@ -3,6 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Paper from '@mui/material/Paper';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import DoughnutChart from 'components/DoughnutChart/DoughnutChart';
+import responsive from 'theme/responsive';
+import LineChart from 'components/LineChart/LineChart';
 
 const UserPayments = () => {
   return (
@@ -10,15 +13,12 @@ const UserPayments = () => {
       <Typography fontSize={24} fontWeight={700} marginBottom={4}>
         Wydatki
       </Typography>
-
-      <ExpansesBoxes>
+      <TopRow>
         <StyledPaper elevation={6} rounded>
-          <Typography fontSize={18} align="center">
-            Wydatki
-          </Typography>
+          <StyledTypography align="center">Wydatki</StyledTypography>
           <Typography
             marginTop={2}
-            fontSize={20}
+            fontSize={16}
             variant="body1"
             color="text.secondary"
           >
@@ -32,13 +32,21 @@ const UserPayments = () => {
                 transform: 'translateY(-10%)',
               }}
             />
-            <Typography fontWeight={700} fontSize={24} color="#454C65">
+            <StyledTypography fontWeight={700} fontSize={24} color="#454C65">
               232
-            </Typography>
+            </StyledTypography>
             .00zł
           </TotalExpenses>
         </StyledPaper>
-      </ExpansesBoxes>
+
+        <DoughnutChartWrapper>
+          <DoughnutChart />
+        </DoughnutChartWrapper>
+        <LineChartWrapper>
+          <LineChart />
+        </LineChartWrapper>
+      </TopRow>
+      <BottomRow></BottomRow>
     </Wrapper>
   );
 };
@@ -54,7 +62,14 @@ const StyledPaper = styled(Paper)`
   && {
     width: max-content;
     padding: 1rem 2rem;
-    font-size: ${({ theme }) => theme.fontSize.m};
+    font-size: ${({ theme }) => theme.fontSize.s};
+    align-self: center;
+  }
+`;
+
+const StyledTypography = styled(Typography)`
+  && {
+    font-size: ${({ theme }) => theme.fontSize.s};
   }
 `;
 
@@ -65,3 +80,34 @@ const TotalExpenses = styled.div`
   margin-top: 0.2rem;
   color: #e0dfe2;
 `;
+
+const TopRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+
+  @media ${responsive.laptop} {
+    justify-content: space-around;
+  }
+`;
+
+const DoughnutChartWrapper = styled.div`
+  margin-top: 3rem;
+  width: 100%;
+  height: 300px;
+
+  @media ${responsive.laptop} {
+    width: 30%;
+    height: 400px;
+  }
+`;
+
+const LineChartWrapper = styled.div`
+  margin-top: 5rem;
+  width: 100%;
+  height: 300px;
+`;
+
+const BottomRow = styled.div``;
