@@ -31,6 +31,7 @@ const Chat = ({ id }) => {
     channel.bind('message', function (data) {
       allMessages.push(data);
       setMessages(allMessages);
+
       const messagesContainer = document.querySelector('.messages-container');
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
@@ -57,6 +58,9 @@ const Chat = ({ id }) => {
     );
 
     setMessage('');
+
+    const messagesContainer = document.querySelector('.messages-container');
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
   };
 
   return (
