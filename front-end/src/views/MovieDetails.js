@@ -12,6 +12,7 @@ import ReviewCard from 'components/ReviewCard/ReviewCard';
 import { Navigate } from 'react-router-dom';
 import axios from 'utils/axios';
 import { loadStripe } from '@stripe/stripe-js';
+import YouTube from 'react-youtube';
 
 const movie = moviesData.movies[0];
 
@@ -114,6 +115,10 @@ const MovieDetails = () => {
       <MovieInfoButton variant="outlined" href={movie.link} target="_blank">
         Więcej informacji
       </MovieInfoButton>
+      <MovieTrailer>
+        <MovieTrailerHeader>Zobacz zwiastun</MovieTrailerHeader>
+        <YouTube videoId="u34gHaRiBIU" />
+      </MovieTrailer>
       <Reviews>
         <ReviewsHeader marginBottom={3.5} fontWeight="bold">
           Opinie
@@ -221,6 +226,7 @@ const ImageOverlay = styled.div`
   inset: 0;
   clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
   height: 100%;
+  z-index: 10;
 `;
 
 const MovieTitle = styled(Typography)`
@@ -250,7 +256,6 @@ const MovieHeaderInfo = styled.div`
     width: 500px;
     left: 50%;
     transform: translateX(-50%);
-    /* justify-content: center; */
   }
 `;
 
@@ -321,8 +326,8 @@ const HeaderButton = styled(Button)`
 `;
 
 const MovieData = styled.div`
-  margin-top: 5rem;
   display: flex;
+  margin-top: -200px;
   flex-direction: column;
 
   @media ${responsive.tablet} {
@@ -332,10 +337,16 @@ const MovieData = styled.div`
   }
 `;
 const MovieInformation = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 5rem;
   align-items: center;
+  background: rgb(230, 230, 230);
+  z-index: -1;
+  flex-basis: 50%;
+  padding-top: 350px;
+  padding-bottom: 150px;
 
   p {
     margin-bottom: 0.8rem;
@@ -350,9 +361,36 @@ const MovieInformation = styled.div`
 const MovieDescription = styled.div`
   padding: 0 0.5rem;
   text-align: center;
+  flex-basis: 50%;
+  padding-top: 250px;
 
   @media ${responsive.tablet} {
     width: 50%;
+  }
+`;
+
+const MovieTrailer = styled.div`
+  margin: 4rem auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+
+  iframe {
+    height: 350px;
+    width: 80vw;
+    -webkit-box-shadow: 8px 8px 35px 1px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 8px 8px 35px 1px rgba(0, 0, 0, 0.6);
+    box-shadow: 8px 8px 35px 1px rgba(0, 0, 0, 0.6);
+
+    @media ${responsive.laptop} {
+      height: 600px;
+    }
+
+    @media ${responsive.desktop} {
+      height: 750px;
+    }
   }
 `;
 
@@ -366,6 +404,18 @@ const ReviewsHeader = styled(Typography)`
     margin-left: 3rem;
     @media ${responsive.tablet} {
       font-size: ${({ theme }) => theme.fontSize.m};
+    }
+  }
+`;
+
+const MovieTrailerHeader = styled(ReviewsHeader)`
+  && {
+    margin-bottom: 1.5rem;
+    font-weight: ${({ theme }) => theme.fontBold};
+
+    @media ${responsive.laptop} {
+      font-size: ${({ theme }) => theme.fontSize['2xl']};
+      margin: 5rem 0;
     }
   }
 `;
@@ -399,8 +449,8 @@ const MovieInfoButton = styled(Button)`
       font-size: ${({ theme }) => theme.fontSize.lg};
     }
     @media ${responsive.desktop} {
-      width: 450px;
-      height: 85px;
+      width: 420px;
+      height: 80px;
       font-weight: ${({ theme }) => theme.fontBold};
       font-size: ${({ theme }) => theme.fontSize['xl']};
     }

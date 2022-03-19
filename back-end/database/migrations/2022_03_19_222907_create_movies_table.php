@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('running_time');
             $table->string('poster');
             $table->string('video_link');
+            $table->string('trailer_link');
             $table->decimal('rating_average',5,1);
             $table->integer('rating_quantity');
             $table->decimal('cost',5,2);
