@@ -34,8 +34,8 @@ const MovieDetails = () => {
     const stripe = await loadStripe(
       'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
     );
-
-    const session = await axios.get('/getSession');
+    console.log(movie.id);
+    const session = await axios.get(`/getSession/${movie.id}`);
     console.log(session);
     await stripe.redirectToCheckout({
       sessionId: session.data.id,

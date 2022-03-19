@@ -22,7 +22,7 @@ Route::post('/message', [ChatController::class, 'message']);
 
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/getSession', [StripeController::class, 'getSession']);
+Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
 
 
 //* Proteced routes

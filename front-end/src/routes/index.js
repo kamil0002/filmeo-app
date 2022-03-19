@@ -6,6 +6,5 @@ export default {
   dashboard: '/profil',
   movieDetails: '/film/:slug',
   addReview: '/film/:slug/dodaj-opinie',
-  rentMovie: '/film/:slug/zamow',
   watchMovie: '/film/:slug/ogladaj',
 };

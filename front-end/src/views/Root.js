@@ -14,7 +14,6 @@ import Dashboard from './Dashboard';
 import Movies from './Movies';
 import MovieDetails from './MovieDetails';
 import AddReview from './AddReview';
-import RentMovie from './RentMovie';
 import WatchMovie from './WatchMovie';
 
 const Root = () => {
@@ -33,7 +32,6 @@ const Root = () => {
             <Route path={routes.dashboard} element={<Dashboard />} />
             <Route path={routes.movieDetails} element={<MovieDetails />} />
             <Route path={routes.addReview} element={<AddReview />} />
-            <Route path={routes.rentMovie} element={<RentMovie />} />
             <Route path={routes.watchMovie} element={<WatchMovie />} />
           </Routes>
         </Content>
