@@ -13,7 +13,16 @@ class Movie extends Model
 
     protected $primaryKey = 'id';
 
-    public function genres() {
-        return $this->hasMany(Genre::class);
+
+    public function review() {
+        return $this->belongsTo(Review::class);
+    }
+
+    public function rentals() {
+        return $this->belongsToMany(Rental::class);
+    }
+
+    public function genre() {
+        return $this->belongsTo(Genre::class);
     }
 }

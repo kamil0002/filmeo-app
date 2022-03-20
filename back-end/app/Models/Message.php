@@ -9,7 +9,7 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $table = 'posts';
+    protected $table = 'messages';
 
     protected $primaryKey = 'id';
 

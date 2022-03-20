@@ -45,4 +45,12 @@ class User extends Authenticatable
     public function messages() {
         return $this->hasMany(Message::class);
     }
+
+    public function review() {
+        return $this->belongsTo(Review::class);
+    }
+
+    public function rental() {
+        return $this->belongTo(Rental::class);
+    }
 }

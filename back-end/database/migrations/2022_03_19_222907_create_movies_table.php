@@ -16,11 +16,10 @@ return new class extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreign('genre_id')
-                ->references('id')
-                ->on('genres')
-                ->onDelete('cascade');
+            $table->bigInteger('genre_id')->unsigned();
+            $table->foreign('genre_id')->references('id')->on('genres');
             $table->string('description');
+            $table->string('short_description');
             $table->string('director');
             $table->date('release_date');
             $table->integer('running_time');
