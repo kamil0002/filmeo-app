@@ -200,15 +200,17 @@ const MovieDetails = () => {
           </Grid>
         </GridContainer>
       </Reviews>
-      <RentMovie elevation={14}>
-        <img
-          src="https://images.savoysystems.co.uk/KGH/9395940.jpg"
-          alt="movie-poster"
-        />
-        <StyledButton onClick={handleRedirectToOrder} variant="contained">
-          Wypożycz
-        </StyledButton>
-      </RentMovie>
+      <RentMovieWrapper>
+        <RentMovie elevation={14}>
+          <img
+            src="https://images.savoysystems.co.uk/KGH/9395940.jpg"
+            alt="movie-poster"
+          />
+          <StyledButton onClick={handleRedirectToOrder} variant="contained">
+            Wypożycz
+          </StyledButton>
+        </RentMovie>
+      </RentMovieWrapper>
     </Wrapper>
   );
 };
@@ -505,10 +507,29 @@ const MovieInfoButton = styled(Button)`
   }
 `;
 
+const RentMovieWrapper = styled.div`
+  margin-top: -9vw;
+  padding-top: 150px;
+  padding-bottom: 100px;
+  clip-path: polygon(0 9vw, 100% 0, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% 100%, 0 100%);
+  background: ${({ theme }) => theme.secondaryLight};
+  display: flex;
+  justify-content: center;
+
+  @media ${responsive.tablet} {
+    padding-top: 250px;
+    padding-bottom: 150px;
+  }
+
+  @media ${responsive.desktop} {
+    padding-top: 330px;
+  }
+`;
+
 const RentMovie = styled(Paper)`
   && {
     width: 80vw;
-    margin: 7rem auto;
     display: flex;
     position: relative;
     height: 100px;
@@ -525,7 +546,6 @@ const RentMovie = styled(Paper)`
     }
 
     @media ${responsive.tablet} {
-      margin: 10rem auto;
       height: 200px;
     }
   }
