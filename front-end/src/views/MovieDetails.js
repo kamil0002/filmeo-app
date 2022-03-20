@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Grid, Paper, Rating } from '@mui/material';
+import { Button, Grid, Paper } from '@mui/material';
 import moviesData from 'movies-data.json';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
