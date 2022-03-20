@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { Button, Grid, Rating } from '@mui/material';
+import { Button, Grid, Paper, Rating } from '@mui/material';
 import moviesData from 'movies-data.json';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
@@ -13,7 +13,7 @@ import ReviewCard from 'components/ReviewCard/ReviewCard';
 import { Navigate } from 'react-router-dom';
 import axios from 'utils/axios';
 import { loadStripe } from '@stripe/stripe-js';
-import YouTube from 'react-youtube';
+import ReactPlayer from 'react-player';
 
 const movie = moviesData.movies[0];
 
@@ -88,8 +88,10 @@ const MovieDetails = () => {
           <Typography
             fontWeight={700}
             align={'center'}
+            paddingX={2}
+            marginTop={2}
             marginBottom={7}
-            fontSize={24}
+            fontSize={22}
             color="#1465C0"
             textTransform="uppercase"
           >
@@ -116,28 +118,50 @@ const MovieDetails = () => {
           </MovieInfoButton>
         </MovieInformationWrapper>
         <MovieDescription>
-          <Typography marginBottom={3.5} fontWeight="bold">
-            Opis
+          <Typography
+            fontWeight={700}
+            align={'center'}
+            paddingX={2}
+            marginTop={2}
+            marginBottom={7}
+            fontSize={22}
+            color="#1465C0"
+            textTransform="uppercase"
+          >
+            Opis fabuły
           </Typography>
           <Typography>{movie.description}</Typography>
         </MovieDescription>
       </MovieData>
       <MovieTrailer>
-        <MovieTrailerHeader>Zobacz zwiastun</MovieTrailerHeader>
-        <YouTube videoId="u34gHaRiBIU" />
+        <ReactPlayer
+          config={{ youtube: {} }}
+          loop={true}
+          playing={true}
+          playIcon={true}
+          volume={0.05}
+          width="100%"
+          height="100%"
+          url="https://www.youtube.com/watch?v=mqqft2x_Aa4"
+          controls={false}
+        />
       </MovieTrailer>
       <Reviews>
-        <ReviewsHeader marginBottom={3.5} fontWeight="bold">
+        <ReviewsHeader
+          marginBottom={3.5}
+          fontWeight={700}
+          paddingX={2}
+          marginTop={2}
+          fontSize={22}
+          color="#1465C0"
+          textTransform="uppercase"
+        >
           Opinie
         </ReviewsHeader>
-        <Button
-          sx={{ backgroundColor: '#fff', marginBottom: 4, marginLeft: 6 }}
-          variant="outlined"
-          onClick={handleRedirectToReviews}
-        >
+        <AddReviewButton variant="outlined" onClick={handleRedirectToReviews}>
           Dodaj Opinię
-        </Button>
-        <GridContainer container columnSpacing={3} rowSpacing={3}>
+        </AddReviewButton>
+        <GridContainer gridRow={2} container columnSpacing={3} rowSpacing={3}>
           <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
           </Grid>
@@ -176,15 +200,12 @@ const MovieDetails = () => {
           </Grid>
         </GridContainer>
       </Reviews>
-      <RentMovie>
-        <StyledTypography fontWeight={700}>
-          Nie czekaj. Oglądaj już teraz!
-        </StyledTypography>
-        <StyledButton
-          onClick={handleRedirectToOrder}
-          size="large"
-          variant="contained"
-        >
+      <RentMovie elevation={14}>
+        <img
+          src="https://images.savoysystems.co.uk/KGH/9395940.jpg"
+          alt="movie-poster"
+        />
+        <StyledButton onClick={handleRedirectToOrder} variant="contained">
           Wypożycz
         </StyledButton>
       </RentMovie>
@@ -230,6 +251,8 @@ const HeaderWrapper = styled.div`
   width: 100%;
   height: 75vh;
   position: relative;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 9vw), 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 9vw), 0 100%);
 `;
 
 const Header = styled.div`
@@ -242,7 +265,6 @@ const HeaderImage = styled.img`
   height: 100%;
   object-fit: cover;
   object-position: 50% 25%;
-  clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
   z-index: -1;
 `;
 
@@ -256,7 +278,6 @@ const ImageOverlay = styled.div`
   );
   position: absolute;
   inset: 0;
-  clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
   height: 100%;
 `;
 
@@ -358,8 +379,10 @@ const HeaderButton = styled(Button)`
 
 const MovieData = styled.div`
   display: flex;
-  margin-top: -400px;
+  margin-top: -9vw;
   flex-direction: column;
+  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
+  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
 
   @media ${responsive.tablet} {
     flex-direction: row;
@@ -373,12 +396,16 @@ const MovieInformationWrapper = styled.div`
   background: rgb(230, 230, 230);
   z-index: -1;
   flex-basis: 50%;
-  padding-top: 420px;
-  padding-bottom: 50px;
+  padding-top: 100px;
+  padding-bottom: 90px;
 
   @media ${responsive.tablet} {
     margin-bottom: 0;
-    padding-top: 500px;
+    padding-top: 200px;
+  }
+
+  @media ${responsive.laptop} {
+    padding-bottom: 120px;
   }
 `;
 
@@ -387,41 +414,53 @@ const MovieDescription = styled.div`
   text-align: center;
   flex-basis: 50%;
   background: #fff;
-  padding: 60px 20px;
+  padding: 60px 20px 120px;
 
   @media ${responsive.tablet} {
     width: 50%;
-    padding-top: 500px;
+    padding-top: 100px;
+    padding-bottom: 80px;
+  }
+
+  @media ${responsive.desktop} {
+    padding-top: 150px;
   }
 `;
 
 const MovieTrailer = styled.div`
-  margin: 4rem auto;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  width: 80vw;
+  margin-top: calc(0px - 9vw);
+  width: 100%;
+  height: 85vmin;
+  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
+  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
 
   iframe {
-    height: 350px;
-    width: 80vw;
-    -webkit-box-shadow: 8px 8px 35px 1px rgba(0, 0, 0, 0.6);
-    -moz-box-shadow: 8px 8px 35px 1px rgba(0, 0, 0, 0.6);
-    box-shadow: 8px 8px 35px 1px rgba(0, 0, 0, 0.6);
+    height: 85vmin;
+  }
 
-    @media ${responsive.laptop} {
-      height: 600px;
-    }
-
-    @media ${responsive.desktop} {
-      height: 750px;
-    }
+  @media ${responsive.desktop} {
+    width: 95vw;
   }
 `;
 
 const Reviews = styled.div`
-  margin-top: 5rem;
+  margin-top: -9vw;
+  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
+  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
+  padding: 10rem 0;
+  background: ${({ theme }) => theme.lightBlue};
+
+  @media ${responsive.laptop} {
+    padding: 14rem 0;
+  }
+`;
+
+const AddReviewButton = styled(Button)`
+  && {
+    margin-bottom: 2rem;
+    margin-left: 3rem;
+    background: #fff;
+  }
 `;
 
 const ReviewsHeader = styled(Typography)`
@@ -430,18 +469,6 @@ const ReviewsHeader = styled(Typography)`
     margin-left: 3rem;
     @media ${responsive.tablet} {
       font-size: ${({ theme }) => theme.fontSize.m};
-    }
-  }
-`;
-
-const MovieTrailerHeader = styled(ReviewsHeader)`
-  && {
-    margin-bottom: 1.5rem;
-    font-weight: ${({ theme }) => theme.fontBold};
-
-    @media ${responsive.laptop} {
-      font-size: ${({ theme }) => theme.fontSize['2xl']};
-      margin: 5rem 0;
     }
   }
 `;
@@ -477,38 +504,50 @@ const MovieInfoButton = styled(Button)`
   }
 `;
 
-const RentMovie = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 5rem 0;
-  justify-content: space-between;
-  align-items: center;
-  height: 100px;
-
-  @media ${responsive.tablet} {
-    margin-bottom: 8rem;
-  }
-`;
-
-const StyledTypography = styled(Typography)`
+const RentMovie = styled(Paper)`
   && {
-    font-weight: ${({ theme }) => theme.fontBold};
+    width: 80vw;
+    margin: 7rem auto;
+    display: flex;
+    position: relative;
+    height: 100px;
+
+    img {
+      display: block;
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      position: absolute;
+      left: 0;
+      border-radius: 4px 0 0 4px;
+    }
 
     @media ${responsive.tablet} {
-      font-size: ${({ theme }) => theme.fontSize.xl};
-      margin-bottom: 2rem;
+      margin: 10rem auto;
+      height: 200px;
     }
   }
 `;
 
 const StyledButton = styled(Button)`
   && {
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
     font-weight: ${({ theme }) => theme.fontBold};
 
     @media ${responsive.tablet} {
-      font-size: ${({ theme }) => theme.fontSize.xl};
-      width: 320px;
+      width: 200px;
+      height: 50px;
+      font-size: ${({ theme }) => theme.fontSize.m};
+    }
+
+    @media ${responsive.laptop} {
+      width: 300px;
       height: 70px;
+      font-size: ${({ theme }) => theme.fontSize.lg};
     }
   }
 `;
