@@ -27,8 +27,8 @@ use Illuminate\Support\Facades\Mail;
 //* Public
 Route::post('/message', [ChatController::class, 'message']);
 
-Route::post('/register', [AuthController::class, 'register']);
 
+//* Payments with Stripe
 Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
 
 //* Register User
@@ -36,6 +36,7 @@ Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/login', [AuthController::class, 'login']);
+
 
 //* Mails
 Route::get('/email', [MailController::class, 'sendWelcomeMail']);
