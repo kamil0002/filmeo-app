@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -83,28 +84,37 @@ const MovieDetails = () => {
         </Header>
       </HeaderWrapper>
       <MovieData>
-        <MovieInformation>
-          <Typography>
-            <strong>Reżyser</strong>: {movie.director}
+        <MovieInformationWrapper>
+          <Typography
+            fontWeight={700}
+            align={'center'}
+            marginBottom={7}
+            fontSize={24}
+            color="#1465C0"
+            textTransform="uppercase"
+          >
+            Podstawowe informacje
           </Typography>
-          <Typography>
-            <strong>Gatunek</strong>: {movie.genre}
-          </Typography>
-          <Typography>
-            <strong>Wiek</strong>: +{movie.ageLimit}
-          </Typography>
-          <Typography>
-            <strong>Ocena</strong>:
-            <Rating
-              sx={{ zIndex: 100 }}
-              readOnly
-              value={movie.ratingAverage}
-              precision={0.1}
-              defaultValue={0.0}
-              size="small"
-            />
-          </Typography>
-        </MovieInformation>
+          <MovieInformation>
+            <img src="/images/movie-genre.png" alt="movie-genre" />
+            <MovieInformationText>{movie.genre}</MovieInformationText>
+          </MovieInformation>
+          <MovieInformation>
+            <img src="/images/movie-director.png" alt="movie-director" />
+            <MovieInformationText>{movie.director}</MovieInformationText>
+          </MovieInformation>
+          <MovieInformation>
+            <img src="/images/age-limit.png" alt="movie-age-limit" />
+            <MovieInformationText>{movie.ageLimit}</MovieInformationText>
+          </MovieInformation>
+          <MovieInformation>
+            <img src="/images/movie-rating.png" alt="movie-rating" />
+            <MovieInformationText>{movie.ratingAverage}/5</MovieInformationText>
+          </MovieInformation>
+          <MovieInfoButton variant="outlined" href={movie.link} target="_blank">
+            Więcej informacji
+          </MovieInfoButton>
+        </MovieInformationWrapper>
         <MovieDescription>
           <Typography marginBottom={3.5} fontWeight="bold">
             Opis
@@ -112,9 +122,6 @@ const MovieDetails = () => {
           <Typography>{movie.description}</Typography>
         </MovieDescription>
       </MovieData>
-      <MovieInfoButton variant="outlined" href={movie.link} target="_blank">
-        Więcej informacji
-      </MovieInfoButton>
       <MovieTrailer>
         <MovieTrailerHeader>Zobacz zwiastun</MovieTrailerHeader>
         <YouTube videoId="u34gHaRiBIU" />
@@ -187,9 +194,34 @@ const MovieDetails = () => {
 
 export default MovieDetails;
 
+const MovieInformation = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 230px;
+  height: 70px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+
+  img {
+    display: block;
+    width: 48px;
+  }
+`;
+
+const MovieInformationText = styled(Typography)`
+  && {
+    margin-left: 1rem;
+    font-size: ${({ theme }) => theme.fontSize.m};
+    font-weight: ${({ theme }) => theme.fontBold};
+    color: ${({ theme }) => theme.primaryBlue};
+  }
+`;
+
 const Wrapper = styled.div`
   @media ${responsive.desktop} {
-    width: 85vw;
+    width: 95vw;
     margin: auto;
   }
 `;
@@ -226,7 +258,6 @@ const ImageOverlay = styled.div`
   inset: 0;
   clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
   height: 100%;
-  z-index: 10;
 `;
 
 const MovieTitle = styled(Typography)`
@@ -327,45 +358,40 @@ const HeaderButton = styled(Button)`
 
 const MovieData = styled.div`
   display: flex;
-  margin-top: -200px;
+  margin-top: -400px;
   flex-direction: column;
 
   @media ${responsive.tablet} {
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-around;
   }
 `;
-const MovieInformation = styled.div`
+const MovieInformationWrapper = styled.div`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 5rem;
-  align-items: center;
+
   background: rgb(230, 230, 230);
   z-index: -1;
   flex-basis: 50%;
-  padding-top: 350px;
-  padding-bottom: 150px;
-
-  p {
-    margin-bottom: 0.8rem;
-    display: flex;
-    align-items: center;
-  }
+  padding-top: 420px;
+  padding-bottom: 50px;
 
   @media ${responsive.tablet} {
     margin-bottom: 0;
+    padding-top: 500px;
   }
 `;
+
 const MovieDescription = styled.div`
   padding: 0 0.5rem;
   text-align: center;
   flex-basis: 50%;
-  padding-top: 250px;
+  background: #fff;
+  padding: 60px 20px;
 
   @media ${responsive.tablet} {
     width: 50%;
+    padding-top: 500px;
   }
 `;
 
@@ -443,16 +469,10 @@ const MovieInfoButton = styled(Button)`
     font-weight: ${({ theme }) => theme.fontBold};
 
     @media ${responsive.tablet} {
-      width: 350px;
-      height: 60px;
+      width: 285px;
+      height: 50px;
       font-weight: ${({ theme }) => theme.fontBold};
-      font-size: ${({ theme }) => theme.fontSize.lg};
-    }
-    @media ${responsive.desktop} {
-      width: 420px;
-      height: 80px;
-      font-weight: ${({ theme }) => theme.fontBold};
-      font-size: ${({ theme }) => theme.fontSize['xl']};
+      font-size: ${({ theme }) => theme.fontSize.m};
     }
   }
 `;
