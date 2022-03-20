@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
@@ -21,7 +22,6 @@ const MovieTrailer = () => {
       <ReactPlayer
         loop={true}
         playing={true}
-        playIcon={true}
         volume={videoVolume}
         width="100%"
         height="100%"
@@ -44,6 +44,7 @@ const Wrapper = styled.div`
 
   @media ${responsive.desktop} {
     width: 95vw;
+    height: 800px;
   }
 `;
 
