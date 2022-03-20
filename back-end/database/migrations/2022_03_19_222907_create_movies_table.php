@@ -16,8 +16,6 @@ return new class extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->bigInteger('genre_id')->unsigned();
-            $table->foreign('genre_id')->references('id')->on('genres');
             $table->string('description');
             $table->string('short_description');
             $table->string('director');
@@ -26,6 +24,7 @@ return new class extends Migration
             $table->string('poster');
             $table->string('video_link');
             $table->string('trailer_link');
+            $table->string('details_page');
             $table->decimal('rating_average',5,1);
             $table->integer('rating_quantity');
             $table->decimal('cost',5,2);
