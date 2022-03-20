@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('surname');
             $table->string('role');
+            $table->boolean('banned');
+            $table->boolean('muted');
             $table->string('address');
             $table->date('birth_date');
             $table->string('email')->unique();

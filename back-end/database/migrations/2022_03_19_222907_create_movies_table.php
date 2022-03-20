@@ -29,7 +29,6 @@ return new class extends Migration
             $table->integer('rating_quantity');
             $table->decimal('cost',5,2);
             $table->integer('rentings_number')->nullable();
-            $table->date('date_added');
             $table->timestamps();
         });
     }
