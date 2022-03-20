@@ -414,16 +414,17 @@ const MovieDescription = styled.div`
   text-align: center;
   flex-basis: 50%;
   background: #fff;
-  padding: 60px 20px 120px;
+  padding: 100px 20px 90px;
 
   @media ${responsive.tablet} {
     width: 50%;
-    padding-top: 100px;
-    padding-bottom: 80px;
+    padding-top: 200px;
   }
 
   @media ${responsive.desktop} {
-    padding-top: 150px;
+    padding-bottom: 120px;
+    padding-left: 70px;
+    padding-right: 70px;
   }
 `;
 
