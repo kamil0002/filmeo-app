@@ -2,9 +2,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { Button, Grid, Paper, Rating } from '@mui/material';
 import moviesData from 'movies-data.json';
 import Typography from 'components/Typography/Typography';
@@ -13,7 +10,9 @@ import ReviewCard from 'components/ReviewCard/ReviewCard';
 import { Navigate } from 'react-router-dom';
 import axios from 'utils/axios';
 import { loadStripe } from '@stripe/stripe-js';
-import ReactPlayer from 'react-player';
+
+import Header from 'components/MovieDetailsHeader/MovieDetailsHeader';
+import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
 
 const movie = moviesData.movies[0];
 
@@ -31,7 +30,7 @@ const MovieDetails = () => {
     setRedirectToOrder(true);
   };
 
-  const orderMovie = async (e) => {
+  const rentMovie = async (e) => {
     e.preventDefault();
     const stripe = await loadStripe(
       'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
@@ -51,38 +50,7 @@ const MovieDetails = () => {
 
   return (
     <Wrapper>
-      <HeaderWrapper>
-        <Header>
-          <MovieTitle>Uncharted</MovieTitle>
-          <MovieHeaderInfo>
-            <Time>
-              <MovieTime></MovieTime>
-              <Typography fontWeight={700} color={'#fff'} fontSize={24}>
-                186m
-              </Typography>
-            </Time>
-            <ReleaseDate>
-              <MovieReleaseDate></MovieReleaseDate>
-              <Typography fontWeight={700} color={'#fff'} fontSize={24}>
-                2022
-              </Typography>
-            </ReleaseDate>
-          </MovieHeaderInfo>
-          <MovieCost>
-            <MovieCostIcon></MovieCostIcon>
-            <Typography fontWeight={700} color={'#fff'} fontSize={24}>
-              10zł/7 dni
-            </Typography>
-          </MovieCost>
-          <HeaderAction>
-            <HeaderButton onClick={orderMovie} variant="contained">
-              Zamów teraz!
-            </HeaderButton>
-          </HeaderAction>
-          <HeaderImage src={movie.poster} />
-          <ImageOverlay></ImageOverlay>
-        </Header>
-      </HeaderWrapper>
+      <Header rentMovieFn={rentMovie} movie={movie} />
       <MovieData>
         <MovieInformationWrapper>
           <Typography
@@ -133,19 +101,7 @@ const MovieDetails = () => {
           <Typography>{movie.description}</Typography>
         </MovieDescription>
       </MovieData>
-      <MovieTrailer>
-        <ReactPlayer
-          config={{ youtube: {} }}
-          loop={true}
-          playing={true}
-          playIcon={true}
-          volume={0.05}
-          width="100%"
-          height="100%"
-          url="https://www.youtube.com/watch?v=mqqft2x_Aa4"
-          controls={false}
-        />
-      </MovieTrailer>
+      <MovieTrailer />
       <Reviews>
         <ReviewsHeader
           marginBottom={3.5}
@@ -249,136 +205,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const HeaderWrapper = styled.div`
-  width: 100%;
-  height: 75vh;
-  position: relative;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 9vw), 0 100%);
-`;
-
-const Header = styled.div`
-  position: absolute;
-  inset: 0;
-`;
-
-const HeaderImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 25%;
-  z-index: -1;
-`;
-
-const ImageOverlay = styled.div`
-  background: rgb(67, 65, 88);
-  background: linear-gradient(
-    90deg,
-    rgba(67, 65, 88, 0.6674019949776786) 0%,
-    rgba(63, 63, 133, 0.6786064767703957) 35%,
-    rgba(47, 133, 150, 0.6505952722886029) 100%
-  );
-  position: absolute;
-  inset: 0;
-  height: 100%;
-`;
-
-const MovieTitle = styled(Typography)`
-  && {
-    color: ${({ theme }) => theme.secondaryLight};
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    top: 10%;
-    text-decoration: underline;
-    transform: translateX(-50%);
-    font-size: ${({ theme }) => theme.fontSize['3xl']};
-    font-weight: ${({ theme }) => theme.fontBold};
-  }
-`;
-
-const MovieHeaderInfo = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 30%;
-  z-index: 2;
-  display: flex;
-  justify-content: space-around;
-
-  @media ${responsive.tablet} {
-    width: 500px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-`;
-
-const Time = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const MovieTime = styled(AccessTimeOutlinedIcon)`
-  && {
-    color: #85b6ff;
-    font-size: 2.5rem;
-    margin-right: 0.4rem;
-  }
-`;
-
-const ReleaseDate = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const MovieReleaseDate = styled(CalendarMonthIcon)`
-  && {
-    color: #85b6ff;
-    font-size: 2.5rem;
-    margin-right: 0.4rem;
-  }
-`;
-
-const MovieCost = styled.div`
-  position: absolute;
-  left: 0%;
-  right: 0%;
-  top: 45%;
-  transform: translateX(-50);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MovieCostIcon = styled(AttachMoneyIcon)`
-  && {
-    color: #85b6ff;
-    font-size: 2.5rem;
-    margin-right: 0.4rem;
-  }
-`;
-
-const HeaderAction = styled.div`
-  position: absolute;
-  top: 60%;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  z-index: 2;
-`;
-
-const HeaderButton = styled(Button)`
-  && {
-    font-family: 'Poppins';
-
-    @media ${responsive.tablet} {
-      font-size: ${({ theme }) => theme.fontSize.m};
-    }
-  }
-`;
-
 const MovieData = styled.div`
   display: flex;
   margin-top: -9vw;
@@ -427,22 +253,6 @@ const MovieDescription = styled.div`
     padding-bottom: 120px;
     padding-left: 70px;
     padding-right: 70px;
-  }
-`;
-
-const MovieTrailer = styled.div`
-  margin-top: calc(0px - 9vw);
-  width: 100%;
-  height: 85vmin;
-  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-
-  iframe {
-    height: 85vmin;
-  }
-
-  @media ${responsive.desktop} {
-    width: 95vw;
   }
 `;
 
@@ -529,7 +339,7 @@ const RentMovieWrapper = styled.div`
 
 const RentMovie = styled(Paper)`
   && {
-    width: 80vw;
+    width: 90vw;
     display: flex;
     position: relative;
     height: 100px;
@@ -547,6 +357,7 @@ const RentMovie = styled(Paper)`
 
     @media ${responsive.tablet} {
       height: 200px;
+      width: 80vw;
     }
   }
 `;

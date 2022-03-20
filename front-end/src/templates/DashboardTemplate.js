@@ -75,6 +75,10 @@ const StyledPaper = styled(Paper)`
     @media ${responsive.laptop} {
       width: 80%;
     }
+
+    @media ${responsive.desktop} {
+      width: 65%;
+    }
   }
 `;
 
