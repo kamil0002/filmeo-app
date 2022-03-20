@@ -12,6 +12,12 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+
+    // public function __construct() {
+    //     $this->middleware(['auth', 'verified']);
+    // }
+
+
     public function register(Request $request)
     {
         $fields = $request->validate([
@@ -81,6 +87,7 @@ class AuthController extends Controller
     }
 
     public function logout() {
+        
         auth()->user()->tokens()->delete();
 
         return response()->json([
