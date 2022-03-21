@@ -156,10 +156,9 @@ const Heading = styled(Typography)`
 
 const StyledButton = styled(Button)`
   && {
-    margin: 1rem 2rem;
+    margin: 1rem 0.5rem;
 
     @media ${responsive.mobile} {
-      margin: 0 1.5rem;
       font-size: ${({ theme }) => theme.fontSize.xs};
       padding: 0.4rem 1rem;
     }
@@ -173,13 +172,13 @@ const StyledButton = styled(Button)`
 `;
 
 const Actions = styled.div`
+  display: flex;
+  margin-top: 20vh;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 
-  @media ${responsive.mobile} {
+  @media ${responsive.mobileM} {
     flex-direction: row;
   }
-  display: flex;
-  justify-content: center;
-  margin-top: 20vh;
 `;
