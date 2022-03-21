@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use Exception;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
+
 
 use App\Models\User;
 
@@ -33,6 +35,7 @@ class AuthController extends Controller
         $fields['role'] = $fields['role'] ?? 'user';
 
 
+        //* Create User
         $user = User::create([
             'name' => $fields['name'],
             'surname' => $fields['surname'],
@@ -49,6 +52,10 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token
         ];
+
+
+        //* Send Welcome Mail To a User
+        Mail::to($fields['email'])->send(new WelcomeMail($fields['name']));
 
         return response($response, 201);
     }

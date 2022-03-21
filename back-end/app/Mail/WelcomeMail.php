@@ -16,9 +16,14 @@ class WelcomeMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+
+    public $name;
+
+    public function __construct($name)
     {
-        //
+        $this->name = $name;
+        error_log($this->name);
+        error_log($name);
     }
 
     /**
@@ -28,6 +33,6 @@ class WelcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.welcome');
+        return $this->view('emails.welcome')->subject("Witaj w Filmeo - oglądaj i ciesz się filmowymi emocjami!");
     }
 }
