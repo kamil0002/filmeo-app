@@ -12,13 +12,13 @@ const UserMovies = () => {
         Wypożyczone Filmy
       </Typography>
       <GridContainer container columnSpacing={3} rowSpacing={3}>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.5}>
+        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
           <RentedMovie />
         </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.5}>
+        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
           <RentedMovie />
         </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.5}>
+        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
           <RentedMovie />
         </Grid>
       </GridContainer>

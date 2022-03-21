@@ -111,13 +111,17 @@ const StartChatting = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: transform 150ms ease-out;
+  transition: transform 200ms ease-out;
   -webkit-box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
   -moz-box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
   box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
 
   :hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
+
+    svg {
+      transform: scale(1);
+    }
   }
 `;
 

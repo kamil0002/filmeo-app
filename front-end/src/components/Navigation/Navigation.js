@@ -25,7 +25,7 @@ const Navigation = ({ display }) => {
           component="h2"
           marginLeft="1.2rem"
         >
-          Movie Rental
+          Filmeo
         </Title>
       </Brand>
       <Actions>
@@ -112,10 +112,13 @@ const Brand = styled.div`
 
 const Title = styled(Typography)`
   && {
-    font-size: ${({ theme }) => theme.fontSize.s};
+    font-family: 'Lobster', cursive;
+    color: ${({ theme }) => theme.primaryBlue};
+    letter-spacing: 3px;
+    font-size: ${({ theme }) => theme.fontSize.m};
 
     @media ${responsive.laptop} {
-      font-size: ${({ theme }) => theme.fontSize.lg};
+      font-size: ${({ theme }) => theme.fontSize.xl};
     }
   }
 `;
