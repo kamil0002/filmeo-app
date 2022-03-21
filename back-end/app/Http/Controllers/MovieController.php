@@ -5,9 +5,44 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Validator;
 
 class MovieController extends Controller
 {
+
+    private function createRules()
+    {
+        return [
+            'title' => 'bail|required|string|unique:movies',
+            'description' => 'required|string',
+            'short_description' => 'required|string',
+            'director' => 'required|string',
+            'release_date' => 'required|date|before:today',
+            'running_time' => 'required|numeric',
+            'poster' => 'required|string',
+            'movie_link' => 'required|string',
+            'trailer_link' => 'required|string',
+            'details_link' => 'required|string',
+            'cost' => 'required|numeric'
+        ];
+    }
+
+        private function updateRules()
+    {
+        return [
+            'title' => 'bail|string|unique:movies',
+            'description' => 'string',
+            'short_description' => 'string',
+            'director' => 'string',
+            'release_date' => 'date|before:today',
+            'running_time' => 'numeric',
+            'poster' => 'string',
+            'movie_link' => 'string',
+            'trailer_link' => 'string',
+            'details_link' => 'string',
+            'cost' => 'numeric'
+        ];
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,38 +59,18 @@ class MovieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function createMovie(Request $request)
     {
-        $fields = $request->validate([
-            'title' => 'bail|required|string|unique:movies',
-            'description' => 'required|string',
-            'short_description' => 'required|string',
-            'director' => 'required|string',
-            'release_date' => 'required|date|date_format:d-m-Y|before:today',
-            'running_time' => 'required|numeric',
-            'poster' => 'required|string',
-            'movie_link' => 'required|string',
-            'trailer_link' => 'required|string',
-            'details_link' => 'required|string',
-            'cost' => 'required|numeric'
-        ]);
 
-        $fields['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
+        $validator = Validator::make($request->all(), $this->createRules());
 
-        $movie = Movie::create([
-            'title' => $fields['title'],
-            'description' => $fields['description'],
-            'short_description' => $fields['short_description'],
-            'director' => $fields['director'],
-            'release_date' => $fields['release_date'],
-            'running_time' => $fields['running_time'],
-            'poster' => $fields['poster'],
-            'movie_link' => $fields['movie_link'],
-            'trailer_link' => $fields['trailer_link'],
-            'details_link' => $fields['details_link'],
-            'cost' => $fields['cost'],
-            'slug' => $fields['slug'],
-        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
+
+        $movie = Movie::create($request->all());
 
         return response([
             'status' => 'success',
@@ -71,9 +86,23 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getMovie($movieId)
     {
-        //
+        $movie = Movie::find($movieId);
+
+        if(!$movie) {
+            return response([
+                'status' => 'fail',
+                'message' => 'Film o podanym ID nie istnieje.'
+            ], 404);
+        }
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                $movie
+            ]
+        ]);
     }
 
     /**
@@ -83,9 +112,34 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateMovie(Request $request, $movieId)
     {
-        //
+        $movie = Movie::find($movieId);
+
+        if(!$movie) {
+            return response([
+                'status' => 'fail',
+                'message' => 'Film o podanym ID nie istnieje.'
+            ], 404);
+        }
+
+        
+        $validator = Validator::make($request->all(), $this->updateRules());
+        
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $request['title'] && $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
+
+        $movie->update($request->all());
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                $movie
+                ]
+            ]);
     }
 
     /**
@@ -94,8 +148,42 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function deleteMovie($movieId) {
+
+        $movie = Movie::destroy($movieId);
+
+        if(!$movie) {
+            return response([
+                'status' => 'fail',
+                'message' => 'Film o podanym ID nie istnieje'
+            ],404);
+        }
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                null
+            ]
+            ], 204);
+    }
+
+    public function filterMovies($filterText) {
+        $filteredMovies = Movie::where('title', 'like', '%'.$filterText.'%')->get();
+
+
+        if(count($filteredMovies) === 0) {
+            return response([
+                'status' => 'fail',
+                'message' => 'Nie znaleziono żadnego filmu o podanym tytule.'
+            ],404);
+        }
+
+        return response([
+            'status' => 'success',
+            'results' => count($filteredMovies),
+            'data' => [
+                $filteredMovies
+            ]
+            ]);
     }
 }

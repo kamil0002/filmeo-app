@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('trailer_link');
             $table->string('details_link');
             $table->decimal('rating_average',5,1)->nullable();
-            $table->integer('rating_quantity')->nullabe();
+            $table->integer('rating_quantity');
             $table->decimal('cost',5,2);
             $table->integer('rentings_number')->nullable();
             $table->timestamps();

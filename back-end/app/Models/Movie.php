@@ -26,7 +26,7 @@ class Movie extends Model
         'cost',
     ];
 
-        protected $attributes = [
+    protected $attributes = [
         'rating_quantity' => 0,
     ];
 

@@ -40,8 +40,12 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 //* Movie
-Route::post('/movies', [MovieController::class, 'store']);
+Route::post('/movies', [MovieController::class, 'createMovie']);
 Route::get('/movies', [MovieController::class, 'getAllMovies']);
+Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
+Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
+Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
+Route::get('/movies/search/{filterText}', [MovieController::class, 'filterMovies']);
 
 
 
