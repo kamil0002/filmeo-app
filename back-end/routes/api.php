@@ -8,6 +8,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\MovieController;
 use App\Http\Controllers\NewMovieNotificationController;
 use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Auth;
@@ -38,12 +39,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-//* Mails
-Route::get('/email', [MailController::class, 'sendWelcomeMail']);
+//* Movie
+Route::post('/movies', [MovieController::class, 'store']);
+Route::get('/movies', [MovieController::class, 'getAllMovies']);
 
-Route::get('/send-notification', [NewMovieNotificationController::class, 'sendNotification']);
-
-// Auth::routes(['verify' => true]);
 
 
 
