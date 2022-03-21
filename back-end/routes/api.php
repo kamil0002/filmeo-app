@@ -7,6 +7,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\NewMovieNotificationController;
@@ -32,10 +33,8 @@ Route::post('/message', [ChatController::class, 'message']);
 //* Payments with Stripe
 Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
 
-//* Register User
-
+//* Authentication
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::post('/login', [AuthController::class, 'login']);
 
 
@@ -47,8 +46,10 @@ Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
 Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
 Route::get('/movies/search/{filterText}', [MovieController::class, 'filterMovies']);
 
-
-
+//* Genre
+Route::post('/genres', [GenreController::class, 'createGenre']);
+Route::get('/genres', [GenreController::class, 'getAllGenres']);
+Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']);
 
 
 //* Proteced routes

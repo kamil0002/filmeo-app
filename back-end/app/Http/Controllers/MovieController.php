@@ -27,7 +27,7 @@ class MovieController extends Controller
         ];
     }
 
-        private function updateRules()
+    private function updateRules()
     {
         return [
             'title' => 'bail|string|unique:movies',
@@ -50,7 +50,21 @@ class MovieController extends Controller
      */
     public function getAllMovies()
     {
-        return Movie::all();
+        $movies =  Movie::all();
+
+        if(!$movies) {
+            return response([
+                'status' => 'error',
+                'message' => 'Nie znaleziono żadnych wyników'
+            ], 404);
+        }
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                $movies
+            ]
+            ]);
     }
 
     /**
@@ -118,7 +132,7 @@ class MovieController extends Controller
 
         if(!$movie) {
             return response([
-                'status' => 'fail',
+                'status' => 'error',
                 'message' => 'Film o podanym ID nie istnieje.'
             ], 404);
         }
@@ -154,7 +168,7 @@ class MovieController extends Controller
 
         if(!$movie) {
             return response([
-                'status' => 'fail',
+                'status' => 'error',
                 'message' => 'Film o podanym ID nie istnieje'
             ],404);
         }
@@ -173,7 +187,7 @@ class MovieController extends Controller
 
         if(count($filteredMovies) === 0) {
             return response([
-                'status' => 'fail',
+                'status' => 'error',
                 'message' => 'Nie znaleziono żadnego filmu o podanym tytule.'
             ],404);
         }
