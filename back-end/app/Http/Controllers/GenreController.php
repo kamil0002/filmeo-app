@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Models\Genre;
 
+use Illuminate\Support\Facades\Storage;
+
 class GenreController extends Controller
 {
     private function rules() {
@@ -54,6 +56,7 @@ class GenreController extends Controller
 
 
         $genre = Genre::create($request->all());
+
 
 
         return response([
