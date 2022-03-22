@@ -7,8 +7,9 @@ use App\Http\Controllers\API\v1\StripeController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\GenreController;
+use App\Http\Controllers\API\v1\ImageController;
 use App\Http\Controllers\API\v1\MovieController;
-
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ use App\Http\Controllers\API\v1\MovieController;
 |
 */
 
+
 //* Public
 Route::post('/message', [ChatController::class, 'message']);
 
@@ -32,6 +34,9 @@ Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+
+//*Upload Photo
+Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
 
 //* Movie
 Route::post('/movies', [MovieController::class, 'createMovie']);
