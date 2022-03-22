@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use Cviebrock\EloquentSluggable\Services\SlugService;
@@ -23,7 +24,8 @@ class MovieController extends Controller
             'movie_link' => 'required|string',
             'trailer_link' => 'required|string',
             'details_link' => 'required|string',
-            'cost' => 'required|numeric'
+            'cost' => 'required|numeric',
+            'genres' => 'required|array|min:1'
         ];
     }
 
@@ -40,7 +42,8 @@ class MovieController extends Controller
             'movie_link' => 'string',
             'trailer_link' => 'string',
             'details_link' => 'string',
-            'cost' => 'numeric'
+            'cost' => 'numeric',
+            'genres' => 'array|min:1'
         ];
     }
     /**
@@ -50,7 +53,8 @@ class MovieController extends Controller
      */
     public function getAllMovies()
     {
-        $movies =  Movie::all();
+
+        $movies = Movie::whereHas('genres')->with('genres')->get();
 
         if(count($movies) === 0) {
             return response([
@@ -61,6 +65,7 @@ class MovieController extends Controller
 
         return response([
             'status' => 'success',
+            'results' => count($movies),
             'data' => [
                 $movies
             ]
@@ -84,7 +89,24 @@ class MovieController extends Controller
 
         $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
 
+        $genresIds = [];
+
+        //Loop over all genres and find their ids
+        foreach($request->genres as $movieGenre) {
+            $genre = Genre::where('name','=',$movieGenre)->select('id')->get();
+            array_push($genresIds, $genre[0]->id);
+        }
+
+        // Find Genres in Genres table
+        $genres = Genre::find($genresIds);
+
+
+        
         $movie = Movie::create($request->all());
+
+        // Assign appropriate genres to movie
+        $movie->genres()->attach($genres);
+        
 
         return response([
             'status' => 'success',
@@ -102,7 +124,9 @@ class MovieController extends Controller
      */
     public function getMovie($movieId)
     {
-        $movie = Movie::find($movieId);
+        // $movie = Movie::find($movieId);
+
+        $movie = Movie::find($movieId)->whereHas('genres')->with('genres')->get();
 
         if(!$movie) {
             return response([
