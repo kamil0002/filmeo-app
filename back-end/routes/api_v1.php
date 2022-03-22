@@ -9,6 +9,7 @@ use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\GenreController;
 use App\Http\Controllers\API\v1\ImageController;
 use App\Http\Controllers\API\v1\MovieController;
+use App\Http\Middleware\CheckStatus;
 use Illuminate\Support\Facades\File;
 
 /*
@@ -26,11 +27,14 @@ use Illuminate\Support\Facades\File;
 //* Public
 Route::post('/message', [ChatController::class, 'message']);
 
+Route::get('/users', [UserController::class, 'getAllUsers']);
+
 
 //* Payments with Stripe
 Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
 
 //* Authentication
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -52,9 +56,14 @@ Route::get('/genres', [GenreController::class, 'getAllGenres']);
 Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']);
 
 
+
 //* Proteced routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
   //* User Routes
-  Route::get('/users', [UserController::class, 'index']);
   Route::post('/logout', [AuthController::class, 'logout']);
+
+
+  //* Update User
+  Route::put('/updateMyPassword/{userId}', [AuthController::class, 'updateMyPassword']);
+  Route::put('/updateProfile/{userId}', [UserController::class, 'updateUserData']);
 });

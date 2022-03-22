@@ -100,8 +100,6 @@ class MovieController extends Controller
         // Find Genres in Genres table
         $genres = Genre::find($genresIds);
 
-
-        
         $movie = Movie::create($request->all());
 
         // Assign appropriate genres to movie
@@ -113,7 +111,7 @@ class MovieController extends Controller
             'data' => [
                 $movie
             ]
-            ]);
+            ], 201);
     }
 
     /**
@@ -122,7 +120,7 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getMovie($movieId)
+    public function getMovie(int $movieId)
     {
         // $movie = Movie::find($movieId);
 
@@ -150,7 +148,7 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateMovie(Request $request, $movieId)
+    public function updateMovie(Request $request, int $movieId)
     {
         $movie = Movie::find($movieId);
 

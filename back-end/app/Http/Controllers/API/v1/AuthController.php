@@ -10,7 +10,7 @@ use App\Mail\WelcomeMail;
 
 
 use App\Models\User;
-
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -19,10 +19,8 @@ class AuthController extends Controller
     //     $this->middleware(['auth', 'verified']);
     // }
 
-
-    public function register(Request $request)
-    {
-        $fields = $request->validate([
+    private function registerRules() {
+        return [
             'name' => 'required|string',
             'surname' => 'required|string',
             'address' => 'required|string',
@@ -30,20 +28,45 @@ class AuthController extends Controller
             'role' => 'string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed'
-        ]);
+        ];
+    }
 
-        $fields['role'] = $fields['role'] ?? 'user';
+    private function updatePasswordRules() {
+        return [
+            'old_password' => 'required|string',
+            'password' => 'required|string|confirmed'
+        ];
+    }
+
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), $this->registerRules());
+
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        //* Check if user is banned
+
+        $user = User::where('email', $request['email']);
+
+        if($user->banned) {
+            error_log('USER IS BANNED');
+        }
+
+        $request['role'] = $request['role'] ?? 'user';
 
 
         //* Create User
         $user = User::create([
-            'name' => $fields['name'],
-            'surname' => $fields['surname'],
-            'address' => $fields['address'],
-            'birth_date' => $fields['birth_date'],
-            'role' => $fields['role'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password']),
+            'name' => $request['name'],
+            'surname' => $request['surname'],
+            'address' => $request['address'],
+            'birth_date' => $request['birth_date'],
+            'role' => $request['role'],
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
         ]);
 
         $token = $user->createToken('user_token')->plainTextToken;
@@ -54,8 +77,9 @@ class AuthController extends Controller
         ];
 
 
+        // TODO ENABLE EMAIL
         //* Send Welcome Mail To a User
-        Mail::to($fields['email'])->send(new WelcomeMail($fields['name']));
+        // Mail::to($fields['email'])->send(new WelcomeMail($fields['name']));
 
         return response($response, 201);
     }
@@ -73,6 +97,14 @@ class AuthController extends Controller
 
         //* Check Email
         $user = User::where('email', $fields['email'])->first();
+
+        if($user->banned) {
+            return response([
+                'status' => 'error',
+                'message' => 'Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS')
+            ],401);
+        }
+
 
 
         //* Check Password
@@ -101,4 +133,36 @@ class AuthController extends Controller
             'status' => 'success',
         ], 200);
     }
+
+    public function updateMyPassword(Request $request, int $userId) {
+
+        $user = User::find($userId);
+
+        //* Check if old password is correct
+        if (!$user || !Hash::check($request['old_password'], $user->password)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Niepoprawne stare hasło'
+            ], 401);
+        }
+
+
+        $validator = Validator::make($request->all(), $this->updatePasswordRules());
+
+        if($validator->fails()) {
+            return response([
+                'status' => 'error',
+                'message' => $validator->errors()
+            ]);
+        }
+
+        $user->update([
+            'password' => bcrypt($request['password']),
+        ]);
+
+        return response([
+            'status' => 'success'
+        ]);
+    }
+
 }

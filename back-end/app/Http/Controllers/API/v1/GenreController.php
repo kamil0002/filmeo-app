@@ -63,7 +63,7 @@ class GenreController extends Controller
             'data' => [
                 $genre
          ]
-        ]);
+        ],201);
 
     }
 
