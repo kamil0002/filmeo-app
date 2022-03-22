@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Uncharted",
+    "genres": ["Przygodowy", "Akcja"],
+    "short_description": "Nathan Drake wraz ze swoim przyjacielem Victorem Sullivanem i dziennikarką Eleną Fisher wyrusza na poszukiwania El Dorado.",
+    "description": "Bystry złodziej Nathan Drake (Tom Holland) zostaje zwerbowany przez doświadczonego poszukiwacza skarbów Victora „Sully” Sullivana (Mark Wahlberg), aby odzyskać fortunę utraconą przez Ferdynanda Magellana 500 lat temu. To, co zaczyna się jako zwykły napad, zmienia się w niezwykły wyścig. Złodzieje muszą zdobyć nagrodę przed bezwzględnym Moncadą (Antonio Banderas), który wierzy, że on i jego rodzina są prawowitymi spadkobiercami. Jeśli Nate i Sully zdołają rozszyfrować wskazówki oraz rozwiązać jedną z najstarszych zagadek świata, mogą znaleźć skarb o wartości 5 miliardów dolarów, a może nawet dawno zaginionego brata Nate'a… ale tylko wtedy, gdy nauczą się współpracować.",
+    "director": "Ruben Fleischer",
+    "release_date": "2022-02-19",
+    "running_time": 116,
+    "poster": "/images/movies/uncharted-poster.png",
+    "movie_link": "https://userload.co/embed/703a05515ad6/Uncharted_2022.mp4",
+    "trailer_link": "https://www.youtube.com/watch?v=eHp3MbsCbMg",
+    "details_link": "https://www.filmweb.pl/film/Uncharted-2022-545895",
+    "rating_quantity": 0,
+    "cost": 10
+  },
+    {
+    "title": "SKAZANI NA SHAWSHANK",
+    "genres": ["Dramat"],
+    "short_description": "Adaptacja opowiadania Stephena Kinga. Niesłusznie skazany na dożywocie bankier, stara się przetrwać w brutalnym, więziennym świecie.",
+    "description": "Film nakręcony na podstawie książki mistrza horrorów Stephena Kinga. Andy Dufresne (Tim Robbins), dobrze zarabiający bankier z Nowej Anglii, zostaje oskarżony o podwójne zabójstwo - swojej żony i jej kochanka. Uparcie twierdzi, że jest niewinny, ale dzięki niezbitym dowodom zostaje skazany na podwójne dożywocie w więzieniu Shawshank. Shawshank rządzi hipokryta i fanatyk biblijny, naczelnik Norton (Bob Gunton), a wraz z nim sadystyczni strażnicy. Andy już po kilku dniach poznaje brutalną, więzienną rzeczywistość, ale dzięki wrodzonej inteligencji, sprytowi oraz pomocy przyjaciela Ellisa Boyda \"Reda\" Reddinga (Morgan Freeman) udaje mu się zachować nadzieję, która pozwoli dokonać zemsty.",
+    "director": "Frank Darabont",
+    "release_date": "1994-09-1-",
+    "running_time": 144,
+    "poster": "/images/movies/shawshank-poster.png",
+    "movie_link": "https://userload.co/embed/d3a8639fba75",
+    "trailer_link": "https://www.youtube.com/watch?v=3TGpUNWUREQ",
+    "details_link": "https://www.filmweb.pl/film/Skazani+na+Shawshank-1994-1048",
+    "rating_quantity": 0,
+    "cost": 8
+  }
+]

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use Illuminate\Http\Request;
 use App\Models\Movie;
@@ -52,7 +52,7 @@ class MovieController extends Controller
     {
         $movies =  Movie::all();
 
-        if(!$movies) {
+        if(count($movies) === 0) {
             return response([
                 'status' => 'error',
                 'message' => 'Nie znaleziono żadnych wyników'

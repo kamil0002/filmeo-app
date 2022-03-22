@@ -1,19 +1,14 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\StripeController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\GenreController;
-use App\Http\Controllers\MailController;
-use App\Http\Controllers\MovieController;
-use App\Http\Controllers\NewMovieNotificationController;
-use App\Mail\WelcomeMail;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\API\v1\ChatController;
+use App\Http\Controllers\API\v1\StripeController;
+use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\GenreController;
+use App\Http\Controllers\API\v1\MovieController;
+
 
 /*
 |--------------------------------------------------------------------------
