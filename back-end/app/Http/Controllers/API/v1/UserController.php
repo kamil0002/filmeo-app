@@ -82,7 +82,9 @@ class UserController extends Controller
             ],400);
         }
 
-        $user = User::find($userId);
+        // $user = User::find($userId);
+
+        $user = auth()->user();
 
         $validator = Validator::make($request->all(), $this->updateRules());
 

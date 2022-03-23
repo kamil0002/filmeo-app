@@ -10,6 +10,7 @@ use App\Mail\WelcomeMail;
 
 
 use App\Models\User;
+use Error;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -41,6 +42,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+
         $validator = Validator::make($request->all(), $this->registerRules());
 
         if($validator->fails()) {
@@ -48,12 +50,6 @@ class AuthController extends Controller
         }
 
         //* Check if user is banned
-
-        $user = User::where('email', $request['email']);
-
-        if($user->banned) {
-            error_log('USER IS BANNED');
-        }
 
         $request['role'] = $request['role'] ?? 'user';
 
@@ -98,10 +94,10 @@ class AuthController extends Controller
         //* Check Email
         $user = User::where('email', $fields['email'])->first();
 
-        if($user->banned) {
+        if($user?->banned) {
             return response([
                 'status' => 'error',
-                'message' => 'Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS')
+                'message' => 'Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.'
             ],401);
         }
 
