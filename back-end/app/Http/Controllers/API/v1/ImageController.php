@@ -20,7 +20,7 @@ class ImageController extends Controller
 
         $file = $request->hasFile('avatar');
 
-        $validator = Validator::make($request->all, $this->rules());
+        $validator = Validator::make($request->all(), $this->rules());
 
         if($validator->fails()) {
             return response([
@@ -29,25 +29,35 @@ class ImageController extends Controller
             ]);
         }
 
-
-        if($file) {
-            $avatar = $request->file('avatar');
-
-
-            $fileName = time().$avatar->getClientOriginalName();
-    
-            $avatar->move(public_path('images/avatars'), $fileName);
-
-            return response([
-                'status' => 'success'
-            ]);
-        }
-
-        if($file) {
+        if(!$file) {
             return response([
                 'status' => 'error',
                 'message' => 'Niepoprawne zdjęcie'
             ],500);
+        }
+
+
+        if($file) {
+            $avatar = $request->file('avatar');
+
+            //* Create Random File Name
+            $fileName = time().$avatar->getClientOriginalName();
+    
+
+            //* Save File To appropriate folder
+            $avatar->move(public_path('images/avatars'), $fileName);
+
+            //* Get User
+            $user = auth()->user();
+
+            //* Update User File Path
+            $user->update([
+                'avatar' => $fileName
+            ]);
+
+            return response([
+                'status' => 'success'
+            ]);
         }
     }
 }

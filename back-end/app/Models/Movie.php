@@ -20,9 +20,9 @@ class Movie extends Model
         'release_date',
         'running_time',
         'poster',
-        'movie_link',
-        'trailer_link',
-        'details_link',
+        'movie_url',
+        'trailer_url',
+        'details_url',
         'cost',
     ];
 

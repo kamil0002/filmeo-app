@@ -48,9 +48,9 @@ class MovieSeeder extends Seeder
                 'release_date' => $val->release_date,
                 'running_time' => $val->running_time,
                 'poster' => $val->poster,
-                'movie_link' => $val->movie_link,
-                'trailer_link' => $val->trailer_link,
-                'details_link' => $val->details_link,
+                'movie_url' => $val->movie_url,
+                'trailer_url' => $val->trailer_url,
+                'details_url' => $val->details_url,
                 'cost' => $val->cost
             ]);
 

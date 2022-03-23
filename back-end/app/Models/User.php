@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'surname',
+        'avatar',
         'role',
         'banned',
         'muted',
@@ -32,7 +33,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $attributes = [
         'role' => 'user',
         'muted' => false,
-        'banned' => false
+        'banned' => false,
+        'avatar' => 'avatar.png'
     ];
 
     /**

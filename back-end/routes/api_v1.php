@@ -39,9 +39,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-//*Upload Photo
-Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
-
 //* Movie
 Route::post('/movies', [MovieController::class, 'createMovie']);
 Route::get('/movies', [MovieController::class, 'getAllMovies']);
@@ -66,4 +63,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   //* Update User
   Route::put('/updateMyPassword/{userId}', [AuthController::class, 'updateMyPassword']);
   Route::put('/updateProfile/{userId}', [UserController::class, 'updateUserData']);
+
+  //*Upload Photo
+  Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
 });

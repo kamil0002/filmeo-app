@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
+            $table->string('avatar')->default('avatar.png');
             $table->string('role');
-            $table->boolean('banned');
-            $table->boolean('muted');
+            $table->boolean('banned')->default(false);
+            $table->boolean('muted')->default(false);
             $table->string('address');
             $table->date('birth_date');
             $table->string('email')->unique();

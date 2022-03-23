@@ -23,9 +23,9 @@ return new class extends Migration
             $table->date('release_date');
             $table->integer('running_time');
             $table->string('poster');
-            $table->string('movie_link');
-            $table->string('trailer_link');
-            $table->string('details_link');
+            $table->string('movie_url');
+            $table->string('trailer_url');
+            $table->string('details_url');
             $table->decimal('rating_average',5,1)->nullable();
             $table->integer('rating_quantity');
             $table->decimal('cost',5,2);
