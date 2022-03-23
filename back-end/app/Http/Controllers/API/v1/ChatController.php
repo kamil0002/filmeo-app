@@ -41,7 +41,6 @@ class ChatController extends Controller
     }
 
     public function getMessages() {
-
         $currentTime = time();
 
         $to = date('Y-m-d');

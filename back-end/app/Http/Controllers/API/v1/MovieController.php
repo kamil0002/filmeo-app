@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use App\Models\Movie;
+use App\Models\Review;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,6 +62,12 @@ class MovieController extends Controller
                 'status' => 'error',
                 'message' => 'Nie znaleziono żadnych wyników'
             ], 404);
+        }
+
+        foreach($movies as $movie) {
+            $reviews = Review::where('movie_id', '=', $movie->id)->select('rating')->get();
+
+            $movie['rating_average'] = $reviews->avg('rating') ?? 0;
         }
 
         return response([
@@ -124,7 +131,9 @@ class MovieController extends Controller
     {
         // $movie = Movie::find($movieId);
 
-        $movie = Movie::find($movieId)->whereHas('genres')->with('genres')->get();
+        $movie = Movie::find($movieId)->with('genres')->with('reviews')->first();
+
+
 
         if(!$movie) {
             return response([
@@ -132,6 +141,10 @@ class MovieController extends Controller
                 'message' => 'Film o podanym ID nie istnieje.'
             ], 404);
         }
+
+        $reviews = Review::where('movie_id', '=', $movieId)->select('rating')->get();
+
+        $movie['rating_average'] = $reviews->avg('rating');
 
         return response([
             'status' => 'success',
@@ -220,6 +233,6 @@ class MovieController extends Controller
             'data' => [
                 $filteredMovies
             ]
-            ]);
+        ]);
     }
 }

@@ -43,8 +43,8 @@ class Movie extends Model
     protected $primaryKey = 'id';
     
 
-    public function review() {
-        return $this->belongsTo(Review::class);
+    public function reviews() {
+        return $this->hasMany(Review::class);
     }
 
     public function rentals() {

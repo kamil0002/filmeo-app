@@ -9,6 +9,7 @@ use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\GenreController;
 use App\Http\Controllers\API\v1\ImageController;
 use App\Http\Controllers\API\v1\MovieController;
+use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Middleware\CheckStatus;
 use Illuminate\Support\Facades\File;
 
@@ -48,6 +49,10 @@ Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']);
 //* Get Messages
 Route::get('/getMessages', [ChatController::class, 'getMessages']);
 
+//* Reviews
+Route::get('/reviews', [ReviewController::class, 'getAllReviews']);
+Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
+
 
 
 //* Proteced routes
@@ -67,4 +72,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   //* Messages
   Route::post('/message', [ChatController::class, 'sendMessage']);
+
+  //* Review
+  Route::post('/reviews/{movieId}', [ReviewController::class, 'createReview']);
 });

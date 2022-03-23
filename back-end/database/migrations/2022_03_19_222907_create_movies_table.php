@@ -26,10 +26,8 @@ return new class extends Migration
             $table->string('movie_url');
             $table->string('trailer_url');
             $table->string('details_url');
-            $table->decimal('rating_average',5,1)->nullable();
             $table->integer('rating_quantity');
             $table->decimal('cost',5,2);
-            $table->integer('rentings_number')->nullable();
             $table->timestamps();
         });
     }
