@@ -234,6 +234,39 @@ class MovieController extends Controller
         ]);
     }
 
+    public function getMoviesByGenre($genre) {
+
+        // $movies = Movie::whereHas('genres')->with('genres')->where('name', '=', $genre)->get();
+
+        $allMovies = Movie::all();
+        $filteredMovies = [];
+
+        foreach($allMovies as $movie) {
+            foreach($movie->genres as $movieGenre) {
+                if($genre === $movieGenre->name) {
+                    array_push($filteredMovies, $movie);
+                    break;
+                }
+            }
+        }
+
+
+
+        if(!$allMovies) {
+            return response([
+                'status' => 'error',
+                'message' => 'Nie ma żadnych filmów o podanej kategorii.'
+            ],404);
+        }
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                $filteredMovies
+            ]
+        ]);
+    }
+
 
     //* Aggregations
 }

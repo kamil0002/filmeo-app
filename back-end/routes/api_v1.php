@@ -40,6 +40,8 @@ Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
 Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
 Route::get('/movies/search/{filterText}', [MovieController::class, 'filterMovies']);
 
+Route::get('/movies/genre/{genre}', [MovieController::class, 'getMoviesByGenre']);
+
 //* Genre
 Route::post('/genres', [GenreController::class, 'createGenre']);
 Route::get('/genres', [GenreController::class, 'getAllGenres']);
