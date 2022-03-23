@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\AdminController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\v1\ChatController;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\File;
 
 
 Route::get('/users', [UserController::class, 'getAllUsers']);
+Route::get('/users/{userId}', [UserController::class, 'getUser']);
 
 
 //* Authentication
@@ -38,7 +40,6 @@ Route::post('/movies', [MovieController::class, 'createMovie']);
 Route::get('/movies', [MovieController::class, 'getAllMovies']);
 Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
 Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
-Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
 Route::get('/movies/search/{filterText}', [MovieController::class, 'filterMovies']);
 
 //* Genre
@@ -75,4 +76,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   //* Review
   Route::post('/reviews/{movieId}', [ReviewController::class, 'createReview']);
+
+  Route::delete('/reviews/{reviewId}', [ReviewController::class, 'deleteReview']);
+
+  
+  //* Admin func
+  Route::post('/user/reviews', [ReviewController::class, 'getAllUserReviews']);
+
+  Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
+
+  Route::get('/admin/ban/{userId}', [AdminController::class, 'banUser']);
+  Route::get('/admin/mute/{userId}', [AdminController::class, 'muteUser']);
+  Route::get('/admin/unban/{userId}', [AdminController::class, 'unbanUser']);
+  Route::get('/admin/unmute/{userId}', [AdminController::class, 'unmuteUser']);
 });

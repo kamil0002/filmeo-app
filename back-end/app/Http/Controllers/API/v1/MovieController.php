@@ -129,11 +129,7 @@ class MovieController extends Controller
      */
     public function getMovie(int $movieId)
     {
-        // $movie = Movie::find($movieId);
-
-        $movie = Movie::find($movieId)->with('genres')->with('reviews')->first();
-
-
+        $movie = Movie::find($movieId);
 
         if(!$movie) {
             return response([
@@ -141,6 +137,8 @@ class MovieController extends Controller
                 'message' => 'Film o podanym ID nie istnieje.'
             ], 404);
         }
+
+        $movie = $movie->with('genres')->with('reviews')->first();
 
         $reviews = Review::where('movie_id', '=', $movieId)->select('rating')->get();
 
@@ -235,4 +233,7 @@ class MovieController extends Controller
             ]
         ]);
     }
+
+
+    //* Aggregations
 }

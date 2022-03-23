@@ -18,40 +18,60 @@ class UserController extends Controller
             'email' => 'email|unique:users,email',
         ];
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function getAllUsers() {
         return User::all();
     }
 
-        public function updateUserData(Request $request) {
+    public function getUser($userId) {
+        $user = User::find($userId);
 
-        if($request['password'] || $request['password_confirmation']) {
+        if(!$user) {
             return response([
-                'status' => 'error',
-                'message' => 'Ten route nie służy do zmiany hasła!'
-            ],400);
+                'status' => 'failed',
+                'message' => 'Nie znaleziono podanego użytkownika'
+            ]);
         }
-
-        $user = auth()->user();
-
-        $validator = Validator::make($request->all(), $this->updateRules());
-
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        
-        $user->update($request->all());
 
         return response([
-            'status' => 'succes',
+            'status' => 'success',
             'data' => [
                 $user
             ]
         ]);
+    }
+
+    public function updateUserData(Request $request) {
+
+    if($request['password'] || $request['password_confirmation']) {
+        return response([
+            'status' => 'error',
+            'message' => 'Ten route nie służy do zmiany hasła!'
+        ],400);
+    }
+
+    $user = auth()->user();
+
+    $validator = Validator::make($request->all(), $this->updateRules());
+
+    if($validator->fails()) {
+        return response()->json($validator->errors(), 400);
+    }
+
+    
+    $user->update($request->all());
+
+    return response([
+        'status' => 'succes',
+        'data' => [
+            $user
+        ]
+    ]);
     }
 }
