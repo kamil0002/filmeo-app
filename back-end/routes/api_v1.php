@@ -11,8 +11,6 @@ use App\Http\Controllers\API\v1\GenreController;
 use App\Http\Controllers\API\v1\ImageController;
 use App\Http\Controllers\API\v1\MovieController;
 use App\Http\Controllers\API\v1\ReviewController;
-use App\Http\Middleware\CheckStatus;
-use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,12 +79,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   
   //* Admin func
-  Route::post('/user/reviews', [ReviewController::class, 'getAllUserReviews']);
+  Route::middleware('restrictToAdmin')->group(function() {
+    Route::post('/user/reviews', [ReviewController::class, 'getAllUserReviews']);
+    Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
+    Route::get('/admin/ban/{userId}', [AdminController::class, 'banUser']);
+    Route::get('/admin/unban/{userId}', [AdminController::class, 'unbanUser']);
+  });
 
-  Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
-
-  Route::get('/admin/ban/{userId}', [AdminController::class, 'banUser']);
-  Route::get('/admin/mute/{userId}', [AdminController::class, 'muteUser']);
-  Route::get('/admin/unban/{userId}', [AdminController::class, 'unbanUser']);
-  Route::get('/admin/unmute/{userId}', [AdminController::class, 'unmuteUser']);
+    Route::middleware('restrictToModerator')->group(function() {
+    Route::get('/admin/unmute/{userId}', [AdminController::class, 'unmuteUser']);
+    Route::get('/admin/mute/{userId}', [AdminController::class, 'muteUser']);
+  });
+  
 });
