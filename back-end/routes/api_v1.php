@@ -24,17 +24,10 @@ use Illuminate\Support\Facades\File;
 */
 
 
-//* Public
-Route::post('/message', [ChatController::class, 'message']);
-
 Route::get('/users', [UserController::class, 'getAllUsers']);
 
 
-//* Payments with Stripe
-Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
-
 //* Authentication
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -52,6 +45,9 @@ Route::post('/genres', [GenreController::class, 'createGenre']);
 Route::get('/genres', [GenreController::class, 'getAllGenres']);
 Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']);
 
+//* Get Messages
+Route::get('/getMessages', [ChatController::class, 'getMessages']);
+
 
 
 //* Proteced routes
@@ -59,11 +55,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   //* User Routes
   Route::post('/logout', [AuthController::class, 'logout']);
 
-
   //* Update User
-  Route::put('/updateMyPassword/{userId}', [AuthController::class, 'updateMyPassword']);
-  Route::put('/updateProfile/{userId}', [UserController::class, 'updateUserData']);
+  Route::put('/updateMyPassword', [AuthController::class, 'updateMyPassword']);
+  Route::put('/updateMyProfile', [UserController::class, 'updateUserData']);
 
   //*Upload Photo
   Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
+
+  //* Payments with Stripe
+  Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
+
+  //* Messages
+  Route::post('/message', [ChatController::class, 'sendMessage']);
 });

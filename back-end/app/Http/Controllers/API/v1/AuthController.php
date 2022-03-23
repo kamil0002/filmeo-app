@@ -106,7 +106,7 @@ class AuthController extends Controller
         //* Check Password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return response()->json([
-                'status' => 'failed',
+                'status' => 'error',
                 'message' => 'Niepoprawny e-mail lub hasło'
             ], 401);
         }
@@ -130,14 +130,14 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function updateMyPassword(Request $request, int $userId) {
+    public function updateMyPassword(Request $request) {
 
-        $user = User::find($userId);
+        $user = auth()->user();
 
         //* Check if old password is correct
         if (!$user || !Hash::check($request['old_password'], $user->password)) {
             return response()->json([
-                'status' => 'failed',
+                'status' => 'error',
                 'message' => 'Niepoprawne stare hasło'
             ], 401);
         }

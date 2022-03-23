@@ -23,57 +23,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllUsers()
-    {
+    public function getAllUsers() {
         return User::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-        public function updateUserData(Request $request, int $userId) {
+        public function updateUserData(Request $request) {
 
         if($request['password'] || $request['password_confirmation']) {
             return response([
@@ -81,8 +35,6 @@ class UserController extends Controller
                 'message' => 'Ten route nie służy do zmiany hasła!'
             ],400);
         }
-
-        // $user = User::find($userId);
 
         $user = auth()->user();
 
@@ -93,7 +45,6 @@ class UserController extends Controller
         }
 
         
-
         $user->update($request->all());
 
         return response([
