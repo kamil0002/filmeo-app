@@ -48,7 +48,8 @@ class ChatController extends Controller
         $from = date('2022-03-22', $currentTime - 12 * 60 * 60);
 
         //* Get Messages From Last 12 hours
-        $messages = Message::whereDate('created_at', '>=', $from)->whereDate('created_at', '<=', $to)->get();
+        $messages = Message::whereDate('created_at', '>=', $from)->whereDate('created_at', '<=', $to)
+        ->with('user')->get();
 
         return response([
             'status' => 'success',
