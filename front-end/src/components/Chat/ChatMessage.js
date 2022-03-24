@@ -2,15 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
+import { Avatar } from '@mui/material';
 import responsive from 'theme/responsive';
 
 const ChatMessage = ({ text, userName, date, self }) => {
   return (
     <Message self={self} variant="body1" as="div" fontSize={14}>
-      <Typography fontSize={10} fontWeight={700}>
-        {userName}, {date}
-      </Typography>
-      {text}
+      <UserData>
+        <UserAvatar
+          alt="Remy Sharp"
+          src="https://mui.com/static/images/avatar/1.jpg"
+        />
+        <Typography fontSize={12} fontWeight={700}>
+          {userName}, {date}
+        </Typography>
+      </UserData>
+      <Typography>{text}</Typography>
     </Message>
   );
 };
@@ -37,6 +44,17 @@ const Message = styled(Typography)`
       font-size: ${({ theme }) => theme.fontSize.s};
     }
   }
+`;
+
+const UserData = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: -15px;
+  margin-bottom: 1rem;
+`;
+
+const UserAvatar = styled(Avatar)`
+  margin-right: 0.6rem;
 `;
 
 ChatMessage.propTypes = {

@@ -70,6 +70,34 @@ const Chat = ({ id }) => {
           Chat - podziel się wrażeniami
         </ChatHeading>
         <Messages className="messages-container">
+          <ChatMessage
+            text="Lorem laborum occaecat anim laborum cupidatat magna cupidatat laborum ullamco elit commodo. Fugiat ullamco culpa"
+            userName="Kamil"
+            date={new Date().toLocaleDateString('pl-PL', {
+              weekday: 'long',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          />
+          <ChatMessage
+            text="Lorem laborum occaecat anim laborum cupidatat magna cupidatat laborum ullamco elit commodo. Fugiat ullamco culpa"
+            userName="Kamil"
+            date={new Date().toLocaleDateString('pl-PL', {
+              weekday: 'long',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          />
+          <ChatMessage
+            text="Lorem laborum occaecat anim laborum cupidatat magna cupidatat laborum ullamco elit commodo. Fugiat ullamco culpa"
+            userName="Kamil"
+            self
+            date={new Date().toLocaleDateString('pl-PL', {
+              weekday: 'long',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          />
           {messages.map((message, i) => {
             return (
               <ChatMessage
