@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 const AdminPanel = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [selectedReview, setSelectedReview] = useState('');
+  const [selectedToUnban, setSelectedToUnban] = useState('Zablokowani');
 
   const {
     register: registerOpinionDelete,
@@ -38,8 +39,7 @@ const AdminPanel = () => {
         <Typography marginTop={3}>Usuwanie Filmów</Typography>
         <FormControl sx={{ marginY: 2 }}>
           <InputLabel id="movie">Film</InputLabel>
-          <Select
-            sx={{ width: 200 }}
+          <StyledSelect
             labelId="movie"
             id="movie-select"
             value={selectedMovie}
@@ -50,7 +50,7 @@ const AdminPanel = () => {
             <MenuItem value={'Uncharted'}>Uncharted</MenuItem>
             <MenuItem value={'The Batman'}>The Batman</MenuItem>
             <MenuItem value={'Sing 2'}>Sing 2</MenuItem>
-          </Select>
+          </StyledSelect>
         </FormControl>
         <StyledButton
           sx={{ alignSelf: 'baseline', fontFamily: 'Poppins' }}
@@ -89,8 +89,7 @@ const AdminPanel = () => {
         </Form>
         <FormControl sx={{ marginY: 3 }}>
           <InputLabel id="review">Opinie</InputLabel>
-          <Select
-            sx={{ width: 200 }}
+          <StyledSelect
             labelId="review"
             id="user-reviews"
             value={selectedReview}
@@ -102,7 +101,7 @@ const AdminPanel = () => {
             <MenuItem value={'Uncharted'}>Recenzja 1...</MenuItem>
             <MenuItem value={'The Batman'}>Recenzja 2...</MenuItem>
             <MenuItem value={'Sing 2'}>Recenzja 3...</MenuItem>
-          </Select>
+          </StyledSelect>
         </FormControl>
         <StyledButton
           sx={{ alignSelf: 'baseline', fontFamily: 'Poppins' }}
@@ -134,6 +133,26 @@ const AdminPanel = () => {
           />
         </Form>
       </BlockUserWrapper>
+
+      <UnblockUserWrapper>
+        <Typography marginTop={3} marginBottom={3}>
+          Odblokuj użytkownika
+        </Typography>
+        <FormControl>
+          <StyledSelect
+            labelId="blocked"
+            id="blocked-users"
+            value={selectedToUnban}
+            label="Zablokowani"
+            inputProps={{ MenuProps: { disableScrollLock: true } }}
+            onChange={(e) => setSelectedToUnban(e.target.value)}
+          >
+            <MenuItem value={'laura@example.com'}>laura@example.com.</MenuItem>
+            <MenuItem value={'john@example.com'}>Recenzja 2...</MenuItem>
+            <MenuItem value={'adam@example.com'}>Recenzja 3...</MenuItem>
+          </StyledSelect>
+        </FormControl>
+      </UnblockUserWrapper>
     </>
   );
 };
@@ -161,12 +180,21 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const StyledSelect = styled(Select)`
+  && {
+    width: 150px;
+
+    @media ${responsive.mobileM} {
+      width: 200px;
+    }
+  }
+`;
+
 const DeleteReviewWrapper = styled.div`
   margin-left: 1rem;
   margin-top: 5rem;
 `;
 
-const BlockUserWrapper = styled.div`
-  margin-left: 1rem;
-  margin-top: 5rem;
-`;
+const BlockUserWrapper = styled(DeleteReviewWrapper)``;
+
+const UnblockUserWrapper = styled(BlockUserWrapper)``;
