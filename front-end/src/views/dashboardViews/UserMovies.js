@@ -12,15 +12,15 @@ const UserMovies = () => {
         Wypożyczone Filmy
       </Typography>
       <GridContainer container columnSpacing={3} rowSpacing={3}>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
+        <GridItem item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
           <RentedMovie />
-        </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
+        </GridItem>
+        <GridItem item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
           <RentedMovie />
-        </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
+        </GridItem>
+        <GridItem item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
           <RentedMovie />
-        </Grid>
+        </GridItem>
       </GridContainer>
     </Wrapper>
   );
@@ -47,5 +47,11 @@ const GridContainer = styled(Grid)`
       padding: 0 0.6rem;
       justify-content: flex-start;
     }
+  }
+`;
+
+const GridItem = styled(Grid)`
+  && {
+    max-width: 250px;
   }
 `;

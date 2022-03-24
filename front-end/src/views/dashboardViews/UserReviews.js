@@ -12,42 +12,42 @@ const UserReviews = () => {
         Wystawione Opinie
       </Typography>
       <GridContainer container columnSpacing={3} rowSpacing={3}>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
-        <Grid item xs={11} sm={6} lg={4} xl={3}>
+        </GridItem>
+        <GridItem item xs={11} sm={6} lg={4} xl={3}>
           <ReviewCard />
-        </Grid>
+        </GridItem>
       </GridContainer>
     </Wrapper>
   );
@@ -74,5 +74,11 @@ const GridContainer = styled(Grid)`
       padding: 0 0.6rem;
       justify-content: flex-start;
     }
+  }
+`;
+
+const GridItem = styled(Grid)`
+  && {
+    max-width: 275px;
   }
 `;

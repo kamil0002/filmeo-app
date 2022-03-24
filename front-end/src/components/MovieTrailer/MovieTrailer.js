@@ -44,7 +44,7 @@ const Wrapper = styled.div`
 
   @media ${responsive.desktop} {
     width: 95vw;
-    height: 800px;
+    height: 1000px;
   }
 `;
 
@@ -56,7 +56,7 @@ const VideoActions = styled.div`
   opacity: 0.5;
 
   @media ${responsive.desktop} {
-    bottom: 22%;
+    bottom: 25%;
   }
 `;
 

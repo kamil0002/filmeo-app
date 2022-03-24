@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Grid, Paper } from '@mui/material';
-import moviesData from 'movies-data.json';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import ReviewCard from 'components/ReviewCard/ReviewCard';
 import { Navigate } from 'react-router-dom';
 import axios from 'utils/axios';
 import { loadStripe } from '@stripe/stripe-js';
+import moviesData from 'movies-data.json';
 
 import Header from 'components/MovieDetailsHeader/MovieDetailsHeader';
 import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
@@ -117,42 +118,43 @@ const MovieDetails = () => {
           Dodaj Opinię
         </AddReviewButton>
         <GridContainer gridRow={2} container columnSpacing={3} rowSpacing={3}>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+            <DeleteReviewIcon />
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
-          <Grid item xs={10} sm={6} md={4} lg={3} xl={2}>
+          </GridItem>
+          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
             <ReviewCard profile={false} />
-          </Grid>
+          </GridItem>
         </GridContainer>
       </Reviews>
       <RentMovieWrapper>
@@ -234,6 +236,28 @@ const MovieInformationWrapper = styled.div`
   @media ${responsive.laptop} {
     padding-bottom: 120px;
   }
+
+  @media ${responsive.desktop} {
+    padding-top: 240px;
+  }
+`;
+
+const MovieInfoButton = styled(Button)`
+  && {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 3rem;
+    background-color: #fff;
+    font-weight: ${({ theme }) => theme.fontBold};
+
+    @media ${responsive.tablet} {
+      width: 285px;
+      height: 50px;
+      font-weight: ${({ theme }) => theme.fontBold};
+      font-size: ${({ theme }) => theme.fontSize.m};
+    }
+  }
 `;
 
 const MovieDescription = styled.div`
@@ -249,39 +273,10 @@ const MovieDescription = styled.div`
   }
 
   @media ${responsive.desktop} {
+    padding-top: 240px;
     padding-bottom: 120px;
     padding-left: 70px;
     padding-right: 70px;
-  }
-`;
-
-const Reviews = styled.div`
-  margin-top: -9vw;
-  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  padding: 10rem 0;
-  background: ${({ theme }) => theme.lightBlue};
-
-  @media ${responsive.laptop} {
-    padding: 14rem 0;
-  }
-`;
-
-const AddReviewButton = styled(Button)`
-  && {
-    margin-bottom: 2rem;
-    margin-left: 3rem;
-    background: #fff;
-  }
-`;
-
-const ReviewsHeader = styled(Typography)`
-  && {
-    font-size: ${({ theme }) => theme.fontSize.sm};
-    margin-left: 3rem;
-    @media ${responsive.tablet} {
-      font-size: ${({ theme }) => theme.fontSize.m};
-    }
   }
 `;
 
@@ -298,19 +293,53 @@ const GridContainer = styled(Grid)`
   }
 `;
 
-const MovieInfoButton = styled(Button)`
+const GridItem = styled(Grid)`
   && {
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 3rem;
-    background-color: '#FFF';
-    font-weight: ${({ theme }) => theme.fontBold};
+    max-width: 275px;
+  }
+`;
 
+const Reviews = styled.div`
+  margin-top: -9vw;
+  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
+  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
+  padding: 10rem 0;
+  background: ${({ theme }) => theme.lightBlue};
+
+  @media ${responsive.laptop} {
+    padding: 14rem 0;
+  }
+
+  @media ${responsive.desktop} {
+    padding-top: 15rem;
+    padding-bottom: 20rem;
+  }
+`;
+
+const DeleteReviewIcon = styled(DeleteIcon)`
+  && {
+    position: absolute;
+    right: 2.5%;
+    top: 17%;
+    cursor: pointer;
+    color: #c02020;
+  }
+`;
+
+const AddReviewButton = styled(Button)`
+  && {
+    margin-bottom: 2rem;
+    margin-left: 3rem;
+    background: #fff;
+  }
+`;
+
+const ReviewsHeader = styled(Typography)`
+  && {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    margin-left: 3rem;
     @media ${responsive.tablet} {
-      width: 285px;
-      height: 50px;
-      font-weight: ${({ theme }) => theme.fontBold};
       font-size: ${({ theme }) => theme.fontSize.m};
     }
   }

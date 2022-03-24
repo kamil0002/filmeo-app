@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import InputLabel from '@mui/material/InputLabel';
@@ -13,22 +14,13 @@ import { useForm } from 'react-hook-form';
 
 const AdminPanel = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
-  const [selectedReview, setSelectedReview] = useState('');
-  const [selectedToUnban, setSelectedToUnban] = useState('Zablokowani');
-
-  const {
-    register: registerOpinionDelete,
-    handleSubmit: handleSubmitOpinionDelete,
-    formState: { errors: errors1 },
-  } = useForm({ shouldFocusError: false });
+  const [selectedToUnban, setSelectedToUnban] = useState('');
 
   const {
     register: registerUserBlock,
     handleSubmit: handleSubmitUserBlock,
     formState: { errors: errors2 },
   } = useForm({ shouldFocusError: false });
-
-  const deleteOption = (data) => console.log(data);
 
   const blockUser = (data) => console.log(data);
 
@@ -66,51 +58,6 @@ const AdminPanel = () => {
           recenzjami!
         </Typography>
       </StyledForm>
-      <DeleteReviewWrapper>
-        <Typography marginTop={3}>Usuń opinię</Typography>
-        <Form
-          submitFn={handleSubmitOpinionDelete(deleteOption())}
-          buttonText="Szukaj"
-          buttonType="outlined"
-        >
-          <FormInput
-            validator={{
-              ...registerOpinionDelete('email', {
-                required: true,
-                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
-              }),
-            }}
-            id="email"
-            label="Adres E-Mail"
-            type="email"
-            isValid={errors1.email ? true : false}
-            helperText="Adres E-mail nie poprawny"
-          />
-        </Form>
-        <FormControl sx={{ marginY: 3 }}>
-          <InputLabel id="review">Opinie</InputLabel>
-          <StyledSelect
-            labelId="review"
-            id="user-reviews"
-            value={selectedReview}
-            label="Opinie"
-            inputProps={{ MenuProps: { disableScrollLock: true } }}
-            onChange={(e) => setSelectedReview(e.target.value)}
-            disabled
-          >
-            <MenuItem value={'Uncharted'}>Recenzja 1...</MenuItem>
-            <MenuItem value={'The Batman'}>Recenzja 2...</MenuItem>
-            <MenuItem value={'Sing 2'}>Recenzja 3...</MenuItem>
-          </StyledSelect>
-        </FormControl>
-        <StyledButton
-          sx={{ alignSelf: 'baseline', fontFamily: 'Poppins' }}
-          variant="outlined"
-          disabled
-        >
-          Usuń
-        </StyledButton>
-      </DeleteReviewWrapper>
       <BlockUserWrapper>
         <Typography marginTop={3}>Zablokuj użytkownika</Typography>
         <Form
@@ -139,17 +86,19 @@ const AdminPanel = () => {
           Odblokuj użytkownika
         </Typography>
         <FormControl>
+          <InputLabel id="blocked-user">Wybierz</InputLabel>
+
           <StyledSelect
-            labelId="blocked"
+            labelId="blocked-user"
             id="blocked-users"
             value={selectedToUnban}
-            label="Zablokowani"
+            label="Wybierz"
             inputProps={{ MenuProps: { disableScrollLock: true } }}
             onChange={(e) => setSelectedToUnban(e.target.value)}
           >
             <MenuItem value={'laura@example.com'}>laura@example.com.</MenuItem>
-            <MenuItem value={'john@example.com'}>Recenzja 2...</MenuItem>
-            <MenuItem value={'adam@example.com'}>Recenzja 3...</MenuItem>
+            <MenuItem value={'john@example.com'}>john@example.com.</MenuItem>
+            <MenuItem value={'adam@example.com'}>adam@example.com.</MenuItem>
           </StyledSelect>
         </FormControl>
       </UnblockUserWrapper>
@@ -190,11 +139,9 @@ const StyledSelect = styled(Select)`
   }
 `;
 
-const DeleteReviewWrapper = styled.div`
+const BlockUserWrapper = styled.div`
   margin-left: 1rem;
   margin-top: 5rem;
 `;
-
-const BlockUserWrapper = styled(DeleteReviewWrapper)``;
 
 const UnblockUserWrapper = styled(BlockUserWrapper)``;
