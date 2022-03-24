@@ -1,15 +1,21 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Paper, Typography } from '@mui/material';
+import { IconButton, Input, Paper, Typography } from '@mui/material';
 import responsive from 'theme/responsive';
+import { PhotoCamera } from '@mui/icons-material';
 
 const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   return (
     <StyledPaper>
       <Sidebar>
         <User>
-          <img src="/images/user.png" alt="user" />
+          <ChangeAvatarInput type="file" id="file-input" />
+          <AvatarWrapper htmlFor="file-input">
+            <ChangePhotoIcon />
+            <Avatar src="/images/default.jpg" alt="user" />
+          </AvatarWrapper>
           <UserName marginTop={2} fontFamily="Poppins" fontWeight={500}>
             Kamil Noga
           </UserName>
@@ -84,6 +90,7 @@ const StyledPaper = styled(Paper)`
 
 const Sidebar = styled.div`
   width: 80px;
+  margin-left: -20px;
   min-height: 100%;
   background: ${({ theme }) => theme.primaryLight};
   border-radius: 15px 0 0 15px;
@@ -94,6 +101,7 @@ const Sidebar = styled.div`
 
   @media ${responsive.mobile} {
     width: 100px;
+    margin-left: 0;
   }
 
   @media ${responsive.tablet} {
@@ -107,29 +115,74 @@ const User = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
 
-  img {
-    width: 40px;
-    height: 40px;
-    margin-top: 3rem;
-    border-radius: 50%;
-    filter: drop-shadow(2px 4px 30px rgba(0, 0, 0, 0.25));
-    object-fit: cover;
+const AvatarWrapper = styled.label`
+  width: 40px;
+  height: 40px;
+  z-index: 100;
+  position: relative;
+
+  :hover {
+    cursor: pointer;
+
+    svg {
+      opacity: 1;
+    }
   }
 
   @media ${responsive.mobile} {
-    img {
-      width: 48px;
-      height: 48px;
-    }
+    width: 60px;
+    height: 60px;
   }
 
-  @media ${responsive.laptop} {
-    img {
-      width: auto;
-      height: auto;
+  @media ${responsive.mobile} {
+    width: 55px;
+    height: 55px;
+  }
+
+  @media ${responsive.tablet} {
+    width: 96px;
+    height: 96px;
+  }
+`;
+
+const Avatar = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: drop-shadow(2px 4px 30px rgba(0, 0, 0, 0.25));
+  object-fit: cover;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const ChangePhotoIcon = styled(PhotoCamera)`
+  && {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    font-size: 20px;
+    color: ${({ theme }) => theme.lightBlue};
+    opacity: 0;
+    transition: opacity 250ms ease;
+
+    @media ${responsive.mobile} {
+      font-size: 25px;
+    }
+
+    @media ${responsive.tablet} {
+      font-size: 35px;
     }
   }
+`;
+
+const ChangeAvatarInput = styled.input`
+  display: none;
 `;
 
 const UserName = styled(Typography)`
