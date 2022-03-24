@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rental_movie', function (Blueprint $table) {
+        Schema::create('movie_rental', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('movie_id')->unsigned();
             $table->bigInteger('rental_id')->unsigned();
-            $table->foreign('movie_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
             $table->foreign('rental_id')->references('id')->on('rentals')->onDelete('cascade');
             $table->timestamps();
         });

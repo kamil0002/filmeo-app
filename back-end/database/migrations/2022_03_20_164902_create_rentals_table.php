@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->date('rental_date');
-            $table->date('expire_date');
+            $table->dateTime('expire_date');
             $table->decimal('cost',5,2);
             $table->timestamps();
         });

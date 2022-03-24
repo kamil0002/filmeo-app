@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Grid, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -10,7 +11,6 @@ import { Navigate } from 'react-router-dom';
 import axios from 'utils/axios';
 import { loadStripe } from '@stripe/stripe-js';
 import moviesData from 'movies-data.json';
-
 import Header from 'components/MovieDetailsHeader/MovieDetailsHeader';
 import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
 
@@ -21,6 +21,17 @@ const MovieDetails = () => {
   const [redirectToOrder, setRedirectToOrder] = useState(false);
 
   const params = useParams();
+  const { search } = useLocation();
+
+  useEffect(async () => {
+    if (search.length !== 0) {
+      const searchParams = new URLSearchParams(search);
+
+      const userId = searchParams.get('user');
+      const movieId = searchParams.get('movie');
+      await axios.get(`/rentMovie/${movieId}/${userId}`);
+    }
+  }, []);
 
   const handleRedirectToReviews = () => {
     setRedirectToReviews(true);
@@ -35,9 +46,8 @@ const MovieDetails = () => {
     const stripe = await loadStripe(
       'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
     );
-    console.log(movie.id);
     const session = await axios.get(`/getSession/${movie.id}`);
-    console.log(session);
+
     await stripe.redirectToCheckout({
       sessionId: session.data.id,
     });

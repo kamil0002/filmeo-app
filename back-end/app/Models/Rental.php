@@ -9,6 +9,12 @@ class Rental extends Model
 {
     use HasFactory;
 
+         protected $fillable = [
+        'user_id',
+        'expire_date',
+        'cost',
+    ];
+
     protected $table = 'rentals';
 
     protected $primaryKey = 'id';

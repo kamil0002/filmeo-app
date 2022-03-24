@@ -10,6 +10,7 @@ use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\GenreController;
 use App\Http\Controllers\API\v1\ImageController;
 use App\Http\Controllers\API\v1\MovieController;
+use App\Http\Controllers\API\v1\RentalController;
 use App\Http\Controllers\API\v1\ReviewController;
 
 /*
@@ -54,6 +55,10 @@ Route::get('/getMessages', [ChatController::class, 'getMessages']);
 Route::get('/reviews', [ReviewController::class, 'getAllReviews']);
 Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 
+//* Payments with Stripe
+Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
+Route::get('/rentMovie/{movieId}/{userId}', [RentalController::class, 'rentMovie']);
+
 
 
 //* Proteced routes
@@ -67,9 +72,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   //*Upload Photo
   Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
-
-  //* Payments with Stripe
-  Route::get('/getSession/{movieId}', [StripeController::class, 'getSession']);
 
   //* Messages
   Route::post('/message', [ChatController::class, 'sendMessage']);
