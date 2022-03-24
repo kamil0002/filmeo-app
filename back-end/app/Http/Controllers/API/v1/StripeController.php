@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use Illuminate\Http\Request;
 
@@ -8,7 +8,6 @@ class StripeController extends Controller
 {
     function getSession(Request $request, $movieId)
     {
-        error_log($movieId);
         $stripe = new \Stripe\StripeClient(env('STRIPE_API_KEY'));
 
         $checkout_session = $stripe->checkout->sessions->create([

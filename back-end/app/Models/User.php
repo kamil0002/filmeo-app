@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'surname',
+        'avatar',
         'role',
         'banned',
         'muted',
@@ -32,7 +33,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $attributes = [
         'role' => 'user',
         'muted' => false,
-        'banned' => false
+        'banned' => false,
+        'avatar' => 'avatar.png'
     ];
 
     /**
@@ -58,11 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Message::class);
     }
 
-    public function review() {
-        return $this->belongsTo(Review::class);
+    public function reviews() {
+        return $this->hasMany(Review::class);
     }
 
-    public function rental() {
-        return $this->belongTo(Rental::class);
+    public function rentals() {
+        return $this->hasMany(Rental::class);
     }
 }

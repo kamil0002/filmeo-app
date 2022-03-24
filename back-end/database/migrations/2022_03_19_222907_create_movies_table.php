@@ -16,19 +16,18 @@ return new class extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->string('slug');
+            $table->longText('description');
             $table->string('short_description');
             $table->string('director');
             $table->date('release_date');
             $table->integer('running_time');
             $table->string('poster');
-            $table->string('video_link');
-            $table->string('trailer_link');
-            $table->string('details_page');
-            $table->decimal('rating_average',5,1);
+            $table->string('movie_url');
+            $table->string('trailer_url');
+            $table->string('details_url');
             $table->integer('rating_quantity');
             $table->decimal('cost',5,2);
-            $table->integer('rentings_number')->nullable();
             $table->timestamps();
         });
     }

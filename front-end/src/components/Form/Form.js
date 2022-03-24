@@ -1,29 +1,33 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
 
 const Form = ({ submitFn, children, buttonText, buttonType }) => {
   return (
     <StyledForm onSubmit={submitFn}>
       {children}
-      <Button
-        type="submit"
-        sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'Poppins' }}
-        variant={buttonType}
-      >
+      <StyledButton type="submit" variant={buttonType}>
         {buttonText}
-      </Button>
+      </StyledButton>
     </StyledForm>
   );
 };
+
+export default Form;
 
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
 `;
 
-export default Form;
+const StyledButton = styled(Button)`
+  && {
+    align-self: baseline;
+    margin-top: 1.5rem;
+    font-family: inherit;
+  }
+`;
 
 Form.propTypes = {
   submitFn: PropTypes.func.isRequired,

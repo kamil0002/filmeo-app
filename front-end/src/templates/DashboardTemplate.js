@@ -77,7 +77,7 @@ const StyledPaper = styled(Paper)`
     }
 
     @media ${responsive.desktop} {
-      width: 65%;
+      width: 75%;
     }
   }
 `;

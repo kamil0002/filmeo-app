@@ -111,13 +111,17 @@ const StartChatting = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: transform 150ms ease-out;
+  transition: transform 200ms ease-out;
   -webkit-box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
   -moz-box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
   box-shadow: 8px 1px 48px -3px rgba(0, 0, 0, 0.43);
 
   :hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
+
+    svg {
+      transform: scale(1);
+    }
   }
 `;
 
@@ -152,10 +156,9 @@ const Heading = styled(Typography)`
 
 const StyledButton = styled(Button)`
   && {
-    margin: 1rem 2rem;
+    margin: 1rem 0.5rem;
 
     @media ${responsive.mobile} {
-      margin: 0 1.5rem;
       font-size: ${({ theme }) => theme.fontSize.xs};
       padding: 0.4rem 1rem;
     }
@@ -169,13 +172,13 @@ const StyledButton = styled(Button)`
 `;
 
 const Actions = styled.div`
+  display: flex;
+  margin-top: 20vh;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 
-  @media ${responsive.mobile} {
+  @media ${responsive.mobileM} {
     flex-direction: row;
   }
-  display: flex;
-  justify-content: center;
-  margin-top: 20vh;
 `;

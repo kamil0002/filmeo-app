@@ -5,24 +5,16 @@ import Typography from 'components/Typography/Typography';
 
 const RendtedMovie = () => {
   return (
-    <Paper
-      sx={{
-        position: 'relative',
-        backgroundColor: '#ECEFF1',
-        paddingBottom: 0.3,
-      }}
-      elevation={4}
-    >
+    <StyledPaper elevation={4}>
       <MovieImg src="https://galaxydrivein.com.au/wp-content/uploads/2022/02/ABFCEA5B-4318-4FBB-BC60-E828F210E52C-800x600.jpeg" />
-      <Rating
+      <StyledRating
         name="read-only"
         value={4.3}
         precision={0.1}
         defaultValue={0.0}
         size={'small'}
         readOnly
-        sx={{ position: 'absolute', top: 5, left: 5 }}
-      ></Rating>
+      ></StyledRating>
       <Typography fontWeight={600} align={'center'} marginTop={0.5}>
         Uncharted
       </Typography>
@@ -43,7 +35,7 @@ const RendtedMovie = () => {
       >
         Oglądaj
       </Button>
-    </Paper>
+    </StyledPaper>
   );
 };
 
@@ -55,4 +47,20 @@ const MovieImg = styled.img`
   object-fit: cover;
   border-radius: 4px 4px 0 0;
   filter: brightness(0.75);
+`;
+
+const StyledPaper = styled(Paper)`
+  && {
+    background-color: ${({ theme }) => theme.primaryLight};
+    position: relative;
+    padding-bottom: 0.25rem;
+  }
+`;
+
+const StyledRating = styled(Rating)`
+  && {
+    position: absolute;
+    left: 4%;
+    top: 4%;
+  }
 `;

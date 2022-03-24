@@ -9,15 +9,23 @@ class Review extends Model
 {
     use HasFactory;
 
+         protected $fillable = [
+        'title',
+        'description',
+        'rating',
+        'user_id',
+        'movie_id'
+    ];
+
     protected $table = 'reviews';
 
     protected $primaryKey = 'id';
 
-    public function users() {
-        return $this->hasMany(User::class);
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 
-    public function movies() {
-        return $this->hasMany(Movie::class);
+    public function movie() {
+        return $this->belongsTo(Movie::class);
     }
 }

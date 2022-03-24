@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import LiveTvIcon from '@mui/icons-material/LiveTv';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import Button from '@mui/material/Button';
 import MobileNavigation from './MobileNavigation';
@@ -18,14 +17,14 @@ const Navigation = ({ display }) => {
   return (
     <Wrapper>
       <Brand>
-        <LiveTvIcon fontSize="inherit" color="primary" />
+        <BrandImage src="/images/brand.svg" />
         <Title
           variant="h5"
           fontWeight="bold"
           component="h2"
           marginLeft="1.2rem"
         >
-          Movie Rental
+          Filmeo
         </Title>
       </Brand>
       <Actions>
@@ -110,12 +109,17 @@ const Brand = styled.div`
   }
 `;
 
+const BrandImage = styled.img``;
+
 const Title = styled(Typography)`
   && {
-    font-size: ${({ theme }) => theme.fontSize.s};
+    font-family: 'Lobster', cursive;
+    color: ${({ theme }) => theme.primaryBlue};
+    letter-spacing: 3px;
+    font-size: ${({ theme }) => theme.fontSize.m};
 
     @media ${responsive.laptop} {
-      font-size: ${({ theme }) => theme.fontSize.lg};
+      font-size: ${({ theme }) => theme.fontSize.xl};
     }
   }
 `;
