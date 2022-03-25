@@ -36,10 +36,9 @@ Route::post('/login', [AuthController::class, 'login']);
 
 //* Movie
 Route::post('/movies', [MovieController::class, 'createMovie']);
-Route::get('/movies', [MovieController::class, 'getAllMovies']);
+Route::get('/movies', [MovieController::class, 'getMovies']);
 Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
 Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
-Route::get('/movies/search/{filterText}', [MovieController::class, 'filterMovies']);
 
 Route::get('/movies/genre/{genre}', [MovieController::class, 'getMoviesByGenre']);
 

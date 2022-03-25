@@ -53,10 +53,38 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllMovies()
+    public function getMovies(Request $request)
     {
 
-        $movies = Movie::whereHas('genres')->with('genres')->get();
+        define('filters', ['id', 'title', 'rating_quantity', 'short_description', 'poster', 'slug']);
+
+        if($request->genres)
+            $movies = Movie::whereHas('genres')->with('genres')->select(constant('filters'))->get();
+        else $movies = Movie::select(constant('filters'))->get();
+        
+        //* If user use a query filter text
+        if($request->search) {
+            $filteredMovies = Movie::where('title', 'like', '%'.$request->search.'%')->select(constant('filters'))->get();
+
+            $movies = $filteredMovies;
+        }
+
+        //* If user query for genres
+        if($request->genre) {
+            $filteredMovies = [];
+
+            foreach($movies as $movie) {
+                foreach($movie->genres as $movieGenre) {
+                    if(strtolower($request->genre) === strtolower($movieGenre->name)) {
+                        array_push($filteredMovies, $movie);
+                        break;
+                    }
+                }
+            }
+
+            $movies = $filteredMovies;
+        }
+
 
         if(count($movies) === 0) {
             return response([
@@ -68,7 +96,7 @@ class MovieController extends Controller
         foreach($movies as $movie) {
             $reviews = Review::where('movie_id', '=', $movie->id)->select('rating')->get();
 
-            $movie['rating_average'] = $reviews->avg('rating') ?? 0;
+            $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
         }
 
         return response([
@@ -128,11 +156,11 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getMovie(int $movieId, int $userId = 0)
+    public function getMovie(Request $request, int $movieId)
     {
+        //* Get Filters
+
         $movie = Movie::find($movieId);
-
-
 
         if(!$movie) {
             return response([
@@ -143,27 +171,11 @@ class MovieController extends Controller
 
         $movie = $movie->where('id', '=', $movieId)->with('genres')->with('reviews')->first();
 
-        
-
-        // if($userId) {
-        //     //* Check if user already has rented this movie in the past
-        //     $rentals = Rental::where('user_id', '=', $userId)->whereHas('movies')->with('movies')->get();
-    
-        //     //* If user rented this movie already
-        //     if(count($rentals) !== 0) {
-        //         foreach($rentals as $rental) {
-        //             if($rental->movies[0]->id === $movieId) {
-        //                 $movie['was_rented'] = true;
-        //             }
-        //         }
-        //     }
-        // } 
-
 
 
         $reviews = Review::where('movie_id', '=', $movieId)->select('rating')->get();
 
-        $movie['rating_average'] = $reviews->avg('rating');
+        $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
 
         //* Check if user rented this movie already
 
@@ -236,60 +248,6 @@ class MovieController extends Controller
             ]
             ], 204);
     }
-
-    public function filterMovies($filterText) {
-        $filteredMovies = Movie::where('title', 'like', '%'.$filterText.'%')->get();
-
-
-        if(count($filteredMovies) === 0) {
-            return response([
-                'status' => 'error',
-                'message' => 'Nie znaleziono żadnego filmu o podanym tytule.'
-            ],404);
-        }
-
-        return response([
-            'status' => 'success',
-            'results' => count($filteredMovies),
-            'data' => [
-                $filteredMovies
-            ]
-        ]);
-    }
-
-    public function getMoviesByGenre($genre) {
-
-        // $movies = Movie::whereHas('genres')->with('genres')->where('name', '=', $genre)->get();
-
-        $allMovies = Movie::all();
-        $filteredMovies = [];
-
-        foreach($allMovies as $movie) {
-            foreach($movie->genres as $movieGenre) {
-                if($genre === $movieGenre->name) {
-                    array_push($filteredMovies, $movie);
-                    break;
-                }
-            }
-        }
-
-
-
-        if(!$allMovies) {
-            return response([
-                'status' => 'error',
-                'message' => 'Nie ma żadnych filmów o podanej kategorii.'
-            ],404);
-        }
-
-        return response([
-            'status' => 'success',
-            'data' => [
-                $filteredMovies
-            ]
-        ]);
-    }
-
 
     //* Aggregations
 }

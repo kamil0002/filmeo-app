@@ -19,9 +19,16 @@ class GenreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllGenres()
+    public function getAllGenres(Request $request)
     {
-        $genres =  Genre::all();
+        //* Get Filters
+        $filters = explode(',',$request->fields ?? 'name');
+        array_push($filters, 'id');
+
+        $genres =  Genre::select($filters)->get();
+
+        error_log($request->fields);
+        error_log('name');
 
         if(!$genres) {
             return response([
