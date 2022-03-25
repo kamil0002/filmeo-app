@@ -14,7 +14,8 @@ class Review extends Model
         'description',
         'rating',
         'user_id',
-        'movie_id'
+        'movie_id',
+        'verified'
     ];
 
     protected $table = 'reviews';

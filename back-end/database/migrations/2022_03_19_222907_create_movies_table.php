@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('movie_url');
             $table->string('trailer_url');
             $table->string('details_url');
-            $table->integer('rating_quantity');
+            $table->integer('rating_quantity')->default(0);
             $table->decimal('cost',5,2);
             $table->timestamps();
         });

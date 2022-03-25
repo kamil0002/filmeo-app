@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->decimal('rating', 5, 1);
+            $table->boolean('verified');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('movie_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

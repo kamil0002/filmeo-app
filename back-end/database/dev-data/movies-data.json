@@ -11,10 +11,9 @@
     "movie_url": "https://userload.co/embed/703a05515ad6/Uncharted_2022.mp4",
     "trailer_url": "https://www.youtube.com/watch?v=eHp3MbsCbMg",
     "details_url": "https://www.filmweb.pl/film/Uncharted-2022-545895",
-    "rating_quantity": 0,
     "cost": 10
   },
-    {
+  {
     "title": "SKAZANI NA SHAWSHANK",
     "genres": ["Dramat"],
     "short_description": "Adaptacja opowiadania Stephena Kinga. Niesłusznie skazany na dożywocie bankier, stara się przetrwać w brutalnym, więziennym świecie.",
@@ -26,7 +25,6 @@
     "movie_url": "https://userload.co/embed/d3a8639fba75",
     "trailer_url": "https://www.youtube.com/watch?v=3TGpUNWUREQ",
     "details_url": "https://www.filmweb.pl/film/Skazani+na+Shawshank-1994-1048",
-    "rating_quantity": 0,
     "cost": 8
   }
 ]

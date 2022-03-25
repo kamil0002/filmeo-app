@@ -52,10 +52,8 @@ Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']);
 Route::get('/getMessages', [ChatController::class, 'getMessages']);
 
 //* Reviews
-Route::get('/reviews', [ReviewController::class, 'getAllReviews']);
+Route::get('/movieReviews/{moveId}', [ReviewController::class, 'getMovieReviews']);
 Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
-
-
 
 
 //* Proteced routes
@@ -74,7 +72,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   
   //* Only Admin func
   Route::middleware('restrictToAdmin')->group(function() {
-    Route::post('/user/reviews', [ReviewController::class, 'getAllUserReviews']);
     Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
     Route::get('/admin/ban/{userId}', [AdminController::class, 'banUser']);
     Route::get('/admin/unban/{userId}', [AdminController::class, 'unbanUser']);
@@ -88,8 +85,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   //* Only User and Moderator func
 
-  Route::middleware('rentalAvailability')->group(function() {
-    //* User Rentals
+  Route::middleware('userModeratorFunc')->group(function() {
+    // Rentals
     Route::patch('/renewRental/rental/{rentalId}', [RentalController::class, 'renewRental']);
 
     //* Payments with Stripe and Rentals
@@ -98,6 +95,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/rentals/myRentals', [RentalController::class, 'getUserMovies']);
 
     //* Review
-    Route::post('/reviews/{movieId}', [ReviewController::class, 'createReview']);
+    Route::post('/reviews/movie/{movieId}', [ReviewController::class, 'createReview']);
+    Route::get('/myReviews', [ReviewController::class, 'getMyReviews']);
   });
 });

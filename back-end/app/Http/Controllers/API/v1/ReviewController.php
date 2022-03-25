@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Models\Movie;
+use App\Models\Rental;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,12 +41,27 @@ class ReviewController extends Controller
 
         $userId = auth()->user()->id;
 
+        //* Check if current movie is owned by a user
+        $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
+        $reviewVerified = false;
+
+        foreach($rentals as $rental) {
+            foreach($rental->movies as $rentedMovie) {
+                if($rentedMovie->id === $movieId) {
+                    error_log('VEIFIED!');
+                    $reviewVerified = true;
+                    break 2;
+                }
+            }
+        }
+
         $review = Review::create([
             'title' => $request['title'],
             'description' => $request['description'],
             'rating' => $request['rating'],
             'user_id' => $userId,
-            'movie_id' => $movieId
+            'movie_id' => $movieId,
+            'verified' => $reviewVerified
         ]);
 
 
@@ -61,8 +77,8 @@ class ReviewController extends Controller
         ],201);
     }
 
-    public function getAllReviews() {
-        $reviews = Review::all();
+    public function getMovieReviews(int $movieId) {
+        $reviews = Review::where('movie_id', '=', $movieId)->get();
 
         if(count($reviews) === 0) {
             return response([
@@ -113,11 +129,9 @@ class ReviewController extends Controller
         ], 204);
     }
 
-    public function getAllUserReviews(Request $request) {
+    public function getMyReviews() {
 
-        $email = $request->validate(['email' => 'required|string']);
-
-        $userId = User::where('email', '=', $email)->select('id')->first()->id;
+        $userId = auth()->user()->id;
         
         if(!$userId) {
             return response([
@@ -130,9 +144,9 @@ class ReviewController extends Controller
 
         if(count($reviews) === 0) {
             return response([
-                'status' => 'error',
-                'message' => 'Nie znaleziono żadnych opinii dla podanego użytkownika'
-            ]);
+                'status' => 'failed',
+                'message' => 'Nie znaleziono żadnych opinii.'
+            ], 404);
         }
 
         return response([
