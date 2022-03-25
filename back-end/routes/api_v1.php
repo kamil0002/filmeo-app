@@ -40,6 +40,11 @@ Route::get('/movies', [MovieController::class, 'getMovies']);
 Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
 Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
 
+//* top 5
+Route::get('/top-5-frequently-rented', [MovieController::class, 'frequentlyRented']);
+Route::get('/top-5-rated', [MovieController::class, 'topRated']);
+Route::get('/last-added-movies', [MovieController::class, 'lastAdded']);
+
 Route::get('/movies/genre/{genre}', [MovieController::class, 'getMoviesByGenre']);
 
 //* Genre

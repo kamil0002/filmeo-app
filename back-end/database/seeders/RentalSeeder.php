@@ -54,6 +54,10 @@ class RentalSeeder extends Seeder
                 'created_at' => $date
             ]);
 
+            $movie->update([
+                'rentals_number' => $movie->rentals_number = $movie->rentals_number + 1
+            ]);
+
             $rental->movies()->attach($movie);
         }
     }

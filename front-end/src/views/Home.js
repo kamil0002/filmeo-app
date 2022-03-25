@@ -66,21 +66,21 @@ const Home = () => {
       </Header>
       <Fade left>
         <MovieCardGrid
-          movies={moviesData.movies.slice(-4)}
+          movies={moviesData.movies.slice(-5)}
           heading="Ostatnio dodane"
           backgroundColor="#f7f7f7"
         />
       </Fade>
       <Fade right>
         <MovieCardGrid
-          movies={moviesData.movies.slice(-4)}
+          movies={moviesData.movies.slice(-5)}
           heading="Najlepiej oceniane"
           backgroundColor="#C3D1DE"
         />
       </Fade>
       <Fade left>
         <MovieCardGrid
-          movies={moviesData.movies.slice(-4)}
+          movies={moviesData.movies.slice(-5)}
           heading="Najchętniej oglądane"
           backgroundColor="#e0e0e0"
         />

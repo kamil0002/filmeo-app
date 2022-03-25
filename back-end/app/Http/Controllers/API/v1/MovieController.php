@@ -171,8 +171,6 @@ class MovieController extends Controller
 
         $movie = $movie->where('id', '=', $movieId)->with('genres')->with('reviews')->first();
 
-
-
         $reviews = Review::where('movie_id', '=', $movieId)->select('rating')->get();
 
         $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
@@ -250,4 +248,60 @@ class MovieController extends Controller
     }
 
     //* Aggregations
+
+    public function frequentlyRented() {
+
+        $movies = Movie::orderBy('rentals_number', 'desc')->paginate(5);
+        
+        return response([
+            'status' => 'success',
+            'results' => count($movies),
+            'data' => [
+                $movies
+            ]
+        ]);
+    }
+
+    public function topRated() {
+
+        $movies = Movie::all();
+
+        foreach($movies as $movie) {
+            $reviews = Review::where('movie_id', '=', $movie['id'])->select('rating')->get();
+
+            $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
+        }
+
+        $movies = $movies->toArray();
+
+        //* Sort Movie By Rating
+        usort($movies, function($a, $b) {
+            if ($a['rating_average'] == $b['rating_average']) {
+                return 0;
+            }
+            return ($a['rating_average'] > $b['rating_average']) ? -1 : 1;
+        });
+
+        $movies = array_slice($movies,0,5, true);
+
+        return response([
+            'status' => 'success',
+            'results' => count($movies),
+            'data' => $movies
+            ]
+        );
+    }
+
+    public function lastAdded() {
+        $movies = Movie::orderBy('created_at', 'asc')->paginate(5);
+        
+        return response([
+            'status' => 'success',
+            'results' => count($movies),
+            'data' => [
+                $movies
+            ]
+        ]);
+    }
+
 }
