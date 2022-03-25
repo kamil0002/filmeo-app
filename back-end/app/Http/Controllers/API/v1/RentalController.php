@@ -46,6 +46,21 @@ class RentalController extends Controller
         // $user = auth()->user();
         $user = User::find($userId);
 
+        //* Check if current movie is owned by a user
+        $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
+        // error_log($rental[0]);
+
+        foreach($rentals as $rental) {
+            foreach($rental->movies as $rentedMovie) {
+                if($rentedMovie->id === $movieId) {
+                    return response([
+                        'status' => 'fail',
+                        'message' => 'Ten film jest już przez Ciebie wypożyczony!'
+                    ]);
+                }
+            }
+        }
+
         $currentTime = time();
 
         $to = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
@@ -65,5 +80,28 @@ class RentalController extends Controller
                 $rental
             ]
         ],201);
+    }
+
+    public function getUserMovies(int $userId) {
+
+        $movies = Movie::whereHas('rentals')->with('rentals')->get();
+        $userMovies = [];
+
+        foreach($movies as $movie) {
+            foreach($movie->rentals as $rental) {
+                if($rental->user_id === $userId) {
+                array_push($userMovies, Movie::find($movie->id));
+                break;
+                }
+            }
+        }
+        
+        return [
+            'status' => 'success',
+            'results' => count($userMovies),
+            'data' => [
+                $userMovies
+            ]
+        ];
     }
 }

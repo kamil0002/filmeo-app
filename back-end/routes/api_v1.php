@@ -57,7 +57,10 @@ Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 
 //* Payments with Stripe
 Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
-Route::get('/rentMovie/{movieId}/{userId}', [RentalController::class, 'rentMovie']);
+Route::get('/rentMovie/movie/{movieId}/user/{userId}', [RentalController::class, 'rentMovie']);
+
+//* User Rentals
+Route::get('/rentals/user/{userId}', [RentalController::class, 'getUserMovies']);
 
 
 
