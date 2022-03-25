@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Movie;
 use App\Models\Rental;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 
 class RentalController extends Controller
@@ -43,12 +44,13 @@ class RentalController extends Controller
     public function rentMovie(int $movieId, int $userId) {
         
         $movie = Movie::find($movieId);
+
+        //TODO Later get auth user
         // $user = auth()->user();
         $user = User::find($userId);
 
         //* Check if current movie is owned by a user
         $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
-        // error_log($rental[0]);
 
         foreach($rentals as $rental) {
             foreach($rental->movies as $rentedMovie) {
@@ -68,7 +70,8 @@ class RentalController extends Controller
         $rental = Rental::create([
             'user_id' => $user->id,
             'expire_date' => $to,
-            'cost' => $movie->cost
+            'cost' => $movie->cost,
+            'active' => true
         ]);
 
         $rental->movies()->attach($movie);
@@ -77,20 +80,62 @@ class RentalController extends Controller
             'status' => 'success',
             'message' => 'Film został wypożyczony. Miłego oglądania!' ,
             'data' => [
-                $rental
+                $rentals
             ]
         ],201);
     }
+
+    public function renewRental(int $rentalId) {
+
+        //TODO Later get auth user
+        // $user = auth()->user();
+
+        $rental = Rental::where('id', '=', $rentalId)->first();
+        
+        if(!$rental) 
+            return response([
+            'status' => 'error',
+            'message' => 'Ten film nie został przez Ciebie wcześniej wypożyczony'
+        ], 404);
+        
+        if(!$rental->active) {
+            $rental->update([
+                'active' => true
+            ]);
+        }
+
+        return [
+            'status' => 'success',
+            'rental' => [
+                $rental
+            ]
+        ];
+    }
+
 
     public function getUserMovies(int $userId) {
 
         $movies = Movie::whereHas('rentals')->with('rentals')->get();
         $userMovies = [];
 
+        $today = date('Y-m-d H:m:s');
+
         foreach($movies as $movie) {
             foreach($movie->rentals as $rental) {
+
+                //* If rental expired make active status as false
+                if($rental->expire_date < $today) {
+                    $rental->update([
+                        'active' => false
+                    ]);
+                }    
+                //* Check all user rented movies
                 if($rental->user_id === $userId) {
-                array_push($userMovies, Movie::find($movie->id));
+                $movie = Movie::find($movie->id);
+
+                //* Add bonus field if movie is not active or not
+                $movie['active'] = $rental->active;
+                array_push($userMovies, $movie);
                 break;
                 }
             }
@@ -101,7 +146,7 @@ class RentalController extends Controller
             'results' => count($userMovies),
             'data' => [
                 $userMovies
-            ]
+            ], 201
         ];
     }
 }

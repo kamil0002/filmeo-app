@@ -144,6 +144,8 @@ class MovieController extends Controller
 
         $movie['rating_average'] = $reviews->avg('rating');
 
+        //* Check if user rented this movie already
+
         return response([
             'status' => 'success',
             'data' => [

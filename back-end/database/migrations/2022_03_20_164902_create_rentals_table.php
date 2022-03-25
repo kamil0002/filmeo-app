@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->dateTime('expire_date');
+            $table->boolean('active');
             $table->decimal('cost',5,2);
             $table->timestamps();
         });

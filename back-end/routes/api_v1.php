@@ -59,6 +59,8 @@ Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
 Route::get('/rentMovie/movie/{movieId}/user/{userId}', [RentalController::class, 'rentMovie']);
 
+Route::patch('/renewRental/rental/{rentalId}', [RentalController::class, 'renewRental']);
+
 //* User Rentals
 Route::get('/rentals/user/{userId}', [RentalController::class, 'getUserMovies']);
 

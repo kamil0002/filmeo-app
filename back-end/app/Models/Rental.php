@@ -11,6 +11,7 @@ class Rental extends Model
 
          protected $fillable = [
         'user_id',
+        'active',
         'expire_date',
         'cost',
     ];
