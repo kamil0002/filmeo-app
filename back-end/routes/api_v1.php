@@ -7,6 +7,7 @@ use App\Http\Controllers\API\v1\ChatController;
 use App\Http\Controllers\API\v1\StripeController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\BusinessController;
 use App\Http\Controllers\API\v1\GenreController;
 use App\Http\Controllers\API\v1\ImageController;
 use App\Http\Controllers\API\v1\MovieController;
@@ -101,5 +102,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //* Review
     Route::post('/reviews/movie/{movieId}', [ReviewController::class, 'createReview']);
     Route::get('/myReviews', [ReviewController::class, 'getMyReviews']);
+
+    //* Business Logic
+    Route::get('/generalStatistics', [BusinessController::class, 'getGeneralStatistics']);
   });
 });

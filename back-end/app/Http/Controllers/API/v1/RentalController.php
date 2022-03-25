@@ -96,13 +96,21 @@ class RentalController extends Controller
             'message' => 'Ten film nie został przez Ciebie wcześniej wypożyczony'
         ], 404);
 
+        if($rental->active) {
+            return response([
+                'status' => 'failed',
+                'message' => 'Aktualnie posiadasz już ten film w swojej kolekcji, odnów go po czasie wygaśnięcia.'
+            ]);
+        }
+
         $currentTime = time();
         $rentedTo = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
         
         if(!$rental->active) {
             $rental->update([
                 'active' => true,
-                'expire_date' => $rentedTo
+                'expire_date' => $rentedTo,
+                'renewals_quantity' => $rental->renewals_quantity = $rental->renewals_quantity + 1
             ]);
         }
 

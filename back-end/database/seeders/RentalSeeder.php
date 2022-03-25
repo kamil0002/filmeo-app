@@ -23,17 +23,15 @@ class RentalSeeder extends Seeder
 
             $movie = Movie::find($val->movie_id);
 
+            $rentalActive = false;
+
             $currentTime = time();
 
-            $rentalActive = true;
-
-            $rentedTo = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
-
             //* Start Point Of The Date
-            $start = strtotime("10 December 2021 00:00:00");
+            $start = strtotime(date('Y-m-d H:m:s', $currentTime - 1 * 168 * 60 * 60));
 
             //* End Point Point Of The Date
-            $end = strtotime("04 March 2022 00:00:00");
+            $end = strtotime(date('Y-m-d H:m:s'));
 
             //* Custom Date Range.
             $timestamp = mt_rand($start, $end);
@@ -41,8 +39,12 @@ class RentalSeeder extends Seeder
             //* Random Date
             $date = date("Y-m-d H:m:s", $timestamp);
 
-            if($timestamp % 3 === 0) {
-                $rentalActive = false;
+            $twoDaysBehind = date('Y-m-d H:m:s', $currentTime - 1 * 48 * 60 * 60);
+
+            $rentedTo = date('Y-m-d H:m:s', $timestamp + 1 * 48 * 60 * 60);
+
+            if($rentedTo > $twoDaysBehind) {
+                $rentalActive = true;
             }
 
         

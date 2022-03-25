@@ -13,6 +13,7 @@ class Rental extends Model
         'user_id',
         'active',
         'expire_date',
+        'renewals_quantity',
         'cost',
     ];
 
