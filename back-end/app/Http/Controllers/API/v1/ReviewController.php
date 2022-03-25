@@ -82,6 +82,18 @@ class ReviewController extends Controller
 
     public function deleteReview($reviewId) {
 
+        $user = auth()->user();
+
+        $review = Review::find($reviewId)->first();
+
+        //* Check if current review is the auth user review or if user isn't admin
+        if($review->user_id !== $user->id && $user->role !== 'administrator') {
+            return response([
+                'status' => 'error',
+                'message' => 'Możesz usuwać tylko własne opinie użytkowniku!'
+            ]);
+        }
+        
 
         $review = Review::destroy($reviewId);
 
