@@ -128,7 +128,7 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getMovie(int $movieId)
+    public function getMovie(int $movieId, int $userId = 0)
     {
         $movie = Movie::find($movieId);
 
@@ -144,20 +144,21 @@ class MovieController extends Controller
         $movie = $movie->where('id', '=', $movieId)->with('genres')->with('reviews')->first();
 
         
-        //TODO Later get auth user
-        // $user = auth()->user();
-        $userId = 1;
-        //* Check if user already has rented this movie in the past
-        $rentals = Rental::where('user_id', '=', $userId)->whereHas('movies')->with('movies')->get();
 
-        //* If user rented this movie already
-        if(count($rentals) !== 0) {
-            foreach($rentals as $rental) {
-                if($rental->movies[0]->id === $movieId) {
-                    $movie['was_rented'] = true;
-                }
-            }
-        }
+        // if($userId) {
+        //     //* Check if user already has rented this movie in the past
+        //     $rentals = Rental::where('user_id', '=', $userId)->whereHas('movies')->with('movies')->get();
+    
+        //     //* If user rented this movie already
+        //     if(count($rentals) !== 0) {
+        //         foreach($rentals as $rental) {
+        //             if($rental->movies[0]->id === $movieId) {
+        //                 $movie['was_rented'] = true;
+        //             }
+        //         }
+        //     }
+        // } 
+
 
 
         $reviews = Review::where('movie_id', '=', $movieId)->select('rating')->get();

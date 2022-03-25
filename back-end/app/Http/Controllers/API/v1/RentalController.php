@@ -41,13 +41,12 @@ class RentalController extends Controller
         return $session;
     }
 
-    public function rentMovie(int $movieId, int $userId) {
+    public function rentMovie(int $movieId) {
         
         $movie = Movie::find($movieId);
 
         //TODO Later get auth user
-        // $user = auth()->user();
-        $user = User::find($userId);
+        $userId = auth()->user()->id;
 
         //* Check if current movie is owned by a user
         $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
@@ -67,7 +66,7 @@ class RentalController extends Controller
         $rentedTo = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
         
         $rental = Rental::create([
-            'user_id' => $user->id,
+            'user_id' => $userId,
             'expire_date' => $rentedTo,
             'cost' => $movie->cost,
             'active' => true
@@ -79,7 +78,7 @@ class RentalController extends Controller
             'status' => 'success',
             'message' => 'Film został wypożyczony. Miłego oglądania!' ,
             'data' => [
-                $rentals
+                $rental
             ]
         ],201);
     }
@@ -116,10 +115,12 @@ class RentalController extends Controller
     }
 
 
-    public function getUserMovies(int $userId) {
+    public function getUserMovies() {
 
         $movies = Movie::whereHas('rentals')->with('rentals')->get();
         $userMovies = [];
+
+        $userId = auth()->user()->id;
 
         $today = date('Y-m-d H:m:s');
 
@@ -149,7 +150,7 @@ class RentalController extends Controller
             'results' => count($userMovies),
             'data' => [
                 $userMovies
-            ], 201
+            ]
         ];
     }
 }

@@ -55,39 +55,24 @@ Route::get('/getMessages', [ChatController::class, 'getMessages']);
 Route::get('/reviews', [ReviewController::class, 'getAllReviews']);
 Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 
-//* Payments with Stripe
-Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
-Route::get('/rentMovie/movie/{movieId}/user/{userId}', [RentalController::class, 'rentMovie']);
-
-Route::patch('/renewRental/rental/{rentalId}', [RentalController::class, 'renewRental']);
-
-//* User Rentals
-Route::get('/rentals/user/{userId}', [RentalController::class, 'getUserMovies']);
 
 
 
 //* Proteced routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-  //* User Routes
-  Route::post('/logout', [AuthController::class, 'logout']);
+  Route::delete('/reviews/{reviewId}', [ReviewController::class, 'deleteReview']);
 
-  //* Update User
+  //* User Authenticated func
+  Route::post('/logout', [AuthController::class, 'logout']);
   Route::put('/updateMyPassword', [AuthController::class, 'updateMyPassword']);
   Route::put('/updateMyProfile', [UserController::class, 'updateUserData']);
-
-  //*Upload Photo
+  //* Upload Photo
   Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
-
   //* Messages
   Route::post('/message', [ChatController::class, 'sendMessage']);
 
-  //* Review
-  Route::post('/reviews/{movieId}', [ReviewController::class, 'createReview']);
-
-  Route::delete('/reviews/{reviewId}', [ReviewController::class, 'deleteReview']);
-
   
-  //* Admin func
+  //* Only Admin func
   Route::middleware('restrictToAdmin')->group(function() {
     Route::post('/user/reviews', [ReviewController::class, 'getAllUserReviews']);
     Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
@@ -95,9 +80,24 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/admin/unban/{userId}', [AdminController::class, 'unbanUser']);
   });
 
-    Route::middleware('restrictToModerator')->group(function() {
+  //* Admin and Moderator func
+  Route::middleware('restrictToModerator')->group(function() {
     Route::get('/admin/unmute/{userId}', [AdminController::class, 'unmuteUser']);
     Route::get('/admin/mute/{userId}', [AdminController::class, 'muteUser']);
   });
-  
+
+  //* Only User and Moderator func
+
+  Route::middleware('rentalAvailability')->group(function() {
+    //* User Rentals
+    Route::patch('/renewRental/rental/{rentalId}', [RentalController::class, 'renewRental']);
+
+    //* Payments with Stripe and Rentals
+    Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
+    Route::get('/rentMovie/movie/{movieId}', [RentalController::class, 'rentMovie']);
+    Route::get('/rentals/myRentals', [RentalController::class, 'getUserMovies']);
+
+    //* Review
+    Route::post('/reviews/{movieId}', [ReviewController::class, 'createReview']);
+  });
 });
