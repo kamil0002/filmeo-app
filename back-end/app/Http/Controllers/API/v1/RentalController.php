@@ -64,12 +64,11 @@ class RentalController extends Controller
         }
 
         $currentTime = time();
-
-        $to = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
+        $rentedTo = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
         
         $rental = Rental::create([
             'user_id' => $user->id,
-            'expire_date' => $to,
+            'expire_date' => $rentedTo,
             'cost' => $movie->cost,
             'active' => true
         ]);
@@ -97,10 +96,14 @@ class RentalController extends Controller
             'status' => 'error',
             'message' => 'Ten film nie został przez Ciebie wcześniej wypożyczony'
         ], 404);
+
+        $currentTime = time();
+        $rentedTo = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
         
         if(!$rental->active) {
             $rental->update([
-                'active' => true
+                'active' => true,
+                'expire_date' => $rentedTo
             ]);
         }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use App\Models\Movie;
+use App\Models\Rental;
 use App\Models\Review;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Validator;
@@ -131,6 +132,8 @@ class MovieController extends Controller
     {
         $movie = Movie::find($movieId);
 
+
+
         if(!$movie) {
             return response([
                 'status' => 'fail',
@@ -138,7 +141,24 @@ class MovieController extends Controller
             ], 404);
         }
 
-        $movie = $movie->with('genres')->with('reviews')->first();
+        $movie = $movie->where('id', '=', $movieId)->with('genres')->with('reviews')->first();
+
+        
+        //TODO Later get auth user
+        // $user = auth()->user();
+        $userId = 1;
+        //* Check if user already has rented this movie in the past
+        $rentals = Rental::where('user_id', '=', $userId)->whereHas('movies')->with('movies')->get();
+
+        //* If user rented this movie already
+        if(count($rentals) !== 0) {
+            foreach($rentals as $rental) {
+                if($rental->movies[0]->id === $movieId) {
+                    $movie['was_rented'] = true;
+                }
+            }
+        }
+
 
         $reviews = Review::where('movie_id', '=', $movieId)->select('rating')->get();
 
