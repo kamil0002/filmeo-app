@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Events\Message as MessageEvent;
 use App\Models\Message;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

@@ -4,7 +4,6 @@ use App\Http\Controllers\API\v1\AdminController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\v1\ChatController;
-use App\Http\Controllers\API\v1\StripeController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\BusinessController;
@@ -104,6 +103,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/myReviews', [ReviewController::class, 'getMyReviews']);
 
     //* Business Logic
-    Route::get('/generalStatistics', [BusinessController::class, 'getGeneralStatistics']);
+    Route::get('/myBaseStats', [BusinessController::class, 'getUserBaseStats']);
   });
 });

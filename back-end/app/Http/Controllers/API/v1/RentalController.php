@@ -63,8 +63,8 @@ class RentalController extends Controller
             }
         }
 
-        $currentTime = time();
-        $rentedTo = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
+        
+        $rentedTo = date('Y-m-d H:i:s', strtotime('+48 hours'));
         
         $rental = Rental::create([
             'user_id' => $userId,
@@ -95,13 +95,20 @@ class RentalController extends Controller
 
         $rental = Rental::where('id', '=', $rentalId)->first();
 
-        $movieCost = Movie::find($movieId)->select('cost')->first()->cost;
+        $movieCost = Movie::find($movieId)->cost;
         
         if(!$rental) 
             return response([
             'status' => 'error',
             'message' => 'Ten film nie został przez Ciebie wcześniej wypożyczony'
         ], 404);
+
+        if($userId !== $rental->user_id) {
+            return  response([
+                'status' => 'error',
+                'message' => 'To wypożyczenie nie należy do Ciebie!'
+            ],403);
+        }
 
         if($rental->active) {
             return response([
@@ -110,8 +117,7 @@ class RentalController extends Controller
             ]);
         }
 
-        $currentTime = time();
-        $rentedTo = date('Y-m-d H:m:s', $currentTime + 1 * 48 * 60 * 60);
+        $rentedTo = date('Y-m-d H:i:s', strtotime('+48 hours'));
         
         if(!$rental->active) {
             $rental->update([
