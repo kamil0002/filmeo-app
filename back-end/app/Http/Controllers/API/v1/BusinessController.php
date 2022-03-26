@@ -30,9 +30,11 @@ class BusinessController extends Controller
         where (r.user_id = :userId)
         and (mr.rental_id = r.id)
         and (mr.movie_id = m.id)
-        and gm.genre_id = g.id
-        and gm.movie_id = mr.movie_id
-        group by g.name'), array('userId' => $userId));
+        and (gm.genre_id = g.id)
+        and (gm.movie_id = mr.movie_id)
+        group by (g.name)
+        order by count(*) desc'
+        ), array('userId' => $userId));
 
         return response([
             'data' => $data
