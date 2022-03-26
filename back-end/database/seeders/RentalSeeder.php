@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Movie;
+use App\Models\Payment;
 use App\Models\Rental;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -51,9 +52,14 @@ class RentalSeeder extends Seeder
             $rental = Rental::create([
                 'user_id' => $val->user_id,
                 'expire_date' => $rentedTo,
-                'cost' => $movie->cost,
                 'active' => $rentalActive,
                 'created_at' => $date
+            ]);
+
+            Payment::create([
+                'user_id' => $val->user_id,
+                'rental_id' => $rental->id,
+                'amount' => $movie->cost,
             ]);
 
             $movie->update([

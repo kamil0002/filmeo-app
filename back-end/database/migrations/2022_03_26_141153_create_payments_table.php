@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rentals', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('rental_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->dateTime('expire_date');
-            $table->integer('renewals_quantity')->default(0);
-            $table->boolean('active');
+            $table->foreign('rental_id')->references('id')->on('rentals')->onDelete('cascade');
+            $table->decimal('amount', 5, 2);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rentals');
+        Schema::dropIfExists('payments');
     }
 };

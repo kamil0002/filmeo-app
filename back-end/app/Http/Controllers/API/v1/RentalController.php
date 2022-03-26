@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Models\Movie;
+use App\Models\Payment;
 use App\Models\Rental;
 use App\Models\User;
 use DateTime;
@@ -68,9 +69,14 @@ class RentalController extends Controller
         $rental = Rental::create([
             'user_id' => $userId,
             'expire_date' => $rentedTo,
-            'cost' => $movie->cost,
             'active' => true
         ]);
+
+        Payment::create([
+                'user_id' => $userId,
+                'rental_id' => $rental->id,
+                'amount' => $movie->cost,
+            ]);
 
         $rental->movies()->attach($movie);
 
@@ -83,12 +89,13 @@ class RentalController extends Controller
         ],201);
     }
 
-    public function renewRental(int $rentalId) {
+    public function renewRental(int $rentalId, $movieId) {
 
-        //TODO Later get auth user
-        // $user = auth()->user();
+        $userId = auth()->user()->id;
 
         $rental = Rental::where('id', '=', $rentalId)->first();
+
+        $movieCost = Movie::find($movieId)->select('cost')->first()->cost;
         
         if(!$rental) 
             return response([
@@ -111,6 +118,12 @@ class RentalController extends Controller
                 'active' => true,
                 'expire_date' => $rentedTo,
                 'renewals_quantity' => $rental->renewals_quantity = $rental->renewals_quantity + 1
+            ]);
+
+            Payment::create([
+                'user_id' => $userId,
+                'rental_id' => $rental->id,
+                'amount' => $movieCost,
             ]);
         }
 

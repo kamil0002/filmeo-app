@@ -92,7 +92,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   Route::middleware('userModeratorFunc')->group(function() {
     // Rentals
-    Route::patch('/renewRental/rental/{rentalId}', [RentalController::class, 'renewRental']);
+    Route::patch('/renewRental/rental/{rentalId}/movie/{movieId}', [RentalController::class, 'renewRental']);
 
     //* Payments with Stripe and Rentals
     Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
