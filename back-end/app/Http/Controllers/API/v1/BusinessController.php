@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Models\Genre;
+use App\Models\Movie;
 use App\Models\Payment;
 use App\Models\Rental;
 use Carbon\Carbon;
@@ -20,17 +22,20 @@ class BusinessController extends Controller
         ]);
     }
 
-    // public function getFavouriteGenres() {
-    //     $userId = auth()->user()->id;
+    public function getFavouriteGenres() {
+        $userId = auth()->user()->id;
+
+        $genres = Genre::all();
         
-    //     $data = Rental::where('user_id', '=', $userId)->with('movies')->get();
 
-      
+        // $data = Genre::selectRaw('genres.name, count(genres.name) as genre_count')->groupBy('genres.name')->get();
 
-    //     return response([
-    //         'data' => $data
-    //     ]);
-    // }
+        // $data = Movie::where()
+
+        return response([
+            'data' => $data
+        ]);
+    }
 
     public function amountOfRecentRentals() {
         $userId = auth()->user()->id;
