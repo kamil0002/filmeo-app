@@ -60,6 +60,7 @@ class RentalSeeder extends Seeder
                 'user_id' => $val->user_id,
                 'rental_id' => $rental->id,
                 'amount' => $movie->cost,
+                'created_at' => $rentalActive ? date('Y-m-d H:i:s') : $date
             ]);
 
             $movie->update([

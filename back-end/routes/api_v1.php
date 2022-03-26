@@ -104,5 +104,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //* Business Logic
     Route::get('/myBaseStats', [BusinessController::class, 'getUserBaseStats']);
+    Route::get('/myFavouriteGenres', [BusinessController::class, 'getFavouriteGenres']);
+    Route::get('/last-7-days-rentals-number', [BusinessController::class, 'amountOfRecentRentals']);
+    Route::get('/last-7-days-spendings', [BusinessController::class, 'lastSpendings']);
   });
 });
