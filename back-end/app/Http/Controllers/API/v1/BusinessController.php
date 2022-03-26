@@ -24,13 +24,15 @@ class BusinessController extends Controller
 
     public function getFavouriteGenres() {
         $userId = auth()->user()->id;
-
-        $genres = Genre::all();
         
-
-        // $data = Genre::selectRaw('genres.name, count(genres.name) as genre_count')->groupBy('genres.name')->get();
-
-        // $data = Movie::where()
+        $data = Db::select(Db::raw('select g.name, count(*) as results
+        from genres g, movies m, rentals r, movie_rental mr, genre_movie gm
+        where (r.user_id = :userId)
+        and (mr.rental_id = r.id)
+        and (mr.movie_id = m.id)
+        and gm.genre_id = g.id
+        and gm.movie_id = mr.movie_id
+        group by g.name'), array('userId' => $userId));
 
         return response([
             'data' => $data
