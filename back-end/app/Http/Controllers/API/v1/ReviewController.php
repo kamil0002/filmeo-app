@@ -11,7 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
 {
-
+    
+    /**
+     * rules
+     *
+     * @return array walidacja dla recenzji filmu
+     */
     private function rules() {
         return [
             'title' => 'required|string|min:3|max:30',
@@ -21,7 +26,14 @@ class ReviewController extends Controller
             'movie_id' => 'exists:movies,id',
         ];
     }
-
+    
+    /**
+     * createReview
+     *
+     * @param  mixed $request
+     * @param  mixed $movieId id filmu
+     * @return json stworzoną opinię
+     */
     public function createReview(Request $request, int $movieId) {
 
         $movie = Movie::find($movieId);
@@ -76,7 +88,13 @@ class ReviewController extends Controller
             ]
         ],201);
     }
-
+    
+    /**
+     * getMovieReviews
+     *
+     * @param  mixed $movieId id filmu
+     * @return json wszystkie recenzje dla filmu o $movieId
+     */
     public function getMovieReviews(int $movieId) {
         $reviews = Review::where('movie_id', '=', $movieId)->get();
 
@@ -95,7 +113,13 @@ class ReviewController extends Controller
             ]
         ]);
     }
-
+    
+    /**
+     * deleteReview
+     *
+     * @param  mixed $reviewId id recenzji
+     * @return void
+     */
     public function deleteReview($reviewId) {
 
         $user = auth()->user();
@@ -128,7 +152,12 @@ class ReviewController extends Controller
         ]
         ], 204);
     }
-
+    
+    /**
+     * getMyReviews
+     *
+     * @return json recenzje użytkownika
+     */
     public function getMyReviews() {
 
         $userId = auth()->user()->id;

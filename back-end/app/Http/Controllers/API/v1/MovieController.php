@@ -12,7 +12,12 @@ use Illuminate\Support\Facades\Validator;
 
 class MovieController extends Controller
 {
-
+    
+    /**
+     * createRules
+     *
+     * @return array walidacja dla tworzenia filmu
+     */
     private function createRules()
     {
         return [
@@ -30,7 +35,12 @@ class MovieController extends Controller
             'genres' => 'required|array|min:1'
         ];
     }
-
+    
+    /**
+     * updateRules
+     *
+     * @return array walidacja dla aktualizowania filmu
+     */
     private function updateRules()
     {
         return [
@@ -48,10 +58,13 @@ class MovieController extends Controller
             'genres' => 'array|min:1'
         ];
     }
+
+        
     /**
-     * Display a listing of the resource.
+     * getMovies
      *
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @return json kolekcje wszystkich filmów pasujących do filtra
      */
     public function getMovies(Request $request)
     {
@@ -108,11 +121,12 @@ class MovieController extends Controller
             ]);
     }
 
+        
     /**
-     * Store a newly created resource in storage.
+     * createMovie
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @return json film
      */
     public function createMovie(Request $request)
     {
@@ -150,13 +164,14 @@ class MovieController extends Controller
             ], 201);
     }
 
+        
     /**
-     * Display the specified resource.
+     * getMovie
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $movieId id filmu
+     * @return json film
      */
-    public function getMovie(Request $request, int $movieId)
+    public function getMovie(int $movieId)
     {
         //* Get Filters
 
@@ -185,12 +200,14 @@ class MovieController extends Controller
         ]);
     }
 
+
+        
     /**
-     * Update the specified resource in storage.
+     * updateMovie
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @param  mixed $movieId id filmu
+     * @return json zaaktualizowany film
      */
     public function updateMovie(Request $request, int $movieId)
     {
@@ -228,7 +245,7 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteMovie($movieId) {
+    public function deleteMovie(int $movieId) {
 
         $movie = Movie::destroy($movieId);
 
@@ -245,6 +262,28 @@ class MovieController extends Controller
                 null
             ]
             ], 204);
+    }
+
+    public function getMovieVideo(int $rentalId, string $movieSlug) {
+        //* Find actual rental
+        $rental = Rental::find($rentalId);
+
+        //* If Rental Expired inform a user and return
+        if($rental->expire_date < date('Y-m-d H:i:s')) {
+            return response([
+                'status' => 'failed',
+                'message' => 'Niestety ten film nie jest już dostępny, odnów wypożyczenie aby znów oglądać!'
+            ]);
+        }
+
+        $movieVideo = Movie::where('slug', '=', $movieSlug)->select('movie_url')->get();
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                $movieVideo
+            ]
+        ]);
     }
 
     //* Aggregations

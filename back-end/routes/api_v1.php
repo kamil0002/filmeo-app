@@ -77,20 +77,25 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   //* Only Admin func
   Route::middleware('restrictToAdmin')->group(function() {
     Route::delete('/movies/{movieId}', [MovieController::class, 'deleteMovie']);
-    Route::get('/admin/ban/{userId}', [AdminController::class, 'banUser']);
-    Route::get('/admin/unban/{userId}', [AdminController::class, 'unbanUser']);
+    Route::put('/add-moderator', [AdminController::class, 'addModerator']);
+    Route::put('/delete-moderator', [AdminController::class, 'deleteModerator']);
+    Route::put('/admin/ban', [AdminController::class, 'banUser']);
+    Route::put('/admin/unban', [AdminController::class, 'unbanUser']);
   });
 
   //* Admin and Moderator func
   Route::middleware('restrictToModerator')->group(function() {
-    Route::get('/admin/unmute/{userId}', [AdminController::class, 'unmuteUser']);
-    Route::get('/admin/mute/{userId}', [AdminController::class, 'muteUser']);
+    Route::put('/admin/unmute', [AdminController::class, 'unmuteUser']);
+    Route::put('/admin/mute', [AdminController::class, 'muteUser']);
   });
 
   //* Only User and Moderator func
 
   Route::middleware('userModeratorFunc')->group(function() {
-    // Rentals
+    //* Movie video
+    Route::get('/rentals/{rentalId}/movies/{movieSlug}/video', [MovieController::class, 'getMovieVideo']);
+
+    //* Rentals
     Route::patch('/renewRental/rental/{rentalId}/movie/{movieId}', [RentalController::class, 'renewRental']);
 
     //* Payments with Stripe and Rentals

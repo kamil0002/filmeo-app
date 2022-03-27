@@ -7,8 +7,51 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function banUser($userId) {
-        $user = User::find($userId);
+
+    public function addModerator(Request $request) {
+        $user = User::find($request['userId']);
+
+        if(!$user) {
+            return response([
+                'status' => 'error',
+                'message' => 'Nie znaleziono użytkownika'
+            ],404);
+        }
+
+        $user->update([
+            'role' => 'moderator'
+        ]);
+
+        return response([
+            'status' => 'success',
+            'message' => 'Użytkownik '.$user->name.' został moderatoem'
+        ]);
+    }
+
+        public function deleteModerator(Request $request) {
+        $user = User::find($request['userId']);
+
+        if(!$user) {
+            return response([
+                'status' => 'error',
+                'message' => 'Nie znaleziono użytkownika'
+            ],404);
+        }
+
+        $user->update([
+            'role' => 'user'
+        ]);
+
+        return response([
+            'status' => 'success',
+            'message' => 'Rola moderatora użytkownikowi '.$user->name.' została odebrana'
+        ]);
+    }
+
+
+    public function banUser(Request $request) {
+
+        $user = User::find($request['userId']);
 
         $user->update([
             'banned' => true
@@ -20,8 +63,8 @@ class AdminController extends Controller
         ]);
     }
 
-    public function muteUser($userId) {
-        $user = User::find($userId);
+    public function muteUser(Request $request) {
+        $user = User::find($request['userId']);
 
         $user->update([
             'muted' => true
@@ -33,8 +76,8 @@ class AdminController extends Controller
         ]);
     }
 
-    public function unbanUser($userId) {
-        $user = User::find($userId);
+    public function unbanUser(Request $request) {
+        $user = User::find($request['userId']);
 
         $user->update([
             'banned' => false
@@ -46,8 +89,8 @@ class AdminController extends Controller
         ]);
     }
 
-        public function unmuteUser($userId) {
-        $user = User::find($userId);
+        public function unmuteUser(Request $request) {
+        $user = User::find($request['userId']);
 
         $user->update([
             'muted' => false

@@ -9,15 +9,22 @@ use App\Models\Genre;
 
 
 class GenreController extends Controller
-{
+{    
+    /**
+     * rules
+     *
+     * @return array walidacja dla gatunku filmu
+     */
     private function rules() {
         return ['name' => 'required|string'];
     }
 
+    
     /**
-     * Display a listing of the resource.
+     * getAllGenres
      *
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @return json wszystkie gatunki filmów z bazy
      */
     public function getAllGenres(Request $request)
     {
@@ -45,11 +52,12 @@ class GenreController extends Controller
         ]);
     }
 
+    
     /**
-     * Store a newly created resource in storage.
+     * createGenre
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @return json stworzony gatunek filmu
      */
     public function createGenre(Request $request)
     {
@@ -73,12 +81,12 @@ class GenreController extends Controller
         ],201);
 
     }
-
+    
     /**
-     * Display the specified resource.
+     * getGenre
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $genreId id gatunku
+     * @return json pojedyńczy gatunek
      */
     public function getGenre($genreId)
     {
@@ -98,16 +106,5 @@ class GenreController extends Controller
                 $genre
             ]
         ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

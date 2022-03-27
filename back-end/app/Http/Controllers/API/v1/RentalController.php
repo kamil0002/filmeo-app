@@ -5,13 +5,17 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Movie;
 use App\Models\Payment;
 use App\Models\Rental;
-use App\Models\User;
-use DateTime;
-use Illuminate\Http\Request;
+
 
 class RentalController extends Controller
-{
-    function getCheckoutSession(int $movieId) {
+{    
+    /**
+     * getCheckoutSession
+     *
+     * @param  mixed $movieId id filmu
+     * @return object sesja transakcji
+     */
+    public function getCheckoutSession(int $movieId) {
 
         $movie = Movie::find($movieId);;
 
@@ -41,7 +45,13 @@ class RentalController extends Controller
 
         return $session;
     }
-
+    
+    /**
+     * rentMovie
+     *
+     * @param  mixed $movieId id filmu
+     * @return json wiadomość z komunikatem
+     */
     public function rentMovie(int $movieId) {
         
         $movie = Movie::find($movieId);
@@ -83,12 +93,17 @@ class RentalController extends Controller
         return response([
             'status' => 'success',
             'message' => 'Film został wypożyczony. Miłego oglądania!' ,
-            'data' => [
-                $rental
-            ]
         ],201);
     }
 
+    
+    /**
+     * renewRental
+     *
+     * @param  mixed $rentalId id wypożyczenia
+     * @param  mixed $movieId id filmu
+     * @return json wiadomość z komunikatem
+     */
     public function renewRental(int $rentalId, $movieId) {
 
         $userId = auth()->user()->id;
@@ -135,13 +150,16 @@ class RentalController extends Controller
 
         return [
             'status' => 'success',
-            'rental' => [
-                $rental
-            ]
+            'message' => 'Status wypożyczenia został odnowiony. Miłego oglądania!'
         ];
     }
 
-
+    
+    /**
+     * getUserMovies
+     *
+     * @return json ilość wyników, filmy użytkownika
+     */
     public function getUserMovies() {
 
         $movies = Movie::whereHas('rentals')->with('rentals')->get();
@@ -166,6 +184,7 @@ class RentalController extends Controller
 
                 //* Add bonus field if movie is not active or not
                 $movie['active'] = $rental->active;
+                $movie['rental_id'] = $rental->id;
                 array_push($userMovies, $movie);
                 break;
                 }

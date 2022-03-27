@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-
-    // public function __construct() {
-    //     $this->middleware(['auth', 'verified']);
-    // }
-
+    
+    /**
+     * registerRules
+     *
+     * @return array walidacja dla rejestracji
+     */
     private function registerRules() {
         return [
             'name' => 'required|string',
@@ -31,7 +32,12 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed'
         ];
     }
-
+    
+    /**
+     * updatePasswordRules
+     *
+     * @return array walidacja dla aktualizacji hasła
+     */
     private function updatePasswordRules() {
         return [
             'old_password' => 'required|string',
@@ -39,7 +45,13 @@ class AuthController extends Controller
         ];
     }
 
-
+    
+    /**
+     * register
+     *
+     * @param  mixed $request
+     * @return json użytkownik oraz token weryfikacyjny
+     */
     public function register(Request $request)
     {
 
@@ -80,6 +92,13 @@ class AuthController extends Controller
         return response($response, 201);
     }
 
+    
+    /**
+     * login
+     *
+     * @param  mixed $request
+     * @return json użytkownik oraz token weryfikacyjny
+     */
     public function login(Request $request)
     {
         $fields = $request->validate([
@@ -120,7 +139,12 @@ class AuthController extends Controller
 
         return response($response, 202);
     }
-
+    
+    /**
+     * logout
+     *
+     * @return json wiadomość o akcji
+     */
     public function logout() {
         
         auth()->user()->tokens()->delete();
@@ -130,6 +154,13 @@ class AuthController extends Controller
         ], 200);
     }
 
+    
+    /**
+     * updateMyPassword
+     *
+     * @param  mixed $request
+     * @return json status akcji 
+     */
     public function updateMyPassword(Request $request) {
 
         $user = auth()->user();

@@ -8,14 +8,25 @@ use Illuminate\Support\Facades\Validator;
 
 class ImageController extends Controller
 {
-
+    
+    /**
+     * rules
+     *
+     * @return array walidacja dla awataru
+     */
     public function rules()
     {
         return [
             'avatar' => 'required|image|mimes:jpeg,png,jpg|max:800',
         ];
     }
-
+    
+    /**
+     * uploadAvatar
+     *
+     * @param  mixed $request
+     * @return json nowa ścieżka do avataru
+     */
     public function uploadAvatar(Request $request) {
 
         $file = $request->hasFile('avatar');
@@ -56,7 +67,10 @@ class ImageController extends Controller
             ]);
 
             return response([
-                'status' => 'success'
+                'status' => 'success',
+                'data' => [
+                    $fileName
+                ]
             ]);
         }
     }

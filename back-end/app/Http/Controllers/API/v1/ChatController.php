@@ -9,13 +9,25 @@ use Illuminate\Support\Facades\Validator;
 
 class ChatController extends Controller
 {
-
+    
+    /**
+     * rules
+     *
+     * @return array walidacja dla wiadomości
+     */
     private function rules() {
         return [
             'message' => 'required|string'
         ];
     }
     
+        
+    /**
+     * sendMessage
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function sendMessage(Request $request)
     {
         $validator = Validator::make($request->all(), $this->rules());
@@ -39,6 +51,12 @@ class ChatController extends Controller
         return [];
     }
 
+    
+    /**
+     * getMessages
+     *
+     * @return json wiadomości z ostatnich 12 godzin
+     */
     public function getMessages() {
         $currentTime = time();
 
