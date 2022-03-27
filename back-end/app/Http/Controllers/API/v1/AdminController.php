@@ -7,7 +7,13 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-
+    
+    /**
+     * addModerator
+     *
+     * @param  mixed $request
+     * @return json wiadomość o akcji
+     */
     public function addModerator(Request $request) {
         $user = User::find($request['userId']);
 
@@ -48,7 +54,13 @@ class AdminController extends Controller
         ]);
     }
 
-
+    
+    /**
+     * banUser
+     *
+     * @param  mixed $request
+     * @return json wiadomość o akcji
+     */
     public function banUser(Request $request) {
 
         $user = User::find($request['userId']);
@@ -75,7 +87,13 @@ class AdminController extends Controller
             'message' => 'Użytkownik '.$user->name.' został zmutowany'
         ]);
     }
-
+    
+    /**
+     * unbanUser
+     *
+     * @param  mixed $request
+     * @return json wiadomość o akcji
+     */
     public function unbanUser(Request $request) {
         $user = User::find($request['userId']);
 
