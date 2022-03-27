@@ -7,10 +7,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
-
-
+use App\Http\Controllers\API\v1\ErrorController;
 use App\Models\User;
-use Error;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -79,17 +77,17 @@ class AuthController extends Controller
 
         $token = $user->createToken('user_token')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-
         // TODO ENABLE EMAIL
         //* Send Welcome Mail To a User
         // Mail::to($fields['email'])->send(new WelcomeMail($fields['name']));
 
-        return response($response, 201);
+        return response([
+            'status' => 'success',
+            'token' => $token,
+            'data' => [
+                $user
+            ]
+        ],201);
     }
 
     
@@ -114,30 +112,25 @@ class AuthController extends Controller
         $user = User::where('email', $fields['email'])->first();
 
         if($user?->banned) {
-            return response([
-                'status' => 'error',
-                'message' => 'Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.'
-            ],401);
+            return ErrorController::handleError('Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.', 401);
         }
 
 
 
         //* Check Password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Niepoprawny e-mail lub hasło'
-            ], 401);
+            return ErrorController::handleError('Niepoprawny e-mail lub hasło', 401);
         }
 
         $token = $user->createToken('user_token')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 202);
+        return response([
+            'status' => 'success',
+            'token' => $token,
+            'data' => [
+                $user
+            ]
+        ],201);
     }
     
     /**
@@ -167,20 +160,14 @@ class AuthController extends Controller
 
         //* Check if old password is correct
         if (!$user || !Hash::check($request['old_password'], $user->password)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Niepoprawne stare hasło'
-            ], 401);
+            return ErrorController::handleError('Niepoprawne stare hasło.', 401);
         }
 
 
         $validator = Validator::make($request->all(), $this->updatePasswordRules());
 
         if($validator->fails()) {
-            return response([
-                'status' => 'error',
-                'message' => $validator->errors()
-            ]);
+            return ErrorController::handleError($validator->errors(), 400);
         }
 
         $user->update([

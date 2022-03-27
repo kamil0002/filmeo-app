@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Models\Genre;
-use App\Models\Movie;
 use App\Models\Payment;
 use App\Models\Rental;
 use Carbon\Carbon;

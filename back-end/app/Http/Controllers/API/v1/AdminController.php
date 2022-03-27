@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\API\v1\ErrorController;
+
 
 class AdminController extends Controller
 {
@@ -18,10 +20,7 @@ class AdminController extends Controller
         $user = User::find($request['userId']);
 
         if(!$user) {
-            return response([
-                'status' => 'error',
-                'message' => 'Nie znaleziono użytkownika'
-            ],404);
+            return ErrorController::handleError('Nie znaleziono podanego użytkownika', 404, 'error');
         }
 
         $user->update([
@@ -38,10 +37,7 @@ class AdminController extends Controller
         $user = User::find($request['userId']);
 
         if(!$user) {
-            return response([
-                'status' => 'error',
-                'message' => 'Nie znaleziono użytkownika'
-            ],404);
+            return ErrorController::handleError('Nie znaleziono podanego użytkownika', 404, 'error');
         }
 
         $user->update([

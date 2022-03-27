@@ -6,6 +6,8 @@ use App\Events\Message as MessageEvent;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\API\v1\ErrorController;
+
 
 class ChatController extends Controller
 {
@@ -33,10 +35,7 @@ class ChatController extends Controller
         $validator = Validator::make($request->all(), $this->rules());
 
         if($validator->fails()) {
-            return response([
-                'status' => 'failed',
-                'message' => 'Nie podano treści wiadomości'
-            ]);
+            return ErrorController::handleError('Treść wiadomości jest wymagana!', 400, 'failed');
         }
 
         $userId = auth()->user()->id;

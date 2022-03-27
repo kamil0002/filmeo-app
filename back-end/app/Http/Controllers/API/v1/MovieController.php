@@ -10,8 +10,11 @@ use App\Models\Review;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\API\v1\ErrorController;
+
 class MovieController extends Controller
 {
+
     
     /**
      * createRules
@@ -100,10 +103,7 @@ class MovieController extends Controller
 
 
         if(count($movies) === 0) {
-            return response([
-                'status' => 'error',
-                'message' => 'Nie znaleziono żadnych wyników'
-            ], 404);
+            return ErrorController::handleError('Nie znaleziono żadnych wyników', 404);
         }
 
         foreach($movies as $movie) {
@@ -178,10 +178,7 @@ class MovieController extends Controller
         $movie = Movie::find($movieId);
 
         if(!$movie) {
-            return response([
-                'status' => 'fail',
-                'message' => 'Film o podanym ID nie istnieje.'
-            ], 404);
+            return ErrorController::handleError('Film o podanym ID nie istnieje.', 404);
         }
 
         $movie = $movie->where('id', '=', $movieId)->with('genres')->with('reviews')->first();
@@ -214,13 +211,9 @@ class MovieController extends Controller
         $movie = Movie::find($movieId);
 
         if(!$movie) {
-            return response([
-                'status' => 'error',
-                'message' => 'Film o podanym ID nie istnieje.'
-            ], 404);
+            return ErrorController::handleError('Film o podanym ID nie istnieje', 404);
         }
 
-        
         $validator = Validator::make($request->all(), $this->updateRules());
         
         if($validator->fails()) {
@@ -250,10 +243,7 @@ class MovieController extends Controller
         $movie = Movie::destroy($movieId);
 
         if(!$movie) {
-            return response([
-                'status' => 'error',
-                'message' => 'Film o podanym ID nie istnieje'
-            ],404);
+            return ErrorController::handleError('Film o podanym ID nie istnieje', 404);
         }
 
         return response([
@@ -270,10 +260,7 @@ class MovieController extends Controller
 
         //* If Rental Expired inform a user and return
         if($rental->expire_date < date('Y-m-d H:i:s')) {
-            return response([
-                'status' => 'failed',
-                'message' => 'Niestety ten film nie jest już dostępny, odnów wypożyczenie aby znów oglądać!'
-            ]);
+            return ErrorController::handleError('Niestety ten film nie jest już dostępny, odnów wypożyczenie aby znów oglądać!', 403, 'failed');
         }
 
         $movieVideo = Movie::where('slug', '=', $movieSlug)->select('movie_url')->get();
@@ -305,6 +292,10 @@ class MovieController extends Controller
 
         $movies = Movie::all();
 
+        if(!$movies) {
+            return ErrorController::handleError('Brak wyników', 404, 'failed');
+        }
+
         foreach($movies as $movie) {
             $reviews = Review::where('movie_id', '=', $movie['id'])->select('rating')->get();
 
@@ -333,6 +324,10 @@ class MovieController extends Controller
 
     public function lastAdded() {
         $movies = Movie::orderBy('created_at', 'asc')->paginate(5);
+
+        if(!$movies) {
+            return ErrorController::handleError('Brak wyników', 404, 'failed');
+        }
         
         return response([
             'status' => 'success',

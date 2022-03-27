@@ -6,6 +6,9 @@ namespace App\Http\Controllers\API\v1;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\API\v1\ErrorController;
+
+
 class ImageController extends Controller
 {
     
@@ -34,17 +37,11 @@ class ImageController extends Controller
         $validator = Validator::make($request->all(), $this->rules());
 
         if($validator->fails()) {
-            return response([
-                'status' => 'error',
-                'message' => 'Niepoprawne zdjęcie, dostępne formaty to: jpeg,png,jpg, a maksymalny rozmiar to 800px '
-            ]);
+            return ErrorController::handleError('Niepoprawne zdjęcie, dostępne formaty to: jpeg,png,jpg, a maksymalny rozmiar to 800px.', 400, 'failed');
         }
 
         if(!$file) {
-            return response([
-                'status' => 'error',
-                'message' => 'Niepoprawne zdjęcie'
-            ],500);
+            return ErrorController::handleError('Niepoprawne zdjęcie', 400, 'failed');
         }
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\API\v1\ErrorController;
 use App\Models\Genre;
 
 
@@ -38,10 +39,7 @@ class GenreController extends Controller
         error_log('name');
 
         if(!$genres) {
-            return response([
-                'status' => 'error',
-                'message' => 'Nie znaleziono żadnych wyników'
-            ], 404);
+            return ErrorController::handleError('Nie znaleziono żadnych wyników', 404);
         }
 
         return response([
@@ -94,10 +92,7 @@ class GenreController extends Controller
         $genre = Genre::find($genreId);
 
         if(!$genre) {
-            return response([
-                'status' => 'fail',
-                'message' => 'Gatunek o podanym ID nie istnieje.'
-            ], 404);
+            return ErrorController::handleError('Gatunek o podanym ID nie istnieje.', 404, 'failed');
         }
 
         return response([

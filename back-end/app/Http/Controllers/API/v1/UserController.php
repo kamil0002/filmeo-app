@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\API\v1\ErrorController;
+
+
 class UserController extends Controller
 {
 
@@ -44,10 +47,7 @@ class UserController extends Controller
         $user = User::find($userId);
 
         if(!$user) {
-            return response([
-                'status' => 'failed',
-                'message' => 'Nie znaleziono podanego użytkownika'
-            ]);
+            return ErrorController::handleError('Nie znaleziono podanego użytkownika', 404, 'failed');
         }
 
         return response([
@@ -67,10 +67,7 @@ class UserController extends Controller
     public function updateUserData(Request $request) {
 
     if($request['password'] || $request['password_confirmation']) {
-        return response([
-            'status' => 'error',
-            'message' => 'Ten route nie służy do zmiany hasła!'
-        ],400);
+        return ErrorController::handleError('Ten route nie służy do zmiany hasła!', 400);
     }
 
     $user = auth()->user();

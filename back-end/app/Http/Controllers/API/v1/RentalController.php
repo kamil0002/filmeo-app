@@ -6,6 +6,8 @@ use App\Models\Movie;
 use App\Models\Payment;
 use App\Models\Rental;
 
+use App\Http\Controllers\API\v1\ErrorController;
+
 
 class RentalController extends Controller
 {    
@@ -65,10 +67,8 @@ class RentalController extends Controller
         foreach($rentals as $rental) {
             foreach($rental->movies as $rentedMovie) {
                 if($rentedMovie->id === $movieId) {
-                    return response([
-                        'status' => 'fail',
-                        'message' => 'Ten film jest już przez Ciebie wypożyczony!'
-                    ]);
+                    return ErrorController::handleError('Ten film jest już przez Ciebie wypożyczony!', 400, 'failed');
+
                 }
             }
         }
@@ -112,24 +112,18 @@ class RentalController extends Controller
 
         $movieCost = Movie::find($movieId)->cost;
         
-        if(!$rental) 
-            return response([
-            'status' => 'error',
-            'message' => 'Ten film nie został przez Ciebie wcześniej wypożyczony'
-        ], 404);
+        if(!$rental) {
+            return ErrorController::handleError('Ten film nie został przez Ciebie wcześniej wypożyczony', 400, 'failed');
+        }
+
 
         if($userId !== $rental->user_id) {
-            return  response([
-                'status' => 'error',
-                'message' => 'To wypożyczenie nie należy do Ciebie!'
-            ],403);
+            return ErrorController::handleError('Ten film nie należy do Ciebie!', 400);
         }
 
         if($rental->active) {
-            return response([
-                'status' => 'failed',
-                'message' => 'Aktualnie posiadasz już ten film w swojej kolekcji, odnów go po czasie wygaśnięcia.'
-            ]);
+            return ErrorController::handleError('Aktualnie posiadasz już ten film w swojej kolekcji, odnów go po czasie wygaśnięcia.', 400, 'failed');
+
         }
 
         $rentedTo = date('Y-m-d H:i:s', strtotime('+48 hours'));
