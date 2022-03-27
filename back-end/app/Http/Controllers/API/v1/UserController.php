@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
 
+    
+    /**
+     * updateRules
+     *
+     * @return array walidacja dla aktualizacji danych użytkownika
+     */
     private function updateRules() {
         return [
             'name' => 'string',
@@ -18,17 +24,22 @@ class UserController extends Controller
             'email' => 'email|unique:users,email',
         ];
     }
-
+    
     /**
-     * Display a listing of the resource.
+     * getAllUsers
      *
-     * @return \Illuminate\Http\Response
+     * @return json wszystkich użytkowników
      */
-
     public function getAllUsers() {
         return User::all();
     }
-
+    
+    /**
+     * getUser
+     *
+     * @param  mixed $userId id użytkownika
+     * @return json użytkownika o id $userId
+     */
     public function getUser($userId) {
         $user = User::find($userId);
 
@@ -46,7 +57,13 @@ class UserController extends Controller
             ]
         ]);
     }
-
+    
+    /**
+     * updateUserData
+     *
+     * @param  mixed $request
+     * @return json zaaktualizowanego użytkownika
+     */
     public function updateUserData(Request $request) {
 
     if($request['password'] || $request['password_confirmation']) {
