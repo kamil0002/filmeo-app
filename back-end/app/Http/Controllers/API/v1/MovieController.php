@@ -25,6 +25,7 @@ class MovieController extends Controller
     {
         return [
             'title' => 'bail|required|string|unique:movies',
+            'age_limit' => 'required|numeric|min:1',
             'description' => 'required|string',
             'short_description' => 'required|string',
             'director' => 'required|string',

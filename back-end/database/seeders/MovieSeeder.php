@@ -41,6 +41,7 @@ class MovieSeeder extends Seeder
 
             $movie = Movie::create([
                 'title' => $val->title,
+                'age_limit' => $val->age_limit,
                 'slug' => $val->slug,
                 'description' => $val->description,
                 'short_description' => $val->short_description,

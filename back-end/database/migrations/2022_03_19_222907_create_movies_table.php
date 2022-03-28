@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
+            $table->integer('age_limit');
             $table->longText('description');
             $table->string('short_description');
             $table->string('director');
