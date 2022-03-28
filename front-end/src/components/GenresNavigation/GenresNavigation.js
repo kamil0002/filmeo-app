@@ -1,5 +1,6 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeGenre } from 'slices/browsingGenreSlice';
 import styled, { css } from 'styled-components';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,60 +11,93 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
+import axios from 'utils/axios';
+import Alert from 'components/Alert/Alert';
+import { setMovies } from 'slices/moviesSlice';
 
 const GenresNavigation = () => {
-  const [browsingGenre, setBrowsingGenre] = useState('Akcja');
+  const genre = useSelector((state) => state.browsingGenre.genreName);
   const [navWrapped, setNavWrapped] = useState(false);
+  const [allMovies, setAllMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState('');
+  const [errMessage, setErrMessage] = useState(null);
+
+  const dispatch = useDispatch();
 
   const handleActiveGenre = (e) => {
-    setBrowsingGenre(e.target.textContent);
+    dispatch(changeGenre(e.target.textContent));
+    setSelectedMovie('');
   };
 
   const handleNavWrap = () => {
     setNavWrapped(!navWrapped);
   };
 
+  const handleMovieChange = async (e, newValue) => {
+    try {
+      const movieId = e.target.dataset.id;
+      const movie = await axios.get(`/movies/${movieId}`);
+      dispatch(setMovies(movie.data.data));
+      dispatch(changeGenre(null));
+      setSelectedMovie(newValue);
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => setErrMessage(null), 5000);
+    }
+  };
+
+  useEffect(async () => {
+    try {
+      const movies = await axios.get('/movies?fields=title,id');
+      setAllMovies(movies.data.data[0]);
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => setErrMessage(null), 5000);
+    }
+  }, []);
+
   return (
     <Wrapper square>
+      {errMessage && <Alert>{errMessage}</Alert>}
       <Menu
         wrapped={navWrapped ? 1 : 0}
         disablePadding
         onClick={(e) => handleActiveGenre(e)}
       >
-        <StyledMenuItem active={browsingGenre === 'Akcja' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Akcja' ? 1 : 0}>
           <Typography variant="inherit">Akcja</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Thriller' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Thriller' ? 1 : 0}>
           <Typography variant="inherit">Thriller</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Horror' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Horror' ? 1 : 0}>
           <Typography variant="inherit">Horror</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Fantasy' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Fantasy' ? 1 : 0}>
           <Typography variant="inherit">Fantasy</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Sci-Fi' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Sci-Fi' ? 1 : 0}>
           <Typography variant="inherit">Sci-Fi</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Przygodowy' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Przygodowy' ? 1 : 0}>
           <Typography variant="inherit">Przygodowy</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Dramat' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Dramat' ? 1 : 0}>
           <Typography variant="inherit">Dramat</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Kryminalny' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Kryminalny' ? 1 : 0}>
           <Typography variant="inherit">Kryminalny</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Animowany' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Animowany' ? 1 : 0}>
           <Typography variant="inherit">Animowany</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Wojenny' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Wojenny' ? 1 : 0}>
           <Typography variant="inherit">Wojenny</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Romans' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Romans' ? 1 : 0}>
           <Typography variant="inherit">Romans</Typography>
         </StyledMenuItem>
-        <StyledMenuItem active={browsingGenre === 'Komedia' ? 1 : 0}>
+        <StyledMenuItem active={genre === 'Komedia' ? 1 : 0}>
           <Typography variant="inherit">Komedia</Typography>
         </StyledMenuItem>
       </Menu>
@@ -85,9 +119,19 @@ const GenresNavigation = () => {
         )}
       </WrapMenuIcon>
       <Autocomplete
+        value={selectedMovie}
+        onChange={(event, newValue) => handleMovieChange(event, newValue)}
         freeSolo
         disableClearable
-        options={['Uncharted', 'The Batman', 'Sing 2']}
+        options={allMovies}
+        getOptionLabel={(option) => option?.title || ''}
+        renderOption={(props, option) => {
+          return (
+            <li data-id={option.id} {...props} key={option.id}>
+              {option.title}
+            </li>
+          );
+        }}
         renderInput={(params) => (
           <TextField
             {...params}

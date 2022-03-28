@@ -72,7 +72,7 @@ class MovieController extends Controller
     public function getMovies(Request $request)
     {
 
-        define('filters', ['id', 'title', 'rating_quantity', 'short_description', 'poster', 'slug']);
+        define('filters', ['id', 'title', 'rating_quantity', 'short_description', 'poster', 'slug', 'release_date', 'running_time']);
 
         if($request->genres)
             $movies = Movie::whereHas('genres')->with('genres')->select(constant('filters'))->get();
@@ -277,7 +277,14 @@ class MovieController extends Controller
 
     public function frequentlyRented() {
 
-        $movies = Movie::orderBy('rentals_number', 'desc')->paginate(5);
+        $movies = Movie::orderBy('rentals_number', 'desc')->with('genres')->paginate(5);
+
+        
+        foreach($movies as $movie) {
+            $reviews = Review::where('movie_id', '=', $movie['id'])->select('rating')->get();
+
+            $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
+        }
         
         return response([
             'status' => 'success',
@@ -290,7 +297,7 @@ class MovieController extends Controller
 
     public function topRated() {
 
-        $movies = Movie::all();
+        $movies = Movie::with('genres')->get();
 
         if(!$movies) {
             return ErrorController::handleError('Brak wyników', 404, 'failed');
@@ -317,13 +324,21 @@ class MovieController extends Controller
         return response([
             'status' => 'success',
             'results' => count($movies),
-            'data' => $movies
+            'data' => [
+                $movies
+            ]
             ]
         );
     }
 
     public function lastAdded() {
-        $movies = Movie::orderBy('created_at', 'asc')->paginate(5);
+        $movies = Movie::orderBy('created_at', 'desc')->with('genres')->paginate(5);
+
+        foreach($movies as $movie) {
+            $reviews = Review::where('movie_id', '=', $movie['id'])->select('rating')->get();
+
+            $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
+        }
 
         if(!$movies) {
             return ErrorController::handleError('Brak wyników', 404, 'failed');

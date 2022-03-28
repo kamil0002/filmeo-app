@@ -11,7 +11,8 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 
 const MovieCardItem = ({
   title,
-  genre,
+  slug,
+  genres,
   poster,
   ratingAverage,
   ratingQuantity,
@@ -20,13 +21,11 @@ const MovieCardItem = ({
   time,
 }) => {
   const [redirect, setRedirect] = useState(false);
-
   const handleRedirect = () => {
     setRedirect(true);
   };
 
-  if (redirect) return <Navigate to={`/film/${title}`} />;
-
+  if (redirect) return <Navigate to={`/film/${slug}`} />;
   return (
     <Card
       sx={{
@@ -40,7 +39,12 @@ const MovieCardItem = ({
       elevation={8}
     >
       <CardActionArea>
-        <CardMedia component="img" height="150" image={poster} alt={title} />
+        <CardMedia
+          component="img"
+          height="150"
+          image={`http://127.0.0.1:8000/images/movies/${poster}`}
+          alt={title}
+        />
         <CardContent sx={{ paddingBottom: 0 }}>
           <Typography
             gutterBottom
@@ -51,12 +55,11 @@ const MovieCardItem = ({
             marginBottom={0}
             marginTop={-0.75}
           >
-            {`${title} (${releaseDate})`}
+            {`${title} (${releaseDate.split('-')[0]})`}
           </Typography>
-          <Typography
-            color="text.secondary"
-            marginBottom={2}
-          >{`${genre}, ${time}m`}</Typography>
+          <Typography color="text.secondary" marginBottom={2}>{`${genres.join(
+            ' '
+          )}, ${time}m`}</Typography>
           <Typography fontSize={12.5} variant="body2" color="text.secondary">
             {description}
           </Typography>
@@ -110,11 +113,12 @@ const RatingWrapper = styled.div`
 
 MovieCardItem.propTypes = {
   title: PropTypes.string.isRequired,
+  slug: PropTypes.string.isRequired,
   poster: PropTypes.string.isRequired,
-  genre: PropTypes.string.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string).isRequired,
   description: PropTypes.string.isRequired,
   ratingAverage: PropTypes.number.isRequired,
   ratingQuantity: PropTypes.number.isRequired,
-  releaseDate: PropTypes.number.isRequired,
+  releaseDate: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
 };

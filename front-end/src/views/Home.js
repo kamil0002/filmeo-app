@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
@@ -10,9 +11,16 @@ import { Zoom, Fade, Slide } from 'react-reveal';
 import responsive from 'theme/responsive';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import Chat from 'components/Chat/Chat';
+import axios from 'utils/axios';
 import moviesData from 'movies-data.json';
+import Alert from 'components/Alert/Alert';
 
 const Home = () => {
+  const [lastAddedMovies, setLastAddedMovies] = useState([]);
+  const [topRatedMovies, setTopRatedMovies] = useState([]);
+  const [frequentlyRentedMovies, setfrequentlyRentedMovies] = useState([]);
+  const [errMessage, setErrMessage] = useState(null);
+
   const scrollToChat = () => {
     const chatNode = document.getElementById('chat');
     chatNode.scrollIntoView({
@@ -20,8 +28,30 @@ const Home = () => {
     });
   };
 
+  useEffect(async () => {
+    try {
+      const lastAddedURL = axios.get('/last-added-movies');
+      const frequentlyRentedMoviesURL = axios.get('/top-5-frequently-rented');
+      const topRatedURL = axios.get('/top-5-rated');
+      const [lastAdded, frequentlyRentedMovies, topRated] = await Promise.all([
+        lastAddedURL,
+        frequentlyRentedMoviesURL,
+        topRatedURL,
+      ]);
+
+      setLastAddedMovies(lastAdded.data.data[0].data);
+      setTopRatedMovies(topRated.data.data[0]);
+      setfrequentlyRentedMovies(frequentlyRentedMovies.data.data[0].data);
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => setErrMessage(null), 5000);
+    }
+  }, []);
+
   return (
     <Wrapper>
+      {errMessage && <Alert>{errMessage}</Alert>}
+
       <StartChatting onClick={scrollToChat}>
         <ChatBubbleIcon sx={{ color: '#FFF', fontSize: 28 }} />
       </StartChatting>
@@ -64,27 +94,33 @@ const Home = () => {
           </Slide>
         </Actions>
       </Header>
-      <Fade left>
-        <MovieCardGrid
-          movies={moviesData.movies.slice(-5)}
-          heading="Ostatnio dodane"
-          backgroundColor="#f7f7f7"
-        />
-      </Fade>
-      <Fade right>
-        <MovieCardGrid
-          movies={moviesData.movies.slice(-5)}
-          heading="Najlepiej oceniane"
-          backgroundColor="#C3D1DE"
-        />
-      </Fade>
-      <Fade left>
-        <MovieCardGrid
-          movies={moviesData.movies.slice(-5)}
-          heading="Najchętniej oglądane"
-          backgroundColor="#e0e0e0"
-        />
-      </Fade>
+      {lastAddedMovies && (
+        <Fade left>
+          <MovieCardGrid
+            movies={lastAddedMovies}
+            heading="Ostatnio dodane"
+            backgroundColor="#f7f7f7"
+          />
+        </Fade>
+      )}
+      {topRatedMovies && (
+        <Fade right>
+          <MovieCardGrid
+            movies={topRatedMovies}
+            heading="Najlepiej oceniane"
+            backgroundColor="#C3D1DE"
+          />
+        </Fade>
+      )}
+      {frequentlyRentedMovies && (
+        <Fade left>
+          <MovieCardGrid
+            movies={frequentlyRentedMovies}
+            heading="Najchętniej oglądane"
+            backgroundColor="#e0e0e0"
+          />
+        </Fade>
+      )}
       <Chat id="chat" />
     </Wrapper>
   );

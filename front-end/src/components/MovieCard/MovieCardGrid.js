@@ -25,32 +25,21 @@ const MovieCardGrid = ({ movies, heading, backgroundColor, allMovies }) => {
         marginTop={4}
         paddingX={allMovies ? 6 : 2}
       >
-        {movies.map(
-          ({
-            title,
-            genre,
-            poster,
-            ratingAverage,
-            ratingQuantity,
-            id,
-            description,
-            releaseDate,
-            time,
-          }) => (
-            <Grid item key={id}>
-              <MovieCard
-                title={title}
-                genre={genre}
-                poster={poster}
-                ratingAverage={ratingAverage}
-                ratingQuantity={ratingQuantity}
-                description={description}
-                releaseDate={releaseDate}
-                time={time}
-              />
-            </Grid>
-          )
-        )}
+        {movies.map((movie) => (
+          <Grid item key={movie.id}>
+            <MovieCard
+              title={movie.title}
+              slug={movie.slug}
+              genres={movie.genres.map((genre) => genre.name)}
+              poster={movie.poster}
+              ratingAverage={+movie.rating_average || 0}
+              ratingQuantity={movie.rating_quantity}
+              description={movie.short_description}
+              releaseDate={movie.release_date}
+              time={movie.running_time}
+            />
+          </Grid>
+        ))}
       </GridContainer>
     </Wrapper>
   );
