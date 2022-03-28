@@ -20,7 +20,6 @@ const Movies = () => {
   useEffect(async () => {
     try {
       if (!genre) return;
-
       setSpinnerVisible(true);
       const data = await axios.get(`/movies?genre=${genre}`);
       setSpinnerVisible(false);

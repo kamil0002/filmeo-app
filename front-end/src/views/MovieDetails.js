@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Grid, Paper } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
@@ -10,26 +11,37 @@ import ReviewCard from 'components/ReviewCard/ReviewCard';
 import { Navigate } from 'react-router-dom';
 import axios from 'utils/axios';
 import { loadStripe } from '@stripe/stripe-js';
-import moviesData from 'movies-data.json';
 import Header from 'components/MovieDetailsHeader/MovieDetailsHeader';
 import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
-
-const movie = moviesData.movies[0];
+import Alert from 'components/Alert/Alert';
 
 const MovieDetails = () => {
   const [redirectToReviews, setRedirectToReviews] = useState(false);
   const [redirectToOrder, setRedirectToOrder] = useState(false);
+  const [movie, setMovie] = useState(null);
+  const [errMessage, setErrMessage] = useState(null);
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
 
   const params = useParams();
   const { search } = useLocation();
 
   useEffect(async () => {
-    if (search.length !== 0) {
-      const searchParams = new URLSearchParams(search);
+    try {
+      setSpinnerVisible(true);
+      const movie = await axios.get(`/movies/slug/${params.slug}`);
+      setMovie(movie.data.data[0][0]);
+      setSpinnerVisible(false);
+      //* Transaction
+      if (search.length !== 0) {
+        const searchParams = new URLSearchParams(search);
 
-      const userId = searchParams.get('user');
-      const movieId = searchParams.get('movie');
-      await axios.get(`/rentMovie/${movieId}/${userId}`);
+        const userId = searchParams.get('user');
+        const movieId = searchParams.get('movie');
+        await axios.get(`/rentMovie/${movieId}/${userId}`);
+      }
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => setErrMessage(null), 5000);
     }
   }, []);
 
@@ -60,124 +72,153 @@ const MovieDetails = () => {
 
   return (
     <Wrapper>
-      <Header rentMovieFn={rentMovie} movie={movie} />
-      <MovieData>
-        <MovieInformationWrapper>
-          <Typography
-            fontWeight={700}
-            align={'center'}
-            paddingX={2}
-            marginTop={2}
-            marginBottom={7}
-            fontSize={22}
-            color="#1465C0"
-            textTransform="uppercase"
-          >
-            Podstawowe informacje
-          </Typography>
-          <MovieInformation>
-            <img src="/images/movie-genre.png" alt="movie-genre" />
-            <MovieInformationText>{movie.genre}</MovieInformationText>
-          </MovieInformation>
-          <MovieInformation>
-            <img src="/images/movie-director.png" alt="movie-director" />
-            <MovieInformationText>{movie.director}</MovieInformationText>
-          </MovieInformation>
-          <MovieInformation>
-            <img src="/images/age-limit.png" alt="movie-age-limit" />
-            <MovieInformationText>{movie.ageLimit}</MovieInformationText>
-          </MovieInformation>
-          <MovieInformation>
-            <img src="/images/movie-rating.png" alt="movie-rating" />
-            <MovieInformationText>{movie.ratingAverage}/5</MovieInformationText>
-          </MovieInformation>
-          <MovieInfoButton variant="outlined" href={movie.link} target="_blank">
-            Więcej informacji
-          </MovieInfoButton>
-        </MovieInformationWrapper>
-        <MovieDescription>
-          <Typography
-            fontWeight={700}
-            align={'center'}
-            paddingX={2}
-            marginTop={2}
-            marginBottom={7}
-            fontSize={22}
-            color="#1465C0"
-            textTransform="uppercase"
-          >
-            Opis fabuły
-          </Typography>
-          <Typography>{movie.description}</Typography>
-        </MovieDescription>
-      </MovieData>
-      <MovieTrailer />
-      <Reviews>
-        <ReviewsHeader
-          marginBottom={3.5}
-          fontWeight={700}
-          paddingX={2}
-          marginTop={2}
-          fontSize={22}
-          color="#1465C0"
-          textTransform="uppercase"
-        >
-          Opinie
-        </ReviewsHeader>
-        <AddReviewButton variant="outlined" onClick={handleRedirectToReviews}>
-          Dodaj Opinię
-        </AddReviewButton>
-        <GridContainer gridRow={2} container columnSpacing={3} rowSpacing={3}>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <DeleteReviewIcon />
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-          <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-            <ReviewCard profile={false} />
-          </GridItem>
-        </GridContainer>
-      </Reviews>
-      <RentMovieWrapper>
-        <RentMovie elevation={14}>
-          <img
-            src="https://images.savoysystems.co.uk/KGH/9395940.jpg"
-            alt="movie-poster"
+      {spinnerVisible && <Spinner />}
+      {movie && (
+        <>
+          {errMessage && <Alert>{errMessage}</Alert>}
+          <Header
+            rentMovieFn={rentMovie}
+            title={movie.title}
+            time={+movie.running_time}
+            poster={movie.poster}
+            releaseYear={movie.release_date.split('')[0]}
+            cost={+movie.cost}
           />
-          <StyledButton onClick={handleRedirectToOrder} variant="contained">
-            Wypożycz
-          </StyledButton>
-        </RentMovie>
-      </RentMovieWrapper>
+          <MovieData>
+            <MovieInformationWrapper>
+              <Typography
+                fontWeight={700}
+                align={'center'}
+                paddingX={2}
+                marginTop={2}
+                marginBottom={7}
+                fontSize={22}
+                color="#1465C0"
+                textTransform="uppercase"
+              >
+                Podstawowe informacje
+              </Typography>
+              <MovieInformation>
+                <img src="/images/movie-genre.png" alt="movie-genre" />
+                <MovieInformationText>
+                  {movie.genres.map((genre) => genre.name).join(', ')}
+                </MovieInformationText>
+              </MovieInformation>
+              <MovieInformation>
+                <img src="/images/movie-director.png" alt="movie-director" />
+                <MovieInformationText>{movie.director}</MovieInformationText>
+              </MovieInformation>
+              <MovieInformation>
+                <img src="/images/age-limit.png" alt="movie-age-limit" />
+                <MovieInformationText>null</MovieInformationText>
+              </MovieInformation>
+              <MovieInformation>
+                <img src="/images/movie-rating.png" alt="movie-rating" />
+                <MovieInformationText>
+                  {movie.rating_average || 0}/5
+                </MovieInformationText>
+              </MovieInformation>
+              <MovieInfoButton
+                variant="outlined"
+                href={movie.details_url}
+                target="_blank"
+              >
+                Więcej informacji
+              </MovieInfoButton>
+            </MovieInformationWrapper>
+            <MovieDescription>
+              <Typography
+                fontWeight={700}
+                align={'center'}
+                paddingX={2}
+                marginTop={2}
+                marginBottom={7}
+                fontSize={22}
+                color="#1465C0"
+                textTransform="uppercase"
+              >
+                Opis fabuły
+              </Typography>
+              <Typography>{movie.description}</Typography>
+            </MovieDescription>
+          </MovieData>
+          <MovieTrailer url={movie.trailer_url} />
+          <Reviews>
+            <ReviewsHeader
+              marginBottom={3.5}
+              fontWeight={700}
+              paddingX={2}
+              marginTop={2}
+              fontSize={22}
+              color="#1465C0"
+              textTransform="uppercase"
+            >
+              Opinie
+            </ReviewsHeader>
+            <AddReviewButton
+              variant="outlined"
+              onClick={handleRedirectToReviews}
+            >
+              Dodaj Opinię
+            </AddReviewButton>
+            <GridContainer
+              gridRow={2}
+              container
+              columnSpacing={3}
+              rowSpacing={3}
+            >
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <DeleteReviewIcon />
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
+                <ReviewCard profile={false} />
+              </GridItem>
+            </GridContainer>
+          </Reviews>
+          <RentMovieWrapper>
+            <RentMovie elevation={14}>
+              <img
+                src={`http://127.0.0.1:8000/images/movies/${movie.poster}`}
+                alt="movie-poster"
+              />
+              <StyledButton onClick={handleRedirectToOrder} variant="contained">
+                Wypożycz
+              </StyledButton>
+            </RentMovie>
+          </RentMovieWrapper>
+        </>
+      )}
     </Wrapper>
   );
 };
@@ -188,7 +229,7 @@ const MovieInformation = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 230px;
+  width: 280px;
   height: 70px;
   position: relative;
   left: 50%;
@@ -210,6 +251,7 @@ const MovieInformationText = styled(Typography)`
 `;
 
 const Wrapper = styled.div`
+  min-height: 100vh;
   @media ${responsive.desktop} {
     width: 95vw;
     margin: auto;
@@ -420,4 +462,11 @@ const StyledButton = styled(Button)`
       font-size: ${({ theme }) => theme.fontSize.lg};
     }
   }
+`;
+
+const Spinner = styled(CircularProgress)`
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
 `;

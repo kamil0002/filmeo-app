@@ -51,7 +51,6 @@ const Home = () => {
   return (
     <Wrapper>
       {errMessage && <Alert>{errMessage}</Alert>}
-
       <StartChatting onClick={scrollToChat}>
         <ChatBubbleIcon sx={{ color: '#FFF', fontSize: 28 }} />
       </StartChatting>
@@ -94,32 +93,33 @@ const Home = () => {
           </Slide>
         </Actions>
       </Header>
-      {lastAddedMovies && (
-        <Fade left>
-          <MovieCardGrid
-            movies={lastAddedMovies}
-            heading="Ostatnio dodane"
-            backgroundColor="#f7f7f7"
-          />
-        </Fade>
-      )}
-      {topRatedMovies && (
-        <Fade right>
-          <MovieCardGrid
-            movies={topRatedMovies}
-            heading="Najlepiej oceniane"
-            backgroundColor="#C3D1DE"
-          />
-        </Fade>
-      )}
-      {frequentlyRentedMovies && (
-        <Fade left>
-          <MovieCardGrid
-            movies={frequentlyRentedMovies}
-            heading="Najchętniej oglądane"
-            backgroundColor="#e0e0e0"
-          />
-        </Fade>
+
+      {topRatedMovies && frequentlyRentedMovies && lastAddedMovies && (
+        <>
+          <Fade left>
+            <MovieCardGrid
+              movies={lastAddedMovies}
+              heading="Ostatnio dodane"
+              backgroundColor="#f7f7f7"
+            />
+          </Fade>
+
+          <Fade right>
+            <MovieCardGrid
+              movies={topRatedMovies}
+              heading="Najlepiej oceniane"
+              backgroundColor="#C3D1DE"
+            />
+          </Fade>
+
+          <Fade left>
+            <MovieCardGrid
+              movies={frequentlyRentedMovies}
+              heading="Najchętniej oglądane"
+              backgroundColor="#e0e0e0"
+            />
+          </Fade>
+        </>
       )}
       <Chat id="chat" />
     </Wrapper>

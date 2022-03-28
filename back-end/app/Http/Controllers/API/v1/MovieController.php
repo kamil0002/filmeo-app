@@ -62,6 +62,21 @@ class MovieController extends Controller
         ];
     }
 
+    public function getMovieBySlug(string $movieSlug) {
+        $movie = Movie::where('slug', '=', $movieSlug)->with('reviews')->with('genres')->get();
+
+        if(!$movie) {
+            return ErrorController::handleError('Film nie istnieje!', 404);
+        } 
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                $movie
+            ]
+        ]);
+    }
+
         
     /**
      * getMovies

@@ -1,12 +1,12 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
 import responsive from 'theme/responsive';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import RemoveCircleOutlinedIcon from '@mui/icons-material/RemoveCircleOutlined';
 
-const MovieTrailer = () => {
+const MovieTrailer = ({ url }) => {
   const [videoVolume, setVideoVolume] = useState(0.05);
 
   return (
@@ -25,7 +25,7 @@ const MovieTrailer = () => {
         volume={videoVolume}
         width="100%"
         height="100%"
-        url="https://www.youtube.com/watch?v=mqqft2x_Aa4"
+        url={url}
         controls={false}
       />
     </Wrapper>
@@ -44,7 +44,7 @@ const Wrapper = styled.div`
 
   @media ${responsive.desktop} {
     width: 95vw;
-    height: 1000px;
+    height: 780px;
   }
 `;
 
@@ -73,3 +73,7 @@ const VolumeDownBtn = styled(RemoveCircleOutlinedIcon)`
     cursor: pointer;
   }
 `;
+
+MovieTrailer.propTypes = {
+  url: PropTypes.string.isRequired,
+};

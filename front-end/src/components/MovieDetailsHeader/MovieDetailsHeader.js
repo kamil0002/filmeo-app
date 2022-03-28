@@ -8,29 +8,36 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 
-const MovieDetailsHeader = ({ rentMovieFn, movie }) => {
+const MovieDetailsHeader = ({
+  rentMovieFn,
+  title,
+  time,
+  releaseYear,
+  cost,
+  poster,
+}) => {
   return (
     <Wrapper>
       <Header>
-        <MovieTitle>Uncharted</MovieTitle>
+        <MovieTitle>{title}</MovieTitle>
         <MovieHeaderInfo>
           <Time>
             <MovieTime></MovieTime>
             <Typography fontWeight={700} color={'#fff'} fontSize={24}>
-              186m
+              {time}m
             </Typography>
           </Time>
           <ReleaseDate>
             <MovieReleaseDate></MovieReleaseDate>
             <Typography fontWeight={700} color={'#fff'} fontSize={24}>
-              2022
+              {releaseYear}
             </Typography>
           </ReleaseDate>
         </MovieHeaderInfo>
         <MovieCost>
           <MovieCostIcon></MovieCostIcon>
           <Typography fontWeight={700} color={'#fff'} fontSize={24}>
-            10zł/7 dni
+            {cost}zł/48h
           </Typography>
         </MovieCost>
         <HeaderAction>
@@ -38,7 +45,7 @@ const MovieDetailsHeader = ({ rentMovieFn, movie }) => {
             Zamów teraz!
           </HeaderButton>
         </HeaderAction>
-        <HeaderImage src={movie.poster} />
+        <HeaderImage src={`http://127.0.0.1:8000/images/movies/${poster}`} />
         <ImageOverlay></ImageOverlay>
       </Header>
     </Wrapper>
@@ -57,6 +64,8 @@ const Wrapper = styled.div`
 
 const Header = styled.div`
   position: absolute;
+  left: 0;
+  right: 0;
   inset: 0;
 `;
 
@@ -86,12 +95,23 @@ const MovieTitle = styled(Typography)`
     color: ${({ theme }) => theme.secondaryLight};
     position: absolute;
     z-index: 2;
-    left: 50%;
-    top: 10%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 15%;
     text-decoration: underline;
-    transform: translateX(-50%);
-    font-size: ${({ theme }) => theme.fontSize['3xl']};
+    font-size: ${({ theme }) => theme.fontSize.md};
     font-weight: ${({ theme }) => theme.fontBold};
+    padding: 0 1rem;
+
+    @media ${responsive.mobile} {
+      top: 10%;
+      font-size: ${({ theme }) => theme.fontSize.lg};
+    }
+
+    @media ${responsive.laptop} {
+      font-size: ${({ theme }) => theme.fontSize['3xl']};
+    }
   }
 `;
 
@@ -99,12 +119,13 @@ const MovieHeaderInfo = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: 30%;
+  top: 35%;
   z-index: 2;
   display: flex;
   justify-content: space-around;
 
   @media ${responsive.tablet} {
+    top: 30%;
     width: 500px;
     left: 50%;
     transform: translateX(-50%);
@@ -147,6 +168,7 @@ const MovieCost = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 2rem;
 `;
 
 const MovieCostIcon = styled(AttachMoneyIcon)`
@@ -165,6 +187,11 @@ const HeaderAction = styled.div`
   display: flex;
   justify-content: center;
   z-index: 2;
+  margin-top: 3rem;
+
+  @media ${responsive.mobileM} {
+    margin-top: 1.4rem;
+  }
 `;
 
 const HeaderButton = styled(Button)`
@@ -179,5 +206,9 @@ const HeaderButton = styled(Button)`
 
 MovieDetailsHeader.propTypes = {
   rentMovieFn: PropTypes.func.isRequired,
-  movie: PropTypes.object,
+  title: PropTypes.string.isRequired,
+  releaseYear: PropTypes.string.isRequired,
+  cost: PropTypes.number.isRequired,
+  poster: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired,
 };

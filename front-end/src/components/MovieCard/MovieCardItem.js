@@ -26,6 +26,7 @@ const MovieCardItem = ({
   };
 
   if (redirect) return <Navigate to={`/film/${slug}`} />;
+
   return (
     <Card
       sx={{
