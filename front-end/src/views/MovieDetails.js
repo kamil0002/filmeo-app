@@ -118,7 +118,6 @@ const MovieDetails = () => {
                 <img src="/images/movie-rating.png" alt="movie-rating" />
                 <MovieInformationText>
                   {movie.rating_average && `${movie.rating_average}/5`}
-                  {!movie.rating_average && 'Brak opinii'}
                 </MovieInformationText>
               </MovieInformation>
               <MovieInfoButton
@@ -142,7 +141,7 @@ const MovieDetails = () => {
               >
                 Opis fabuły
               </Typography>
-              <Typography>{movie.description}</Typography>
+              <Typography fontSize="inherit">{movie.description}</Typography>
             </MovieDescription>
           </MovieData>
           <MovieTrailer url={movie.trailer_url} />
@@ -170,28 +169,34 @@ const MovieDetails = () => {
               columnSpacing={3}
               rowSpacing={3}
             >
-              {movie.reviews.map(
-                ({
-                  author,
-                  title,
-                  id,
-                  description,
-                  created_at,
-                  rating,
-                  verified,
-                }) => (
-                  <GridItem key={id} item xs={10} sm={6} md={4} lg={3} xl={2}>
-                    <DeleteReviewIcon />
-                    <ReviewCard
-                      title={title}
-                      description={description}
-                      verified={verified}
-                      rating={+rating}
-                      createdAt={created_at}
-                      profile={false}
-                      author={author}
-                    />
-                  </GridItem>
+              {movie.reviews.length === 0 ? (
+                <NoReviewsText>
+                  Ten film nie ma jeszcze żadnych opnii
+                </NoReviewsText>
+              ) : (
+                movie.reviews.map(
+                  ({
+                    author,
+                    title,
+                    id,
+                    description,
+                    created_at,
+                    rating,
+                    verified,
+                  }) => (
+                    <GridItem key={id} item xs={10} sm={6} md={4} lg={3} xl={2}>
+                      <DeleteReviewIcon />
+                      <ReviewCard
+                        title={title}
+                        description={description}
+                        verified={verified}
+                        rating={+rating}
+                        createdAt={created_at}
+                        profile={false}
+                        author={author}
+                      />
+                    </GridItem>
+                  )
                 )
               )}
             </GridContainer>
@@ -224,6 +229,12 @@ const MovieInformation = styled.div`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 1rem;
+
+  @media ${responsive.laptop} {
+    width: 350px;
+    margin-left: 1.4rem;
+  }
 
   img {
     display: block;
@@ -234,9 +245,17 @@ const MovieInformation = styled.div`
 const MovieInformationText = styled(Typography)`
   && {
     margin-left: 1rem;
-    font-size: ${({ theme }) => theme.fontSize.m};
+    font-size: ${({ theme }) => theme.fontSize.xs};
     font-weight: ${({ theme }) => theme.fontBold};
     color: ${({ theme }) => theme.primaryBlue};
+
+    @media ${responsive.mobileM} {
+      font-size: ${({ theme }) => theme.fontSize.s};
+    }
+
+    @media ${responsive.desktop} {
+      font-size: ${({ theme }) => theme.fontSize.m};
+    }
   }
 `;
 
@@ -252,8 +271,6 @@ const MovieData = styled.div`
   display: flex;
   margin-top: -9vw;
   flex-direction: column;
-  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
 
   @media ${responsive.tablet} {
     flex-direction: row;
@@ -276,7 +293,7 @@ const MovieInformationWrapper = styled.div`
   }
 
   @media ${responsive.laptop} {
-    padding-bottom: 120px;
+    padding-bottom: 50px;
   }
 
   @media ${responsive.desktop} {
@@ -312,11 +329,11 @@ const MovieDescription = styled.div`
   @media ${responsive.tablet} {
     width: 50%;
     padding-top: 200px;
+    font-size: ${({ theme }) => theme.fontSize.m};
   }
 
   @media ${responsive.desktop} {
     padding-top: 240px;
-    padding-bottom: 120px;
     padding-left: 70px;
     padding-right: 70px;
   }
@@ -343,20 +360,8 @@ const GridItem = styled(Grid)`
 `;
 
 const Reviews = styled.div`
-  margin-top: -9vw;
-  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  padding: 10rem 0;
+  padding: 4rem 0;
   background: ${({ theme }) => theme.lightBlue};
-
-  @media ${responsive.laptop} {
-    padding: 14rem 0;
-  }
-
-  @media ${responsive.desktop} {
-    padding-top: 15rem;
-    padding-bottom: 20rem;
-  }
 `;
 
 const DeleteReviewIcon = styled(DeleteIcon)`
@@ -387,24 +392,22 @@ const ReviewsHeader = styled(Typography)`
   }
 `;
 
+const NoReviewsText = styled(Typography)`
+  && {
+    font-size: ${({ theme }) => theme.fontSize.lg};
+    font-weight: ${({ theme }) => theme.fontBold};
+    color: ${({ theme }) => theme.primaryLight};
+    text-align: center;
+    padding: 1rem 2rem;
+  }
+`;
+
 const RentMovieWrapper = styled.div`
-  margin-top: -9vw;
   padding-top: 150px;
   padding-bottom: 100px;
-  clip-path: polygon(0 9vw, 100% 0, 100% 100%, 0 100%);
-  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% 100%, 0 100%);
   background: ${({ theme }) => theme.secondaryLight};
   display: flex;
   justify-content: center;
-
-  @media ${responsive.tablet} {
-    padding-top: 250px;
-    padding-bottom: 150px;
-  }
-
-  @media ${responsive.desktop} {
-    padding-top: 330px;
-  }
 `;
 
 const RentMovie = styled(Paper)`

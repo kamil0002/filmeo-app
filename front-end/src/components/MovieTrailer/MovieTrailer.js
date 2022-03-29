@@ -36,28 +36,22 @@ export default MovieTrailer;
 
 const Wrapper = styled.div`
   position: relative;
-  margin-top: calc(0px - 9vw);
   width: 100%;
   height: 85vmin;
-  clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
-  -webkit-clip-path: polygon(0 9vw, 100% 0, 100% calc(100% - 9vw), 0 100%);
 
   @media ${responsive.desktop} {
     width: 95vw;
-    height: 780px;
+    height: 550px;
+    margin: 0 auto;
   }
 `;
 
 const VideoActions = styled.div`
   position: absolute;
-  bottom: 15%;
+  bottom: 8%;
   right: 2%;
   color: ${({ theme }) => theme.primaryLight};
   opacity: 0.5;
-
-  @media ${responsive.desktop} {
-    bottom: 25%;
-  }
 `;
 
 const VolumeUpBtn = styled(AddCircleOutlinedIcon)`

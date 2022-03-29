@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
-import { Button } from '@mui/material';
+import { Button, LinearProgress } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilterOutlined';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
@@ -12,7 +12,6 @@ import responsive from 'theme/responsive';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import Chat from 'components/Chat/Chat';
 import axios from 'utils/axios';
-import moviesData from 'movies-data.json';
 import Alert from 'components/Alert/Alert';
 
 const Home = () => {
@@ -49,53 +48,69 @@ const Home = () => {
   }, []);
 
   return (
-    <Wrapper>
-      {errMessage && <Alert>{errMessage}</Alert>}
-      <StartChatting onClick={scrollToChat}>
-        <ChatBubbleIcon sx={{ color: '#FFF', fontSize: 28 }} />
-      </StartChatting>
-      <Header>
-        <Zoom>
-          <Heading
-            paddingTop={15}
-            paddingX={4}
-            color="#ECEFF1"
-            variant="h1"
-            align="center"
-            fontWeight={700}
-            letterSpacing={3}
+    <>
+      {topRatedMovies.length === 0 ? (
+        <Backdrop>
+          <Typography
+            sx={{
+              position: 'fixed',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%,-50%)',
+              color: '#1465C0',
+              fontWeight: 700,
+              fontSize: 20,
+            }}
           >
-            Znajdź Coś Dla Siebie w Naszej Bazie Filmów
-          </Heading>
-        </Zoom>
-        <Actions>
-          <Slide left>
-            <StyledButton
-              sx={{ fontFamily: 'inherit' }}
-              variant="contained"
-              endIcon={<MovieFilterOutlinedIcon />}
-              LinkComponent={Link}
-              to="/filmy"
-            >
-              Wszystkie Filmy
-            </StyledButton>
-          </Slide>
-          <Slide right>
-            <StyledButton
-              sx={{ fontFamily: 'inherit' }}
-              variant="contained"
-              endIcon={<LoginIcon />}
-              LinkComponent={Link}
-              to="/rejestracja"
-            >
-              Dołącz Do Nas!
-            </StyledButton>
-          </Slide>
-        </Actions>
-      </Header>
-
-      {topRatedMovies && frequentlyRentedMovies && lastAddedMovies && (
-        <>
+            Ładowanie...
+          </Typography>
+          <LinearProgress />
+        </Backdrop>
+      ) : (
+        <Wrapper>
+          {errMessage && <Alert>{errMessage}</Alert>}
+          <StartChatting onClick={scrollToChat}>
+            <ChatBubbleIcon sx={{ color: '#FFF', fontSize: 28 }} />
+          </StartChatting>
+          <Header>
+            <Zoom>
+              <Heading
+                paddingTop={15}
+                paddingX={4}
+                color="#ECEFF1"
+                variant="h1"
+                align="center"
+                fontWeight={700}
+                letterSpacing={3}
+              >
+                Znajdź Coś Dla Siebie w Naszej Bazie Filmów
+              </Heading>
+            </Zoom>
+            <Actions>
+              <Slide left>
+                <StyledButton
+                  sx={{ fontFamily: 'inherit' }}
+                  variant="contained"
+                  endIcon={<MovieFilterOutlinedIcon />}
+                  LinkComponent={Link}
+                  to="/filmy"
+                >
+                  Wszystkie Filmy
+                </StyledButton>
+              </Slide>
+              <Slide right>
+                <StyledButton
+                  sx={{ fontFamily: 'inherit' }}
+                  variant="contained"
+                  endIcon={<LoginIcon />}
+                  LinkComponent={Link}
+                  to="/rejestracja"
+                >
+                  Dołącz Do Nas!
+                </StyledButton>
+              </Slide>
+            </Actions>
+          </Header>
           <Fade left>
             <MovieCardGrid
               movies={lastAddedMovies}
@@ -103,7 +118,6 @@ const Home = () => {
               backgroundColor="#f7f7f7"
             />
           </Fade>
-
           <Fade right>
             <MovieCardGrid
               movies={topRatedMovies}
@@ -111,7 +125,6 @@ const Home = () => {
               backgroundColor="#C3D1DE"
             />
           </Fade>
-
           <Fade left>
             <MovieCardGrid
               movies={frequentlyRentedMovies}
@@ -119,14 +132,21 @@ const Home = () => {
               backgroundColor="#e0e0e0"
             />
           </Fade>
-        </>
+          <Chat id="chat" />
+        </Wrapper>
       )}
-      <Chat id="chat" />
-    </Wrapper>
+    </>
   );
 };
 
 export default Home;
+
+const Backdrop = styled.div`
+  background: ${({ theme }) => theme.primaryLight};
+  position: fixed;
+  inset: 0;
+  z-index: 100000000;
+`;
 
 const Wrapper = styled.div`
   overflow-x: hidden;
