@@ -86,24 +86,7 @@ class ReviewController extends Controller
             ]
         ],201);
     }
-    
-    /**
-     * getMovieReviews
-     *
-     * @param  mixed $movieId id filmu
-     * @return json wszystkie recenzje dla filmu o $movieId
-     */
-    public function getMovieReviews(int $movieId) {
-        $reviews = Review::where('movie_id', '=', $movieId)->get();
 
-        return response([
-            'status' => 'success',
-            'results' => count($reviews),
-            'data' => [
-                $reviews
-            ]
-        ]);
-    }
     
     /**
      * deleteReview

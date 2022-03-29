@@ -29,8 +29,10 @@ const MovieDetails = () => {
     try {
       setSpinnerVisible(true);
       const movie = await axios.get(`/movies/slug/${params.slug}`);
+      console.log(movie);
       setMovie(movie.data.data[0][0]);
       setSpinnerVisible(false);
+
       //* Transaction
       if (search.length !== 0) {
         const searchParams = new URLSearchParams(search);
@@ -69,7 +71,7 @@ const MovieDetails = () => {
     return <Navigate to={`/film/${params.slug}/dodaj-opinie`} />;
 
   if (redirectToOrder) return <Navigate to={`/film/${params.slug}/zamow`} />;
-
+  console.log(movie);
   return (
     <Wrapper>
       {spinnerVisible && <Spinner />}
@@ -81,7 +83,7 @@ const MovieDetails = () => {
             title={movie.title}
             time={+movie.running_time}
             poster={movie.poster}
-            releaseYear={movie.release_date.split('')[0]}
+            releaseYear={movie.release_date.split('-')[0]}
             cost={+movie.cost}
           />
           <MovieData>
@@ -110,12 +112,13 @@ const MovieDetails = () => {
               </MovieInformation>
               <MovieInformation>
                 <img src="/images/age-limit.png" alt="movie-age-limit" />
-                <MovieInformationText>null</MovieInformationText>
+                <MovieInformationText>{movie.age_limit}</MovieInformationText>
               </MovieInformation>
               <MovieInformation>
                 <img src="/images/movie-rating.png" alt="movie-rating" />
                 <MovieInformationText>
-                  {movie.rating_average || 0}/5
+                  {movie.rating_average && `${movie.rating_average}/5`}
+                  {!movie.rating_average && 'Brak opinii'}
                 </MovieInformationText>
               </MovieInformation>
               <MovieInfoButton
@@ -167,43 +170,30 @@ const MovieDetails = () => {
               columnSpacing={3}
               rowSpacing={3}
             >
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <DeleteReviewIcon />
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
-              <GridItem item xs={10} sm={6} md={4} lg={3} xl={2}>
-                <ReviewCard profile={false} />
-              </GridItem>
+              {movie.reviews.map(
+                ({
+                  author,
+                  title,
+                  id,
+                  description,
+                  created_at,
+                  rating,
+                  verified,
+                }) => (
+                  <GridItem key={id} item xs={10} sm={6} md={4} lg={3} xl={2}>
+                    <DeleteReviewIcon />
+                    <ReviewCard
+                      title={title}
+                      description={description}
+                      verified={verified}
+                      rating={+rating}
+                      createdAt={created_at}
+                      profile={false}
+                      author={author}
+                    />
+                  </GridItem>
+                )
+              )}
             </GridContainer>
           </Reviews>
           <RentMovieWrapper>

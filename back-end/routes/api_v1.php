@@ -57,7 +57,6 @@ Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']);
 Route::get('/getMessages', [ChatController::class, 'getMessages']);
 
 //* Reviews
-Route::get('/movieReviews/{moveId}', [ReviewController::class, 'getMovieReviews']);
 Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 
 

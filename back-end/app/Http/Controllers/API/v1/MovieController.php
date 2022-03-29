@@ -11,6 +11,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\API\v1\ErrorController;
+use App\Models\User;
 
 class MovieController extends Controller
 {
@@ -69,6 +70,14 @@ class MovieController extends Controller
         if(!$movie) {
             return ErrorController::handleError('Film nie istnieje!', 404);
         } 
+
+        $movie[0]['rating_average'] = floatval(floor($movie[0]->reviews->avg('rating')) . substr(str_replace(floor($movie[0]->reviews->avg('rating')), '', $movie[0]->reviews->avg('rating')), 0, 2 + 1)) ?? 0;
+
+        foreach($movie[0]->reviews as $review) {
+            $author = User::where('id' ,'=', $review->user_id)->select('name')->get();
+            unset($review['user_id']);
+            $review->author = $author[0]->name;
+        }
 
         return response([
             'status' => 'success',
