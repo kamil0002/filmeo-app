@@ -99,8 +99,6 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        error_log($request['email']);
-        error_log($request['password']);
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
@@ -109,20 +107,21 @@ class AuthController extends Controller
             'password.required' => 'Aby się zalogować podaj e-mail oraz hasło'
         ]);
 
-
+        
         //* Check Email
         $user = User::where('email', $fields['email'])->first();
 
-        if($user?->banned) {
-            return ErrorController::handleError('Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.', 401);
-        }
-
-
+        error_log($user);
 
         //* Check Password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return ErrorController::handleError('Niepoprawny e-mail lub hasło', 401);
         }
+
+        if($user?->banned) {
+            return ErrorController::handleError('Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.', 401);
+        }
+
 
         $token = $user->createToken('user_token')->plainTextToken;
 
@@ -146,6 +145,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'message' => 'Pomyślnie wylogowano.'
         ], 200);
     }
 

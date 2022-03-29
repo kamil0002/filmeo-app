@@ -15,6 +15,7 @@ import Alert from 'components/Alert/Alert';
 const Login = () => {
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const {
     register,
@@ -29,36 +30,21 @@ const Login = () => {
       const csrf = await axios.get('/sanctum/csrf-cookie');
       const login = await axios.post('/api/v1/login', data);
       setSuccessMessage('Pomyślnie zalogowano.');
-
       setTimeout(() => {
         setSuccessMessage(null);
         localStorage.setItem('token', login.data.token);
-        console.log(login);
-        <Navigate to={`/profil`} />;
+        setLoggedIn(true);
       }, 3000);
     } catch (err) {
-      setErrMessage(err.message);
+      setErrMessage('Niepoprawny login lub hasło!');
       setTimeout(() => setErrMessage(null), 5000);
     }
-
-    // axios
-    //   .get('/sanctum/csrf-cookie')
-    //   .then((response) => {
-    //     axios.post('/api/v1/login', data).then((res) => {
-    //       console.log(res);
-    //       localStorage.setItem('token', res.data.token);
-    //       localStorage.setItem('username', res.data.data.name);
-    //       setSuccessMessage('Pomyślnie zalogowano.');
-    //       setTimeout(() => {
-    //         <Navigate to={`/profil`} />;
-    //       }, 3000);
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     setErrMessage(err.message);
-    //     setTimeout(() => setErrMessage(null), 5000);
-    //   });
   };
+
+  if (loggedIn) {
+    return <Navigate to={`/profil`} />;
+  }
+
   return (
     <Wrapper>
       {errMessage && <Alert>{errMessage}</Alert>}

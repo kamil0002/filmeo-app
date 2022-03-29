@@ -39,7 +39,7 @@ const MovieDetails = () => {
 
         const userId = searchParams.get('user');
         const movieId = searchParams.get('movie');
-        await axios.get(`/rentMovie/${movieId}/${userId}`);
+        await axios.get(`api/v1/rentMovie/${movieId}/${userId}`);
       }
     } catch (err) {
       setErrMessage(err.message);

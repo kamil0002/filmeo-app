@@ -3,9 +3,19 @@ import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import responsive from 'theme/responsive';
+import axios from 'utils/axios';
 
 const DesktopNavigation = ({ children }) => {
   const location = useLocation();
+
+  const logout = async () => {
+    try {
+      await axios.post('/api/v1/logout');
+      localStorage.removeItem('token');
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Wrapper>
@@ -16,6 +26,7 @@ const DesktopNavigation = ({ children }) => {
         <ListItem active={location.pathname === '/filmy'}>
           <Link to="/filmy">Filmy</Link>
         </ListItem>
+        <ListItem onClick={logout}>Wyloguj</ListItem>
       </NavList>
       {children}
     </Wrapper>

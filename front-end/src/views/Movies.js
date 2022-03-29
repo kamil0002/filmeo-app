@@ -21,7 +21,7 @@ const Movies = () => {
     try {
       if (!genre) return;
       setSpinnerVisible(true);
-      const data = await axios.get(`/movies?genre=${genre}`);
+      const data = await axios.get(`api/v1/movies?genre=${genre}`);
       setSpinnerVisible(false);
       dispatch(setMovies(data.data.data[0]));
     } catch (err) {
