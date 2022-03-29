@@ -61,7 +61,7 @@ Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 
 
 //* Proteced routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::middleware('auth:sanctum')->group(function () {
   Route::delete('/reviews/{reviewId}', [ReviewController::class, 'deleteReview']);
 
   //* User Authenticated func
@@ -104,8 +104,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/rentals/myRentals', [RentalController::class, 'getUserMovies']);
 
     //* Review
-    Route::post('/reviews/movie/{movieId}', [ReviewController::class, 'createReview']);
     Route::get('/myReviews', [ReviewController::class, 'getMyReviews']);
+    Route::post('/reviews/movie/{slug}', [ReviewController::class, 'createReview']);
 
     //* Business Logic
     Route::get('/myBaseStats', [BusinessController::class, 'getUserBaseStats']);

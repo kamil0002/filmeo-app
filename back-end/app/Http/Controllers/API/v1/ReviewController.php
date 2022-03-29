@@ -36,9 +36,9 @@ class ReviewController extends Controller
      * @param  mixed $movieId id filmu
      * @return json stworzoną opinię
      */
-    public function createReview(Request $request, int $movieId) {
+    public function createReview(Request $request, string $slug) {
 
-        $movie = Movie::find($movieId);
+        $movie = Movie::where('slug', '=', $slug)->get()[0];
 
         if(!$movie) {
             return ErrorController::handleError('Film do którego chcesz dodać opinię nie istnieje!', 400, 'failed');
@@ -58,7 +58,7 @@ class ReviewController extends Controller
 
         foreach($rentals as $rental) {
             foreach($rental->movies as $rentedMovie) {
-                if($rentedMovie->id === $movieId) {
+                if($rentedMovie->id === $movie->id) {
                     $reviewVerified = true;
                     break 2;
                 }
@@ -70,7 +70,7 @@ class ReviewController extends Controller
             'description' => $request['description'],
             'rating' => $request['rating'],
             'user_id' => $userId,
-            'movie_id' => $movieId,
+            'movie_id' => $movie->id,
             'verified' => $reviewVerified
         ]);
 

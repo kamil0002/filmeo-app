@@ -28,7 +28,7 @@ const MovieDetails = () => {
   useEffect(async () => {
     try {
       setSpinnerVisible(true);
-      const movie = await axios.get(`/movies/slug/${params.slug}`);
+      const movie = await axios.get(`api/v1/movies/slug/${params.slug}`);
       console.log(movie);
       setMovie(movie.data.data[0][0]);
       setSpinnerVisible(false);
@@ -60,7 +60,7 @@ const MovieDetails = () => {
     const stripe = await loadStripe(
       'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
     );
-    const session = await axios.get(`/getSession/${movie.id}`);
+    const session = await axios.get(`api/v1//getSession/${movie.id}`);
 
     await stripe.redirectToCheckout({
       sessionId: session.data.id,

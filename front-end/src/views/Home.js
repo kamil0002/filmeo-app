@@ -29,9 +29,11 @@ const Home = () => {
 
   useEffect(async () => {
     try {
-      const lastAddedURL = axios.get('/last-added-movies');
-      const frequentlyRentedMoviesURL = axios.get('/top-5-frequently-rented');
-      const topRatedURL = axios.get('/top-5-rated');
+      const lastAddedURL = axios.get('api/v1/last-added-movies');
+      const frequentlyRentedMoviesURL = axios.get(
+        '/api/v1/top-5-frequently-rented'
+      );
+      const topRatedURL = axios.get('api/v1/top-5-rated');
       const [lastAdded, frequentlyRentedMovies, topRated] = await Promise.all([
         lastAddedURL,
         frequentlyRentedMoviesURL,

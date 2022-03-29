@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Paper } from '@mui/material';
 import Typography from 'components/Typography/Typography';
@@ -8,8 +8,14 @@ import Form from 'components/Form/Form';
 import FormInput from 'components/Form/FormInput';
 import { useForm } from 'react-hook-form';
 import responsive from 'theme/responsive';
+import axios from 'utils/axios';
+
+import Alert from 'components/Alert/Alert';
 
 const Login = () => {
+  const [errMessage, setErrMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -18,9 +24,46 @@ const Login = () => {
     shouldFocusError: false,
   });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const csrf = await axios.get('/sanctum/csrf-cookie');
+      const login = await axios.post('/api/v1/login', data);
+      setSuccessMessage('Pomyślnie zalogowano.');
+
+      setTimeout(() => {
+        setSuccessMessage(null);
+        localStorage.setItem('token', login.data.token);
+        console.log(login);
+        <Navigate to={`/profil`} />;
+      }, 3000);
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => setErrMessage(null), 5000);
+    }
+
+    // axios
+    //   .get('/sanctum/csrf-cookie')
+    //   .then((response) => {
+    //     axios.post('/api/v1/login', data).then((res) => {
+    //       console.log(res);
+    //       localStorage.setItem('token', res.data.token);
+    //       localStorage.setItem('username', res.data.data.name);
+    //       setSuccessMessage('Pomyślnie zalogowano.');
+    //       setTimeout(() => {
+    //         <Navigate to={`/profil`} />;
+    //       }, 3000);
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     setErrMessage(err.message);
+    //     setTimeout(() => setErrMessage(null), 5000);
+    //   });
+  };
   return (
     <Wrapper>
+      {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
+
       <StyledPaper elevation={8}>
         <Heading
           fontFamily="Poppins"

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('verified');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('movie_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->nullable();
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
             $table->timestamps();
         });
