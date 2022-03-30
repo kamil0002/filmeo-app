@@ -70,8 +70,10 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/logout', [AuthController::class, 'logout']);
   Route::put('/updateMyPassword', [AuthController::class, 'updateMyPassword']);
   Route::put('/updateMyProfile', [UserController::class, 'updateUserData']);
+
   //* Upload Photo
   Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
+  
   //* Messages
   Route::post('/message', [ChatController::class, 'sendMessage']);
 

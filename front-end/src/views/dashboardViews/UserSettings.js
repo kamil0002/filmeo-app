@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import Typography from 'components/Typography/Typography';
@@ -6,8 +6,17 @@ import Form from 'components/Form/Form';
 import FormInput from 'components/Form/FormInput';
 import { useForm } from 'react-hook-form';
 import responsive from 'theme/responsive';
+import axios from 'utils/axios';
+import Alert from 'components/Alert/Alert';
 
 const UserSettings = () => {
+  const [errMessage, setErrMessage] = useState(null);
+  const [processingUserData, setProcessingUserData] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [processingPasswordChange, setProcessingPasswordChange] =
+    useState(false);
+
   const user = useSelector((state) => state.auth.user);
 
   const {
@@ -21,7 +30,7 @@ const UserSettings = () => {
       surname: user.surname || '',
       address: user.address || '',
       email: user.email || '',
-      date: user.birth_date
+      birth_date: user.birth_date
         ? new Date(user.birth_date).toISOString().substr(0, 10)
         : null,
     },
@@ -33,14 +42,47 @@ const UserSettings = () => {
     formState: { errors: errors2 },
   } = useForm({ shouldFocusError: false });
 
-  const changeUserData = (data) => {
-    console.log(data);
+  const changeUserData = async (data) => {
+    try {
+      setProcessingUserData(true);
+      await axios.put('/api/v1/updateMyProfile', data);
+      setSuccessMessage('Twoje dane zostały zaaktualizowane!');
+    } catch (err) {
+      setErrMessage(
+        'Na podany e-mail jest już zarejestrowany konto źle podałeś wartości w polach'
+      );
+      setTimeout(() => {
+        setErrMessage(null);
+        setSuccessMessage(null);
+      }, 5000);
+    } finally {
+      setProcessingUserData(false);
+    }
   };
 
-  const changeUserPassword = (data) => console.log(data);
+  const changeUserPassword = async (data) => {
+    try {
+      console.log(data);
+      setProcessingPasswordChange(true);
+      const res = await axios.put('/api/v1/updateMyPassword', data);
+      console.log(res);
+      setSuccessMessage('Twoje hasło zostało zmienione!');
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => {
+        setSuccessMessage(null);
+        setErrMessage(null);
+      }, 5000);
+    } finally {
+      setProcessingPasswordChange(false);
+    }
+  };
 
   return (
     <Wrapper>
+      {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
+
       <Typography fontSize={24} fontWeight={700}>
         Ustawienia
       </Typography>
@@ -49,6 +91,8 @@ const UserSettings = () => {
         submitFn={handleSubmitData(changeUserData)}
         buttonText="Zapisz ustawienia"
         buttonType="outlined"
+        processing={processingUserData}
+        spinnerDark={true}
       >
         <FormInput
           settings="true"
@@ -92,7 +136,7 @@ const UserSettings = () => {
         <FormInput
           settings="true"
           validator={{
-            ...registerData('date', {
+            ...registerData('birth_date', {
               required: true,
             }),
           }}
@@ -126,12 +170,13 @@ const UserSettings = () => {
         submitFn={handleSubmitPassword(changeUserPassword)}
         buttonText="Zmień hasło"
         buttonType="outlined"
+        processing={processingPasswordChange}
       >
         <FormInput
           validator={{
-            ...registerPassword('password', {
+            ...registerPassword('old_password', {
               required: true,
-              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{6,}/,
+              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/,
             }),
           }}
           id="actPassword"
@@ -144,7 +189,7 @@ const UserSettings = () => {
           validator={{
             ...registerPassword('password', {
               required: true,
-              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{6,}/,
+              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/,
             }),
           }}
           id="newPassword"
@@ -155,9 +200,9 @@ const UserSettings = () => {
         />
         <FormInput
           validator={{
-            ...registerPassword('password', {
+            ...registerPassword('password_confirmation', {
               required: true,
-              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{6,}/,
+              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/,
             }),
           }}
           id="repeatPassword"

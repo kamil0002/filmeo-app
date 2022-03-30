@@ -1,13 +1,15 @@
 import { CircularProgress } from '@mui/material';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-const ProcessingSpinner = () => {
+const ProcessingSpinner = ({ spinnerDark }) => {
+  const color = spinnerDark ? '#1465C0' : '#ECEFF1';
   return (
     <CircularProgress
       variant="indeterminate"
       disableShrink
       sx={{
-        color: '#ECEFF1',
+        color,
         animationDuration: '550ms',
         marginLeft: 1,
       }}
@@ -18,3 +20,11 @@ const ProcessingSpinner = () => {
 };
 
 export default ProcessingSpinner;
+
+ProcessingSpinner.propTypes = {
+  spinnerDark: PropTypes.bool,
+};
+
+ProcessingSpinner.defaultProps = {
+  spinnerDark: false,
+};

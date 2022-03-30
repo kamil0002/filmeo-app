@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Response;
 class ErrorController extends Controller
 {
     public static function handleError(string $errorMsg, int $statusCode, string $status = 'error') {
-        return Response::json([
+        return response([
                 'status' => $status,
                 'message' => $errorMsg
-            ])->status($statusCode);
+            ], $statusCode);
     }
 }

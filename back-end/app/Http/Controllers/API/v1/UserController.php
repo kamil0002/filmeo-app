@@ -24,7 +24,7 @@ class UserController extends Controller
             'surname' => 'string',
             'address' => 'string',
             'birth_date' => 'date',
-            'email' => 'email|unique:users,email',
+            'email' => 'email',
         ];
     }
     

@@ -37,7 +37,6 @@ const Navigation = ({ display }) => {
 
   const logout = async () => {
     try {
-      console.log(Cookies.get('token'));
       await axios.post('/api/v1/logout');
       Cookies.remove('token', { path: '' });
       setSuccessMessage('Pomyślnie wylogowano.');
@@ -46,7 +45,7 @@ const Navigation = ({ display }) => {
         dispatch(setUser({}));
         navigate('/');
         location.reload();
-      }, 3000);
+      }, 1500);
     } catch (err) {
       console.log(err);
     }
@@ -114,7 +113,7 @@ const Navigation = ({ display }) => {
                 textAlign: 'center',
               }}
             >
-              <Tooltip title="Account settings">
+              <Tooltip title="Zarządzaj swoim profilem">
                 <IconButton
                   onClick={handleClick}
                   size="medium"

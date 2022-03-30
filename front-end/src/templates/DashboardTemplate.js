@@ -16,7 +16,6 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
 
   const imageChangeHandler = async (e) => {
     try {
-      console.log(e.target.files);
       const formData = new FormData();
       formData.append('avatar', e.target.files[0]);
       const res = await axios.post('/api/v1/uploadAvatar', formData);

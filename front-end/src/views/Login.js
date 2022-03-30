@@ -42,7 +42,7 @@ const Login = () => {
         setSuccessMessage(null);
         navigate('/profil');
         location.reload();
-      }, 3000);
+      }, 1500);
     } catch (err) {
       setErrMessage('Niepoprawny login lub hasło!');
       setTimeout(() => setErrMessage(null), 5000);
@@ -84,7 +84,7 @@ const Login = () => {
             validator={{
               ...register('password', {
                 required: true,
-                pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{6,}/,
+                pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/,
               }),
             }}
             id="password"
