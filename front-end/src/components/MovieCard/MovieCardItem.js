@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -20,12 +20,10 @@ const MovieCardItem = ({
   releaseDate,
   time,
 }) => {
-  const [redirect, setRedirect] = useState(false);
+  const navigate = useNavigate();
   const handleRedirect = () => {
-    setRedirect(true);
+    navigate(`/film/${slug}`);
   };
-
-  if (redirect) return <Navigate to={`/film/${slug}`} />;
 
   return (
     <Card

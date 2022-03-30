@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 import { Paper } from '@mui/material';
 import Typography from 'components/Typography/Typography';
 import Form from 'components/Form/Form';
@@ -9,13 +11,15 @@ import FormInput from 'components/Form/FormInput';
 import { useForm } from 'react-hook-form';
 import responsive from 'theme/responsive';
 import axios from 'utils/axios';
-
+import { setUser } from 'slices/authSlice';
 import Alert from 'components/Alert/Alert';
 
 const Login = () => {
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   const {
     register,
@@ -27,23 +31,23 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
+      setProcessing(true);
       const csrf = await axios.get('/sanctum/csrf-cookie');
       const login = await axios.post('/api/v1/login', data);
+      Cookies.set('token', login.data.token, { path: '' });
+      setProcessing(false);
+      dispatch(setUser(login.data.data[0]));
       setSuccessMessage('Pomyślnie zalogowano.');
       setTimeout(() => {
         setSuccessMessage(null);
-        localStorage.setItem('token', login.data.token);
-        setLoggedIn(true);
+        navigate('/profil');
+        location.reload();
       }, 3000);
     } catch (err) {
       setErrMessage('Niepoprawny login lub hasło!');
       setTimeout(() => setErrMessage(null), 5000);
     }
   };
-
-  if (loggedIn) {
-    return <Navigate to={`/profil`} />;
-  }
 
   return (
     <Wrapper>
@@ -58,7 +62,11 @@ const Login = () => {
         >
           Zaloguj się do swojego konta
         </Heading>
-        <Form submitFn={handleSubmit(onSubmit)} buttonText="Zaloguj się">
+        <Form
+          submitFn={handleSubmit(onSubmit)}
+          buttonText="Zaloguj się"
+          processing={processing}
+        >
           <FormInput
             validator={{
               ...register('email', {

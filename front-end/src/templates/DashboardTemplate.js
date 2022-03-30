@@ -2,70 +2,103 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { IconButton, Input, Paper, Typography } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { Paper, Typography } from '@mui/material';
 import responsive from 'theme/responsive';
 import { PhotoCamera } from '@mui/icons-material';
+import axios from 'utils/axios';
+import { setUserPhoto } from 'slices/authSlice';
 
 const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+
+  const imageChangeHandler = async (e) => {
+    try {
+      console.log(e.target.files);
+      const formData = new FormData();
+      formData.append('avatar', e.target.files[0]);
+      const res = await axios.post('/api/v1/uploadAvatar', formData);
+
+      dispatch(setUserPhoto(res.data.data[0]));
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   return (
-    <StyledPaper>
-      <Sidebar>
-        <User>
-          <ChangeAvatarInput type="file" id="file-input" />
-          <AvatarWrapper htmlFor="file-input">
-            <ChangePhotoIcon />
-            <Avatar src="/images/default.jpg" alt="user" />
-          </AvatarWrapper>
-          <UserName marginTop={2} fontFamily="Poppins" fontWeight={500}>
-            Kamil Noga
-          </UserName>
-        </User>
-        <Navigation>
-          <NavigationList>
-            <NavigationItem
-              currentView={currentView === 'movies'}
-              onClick={() => handleViewChange('movies')}
-            >
-              <img src=".././images/nav-movie.svg" />
-              <span>Filmy</span>
-            </NavigationItem>
-            <NavigationItem
-              currentView={currentView === 'reviews'}
-              onClick={() => handleViewChange('reviews')}
-            >
-              <img src=".././images/nav-reviews.svg" />
-              <span>Oceny</span>
-            </NavigationItem>
-            <NavigationItem
-              currentView={currentView === 'stats'}
-              onClick={() => handleViewChange('stats')}
-            >
-              <img src=".././images/nav-stats.svg" />
-              <span>Wydatki</span>
-            </NavigationItem>
-            <NavigationItem
-              currentView={currentView === 'settings'}
-              onClick={() => handleViewChange('settings')}
-            >
-              <img src=".././images/nav-settings.svg" />
-              <span>Ustawienia</span>
-            </NavigationItem>
-            <NavigationItem
-              currentView={currentView === 'admin'}
-              onClick={() => handleViewChange('admin')}
-            >
-              <img src=".././images/nav-admin.svg" />
-              <span>Panel Admina</span>
-            </NavigationItem>
-          </NavigationList>
-        </Navigation>
-      </Sidebar>
-      <Content>{children}</Content>
-    </StyledPaper>
+    <Wrapper>
+      <StyledPaper>
+        <Sidebar>
+          <User>
+            <ChangeAvatarInput
+              onChange={imageChangeHandler}
+              type="file"
+              id="file-input"
+            />
+            <AvatarWrapper htmlFor="file-input">
+              <ChangePhotoIcon />
+              <Avatar
+                src={`http://127.0.0.1:8000/images/avatars/${user.avatar}`}
+                alt="user"
+              />
+            </AvatarWrapper>
+            <UserName marginTop={2} fontFamily="Poppins" fontWeight={500}>
+              {user.name} {user.surname}
+            </UserName>
+          </User>
+          <Navigation>
+            <NavigationList>
+              <NavigationItem
+                currentView={currentView === 'movies'}
+                onClick={() => handleViewChange('movies')}
+              >
+                <img src=".././images/nav-movie.svg" />
+                <span>Filmy</span>
+              </NavigationItem>
+              <NavigationItem
+                currentView={currentView === 'reviews'}
+                onClick={() => handleViewChange('reviews')}
+              >
+                <img src=".././images/nav-reviews.svg" />
+                <span>Oceny</span>
+              </NavigationItem>
+              <NavigationItem
+                currentView={currentView === 'stats'}
+                onClick={() => handleViewChange('stats')}
+              >
+                <img src=".././images/nav-stats.svg" />
+                <span>Wydatki</span>
+              </NavigationItem>
+              <NavigationItem
+                currentView={currentView === 'settings'}
+                onClick={() => handleViewChange('settings')}
+              >
+                <img src=".././images/nav-settings.svg" />
+                <span>Ustawienia</span>
+              </NavigationItem>
+              <NavigationItem
+                currentView={currentView === 'admin'}
+                onClick={() => handleViewChange('admin')}
+              >
+                <img src=".././images/nav-admin.svg" />
+                <span>Panel Admina</span>
+              </NavigationItem>
+            </NavigationList>
+          </Navigation>
+        </Sidebar>
+        <Content>{children}</Content>
+      </StyledPaper>
+    </Wrapper>
   );
 };
 
 export default DashboardTemplate;
+
+const Wrapper = styled.div`
+  min-height: calc(100vh - 76px - 70px);
+`;
 
 const StyledPaper = styled(Paper)`
   && {

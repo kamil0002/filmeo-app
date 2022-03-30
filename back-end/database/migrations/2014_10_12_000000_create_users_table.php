@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
-            $table->string('avatar')->default('avatar.png');
+            $table->string('avatar')->default('default.jpg');
             $table->string('role');
             $table->boolean('banned')->default(false);
             $table->boolean('muted')->default(false);

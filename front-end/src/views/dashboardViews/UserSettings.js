@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import Typography from 'components/Typography/Typography';
 import Form from 'components/Form/Form';
 import FormInput from 'components/Form/FormInput';
@@ -7,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import responsive from 'theme/responsive';
 
 const UserSettings = () => {
+  const user = useSelector((state) => state.auth.user);
+
   const {
     register: registerData,
     handleSubmit: handleSubmitData,
@@ -14,11 +17,13 @@ const UserSettings = () => {
   } = useForm({
     shouldFocusError: false,
     defaultValues: {
-      name: 'User Name',
-      surname: 'User Surname',
-      address: 'Rzeszów al. Powstańców Warszawy 3A',
-      date: new Date('2000-03-10').toISOString().substr(0, 10),
-      email: 'user@example.com',
+      name: user.name || '',
+      surname: user.surname || '',
+      address: user.address || '',
+      email: user.email || '',
+      date: user.birth_date
+        ? new Date(user.birth_date).toISOString().substr(0, 10)
+        : null,
     },
   });
 

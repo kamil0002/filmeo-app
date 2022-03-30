@@ -72,6 +72,6 @@ const ListItem = styled.li`
 `;
 
 MobileNavigation.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.any,
   visible: PropTypes.bool.isRequired,
 };

@@ -1,21 +1,68 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { useDispatch } from 'react-redux';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import Button from '@mui/material/Button';
 import MobileNavigation from './MobileNavigation';
 import responsive from 'theme/responsive';
 import DesktopNavigation from './DesktopNavigation';
 import Typography from 'components/Typography/Typography';
+import axios from 'utils/axios';
+import Cookies from 'js-cookie';
+import Alert from 'components/Alert/Alert';
+import {
+  Avatar,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+} from '@mui/material';
+import { Logout, PersonAdd, Settings } from '@mui/icons-material';
+import { Box } from '@mui/system';
+import Tooltip from '@mui/material/Tooltip';
+import { setUser } from 'slices/authSlice';
 
 const Navigation = ({ display }) => {
+  const [successMessage, setSuccessMessage] = useState(null);
   const [navVisible, setNavVisible] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      console.log(Cookies.get('token'));
+      await axios.post('/api/v1/logout');
+      Cookies.remove('token', { path: '' });
+      setSuccessMessage('Pomyślnie wylogowano.');
+      setTimeout(() => {
+        setSuccessMessage(null);
+        dispatch(setUser({}));
+        navigate('/');
+        location.reload();
+      }, 3000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   if (!display) return '';
 
   return (
     <Wrapper>
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
       <Brand>
         <BrandImage src="/images/brand.svg" />
         <Title
@@ -29,51 +76,143 @@ const Navigation = ({ display }) => {
       </Brand>
       <Actions>
         <DesktopNavigation>
-          <StyledButton
-            variant="contained"
-            classes={{ root: 'root' }}
-            color="primary"
-            spacing="true"
-            LinkComponent={Link}
-            to="/logowanie"
-          >
-            Logowanie
-          </StyledButton>
-          <StyledButton
-            variant="contained"
-            classes={{ root: 'root' }}
-            color="primary"
-            spacing="true"
-            LinkComponent={Link}
-            to="/rejestracja"
-          >
-            Rejestracja
-          </StyledButton>
+          {!Cookies.get('token') ? (
+            <>
+              <StyledButton
+                variant="contained"
+                classes={{ root: 'root' }}
+                color="primary"
+                spacing="true"
+                LinkComponent={Link}
+                to="/logowanie"
+              >
+                Logowanie
+              </StyledButton>
+              <StyledButton
+                variant="contained"
+                classes={{ root: 'root' }}
+                color="primary"
+                spacing="true"
+                LinkComponent={Link}
+                to="/rejestracja"
+              >
+                Rejestracja
+              </StyledButton>
+            </>
+          ) : (
+            ''
+          )}
         </DesktopNavigation>
+        {Cookies.get('token') ? (
+          <>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                textAlign: 'center',
+              }}
+            >
+              <Tooltip title="Account settings">
+                <IconButton
+                  onClick={handleClick}
+                  size="medium"
+                  sx={{ ml: 2, mr: 2 }}
+                  aria-controls={open ? 'account-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                >
+                  <Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
+                </IconButton>
+              </Tooltip>
+            </Box>
+            <Menu
+              disableScrollLock={true}
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 2,
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 23,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <Link
+                style={{ textDecoration: 'none', color: '#040714' }}
+                to="profil"
+              >
+                <MenuItem>
+                  <Avatar />
+                  Konto
+                </MenuItem>
+              </Link>
+              <Divider />
+              <MenuItem onClick={logout}>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                Wyloguj
+              </MenuItem>
+            </Menu>
+          </>
+        ) : (
+          ''
+        )}
+
         <HamburgerMenu
           classes={{ root: 'root' }}
           onClick={() => setNavVisible(!navVisible)}
         />
       </Actions>
       <MobileNavigation visible={navVisible}>
-        <StyledButton
-          variant="contained"
-          classes={{ root: 'root' }}
-          color="primary"
-          LinkComponent={Link}
-          to="/logowanie"
-        >
-          Logowanie
-        </StyledButton>
-        <StyledButton
-          variant="contained"
-          classes={{ root: 'root' }}
-          color="primary"
-          LinkComponent={Link}
-          to="/rejestracja"
-        >
-          Rejestracja
-        </StyledButton>
+        {!Cookies.get('token') ? (
+          <>
+            <StyledButton
+              variant="contained"
+              classes={{ root: 'root' }}
+              color="primary"
+              LinkComponent={Link}
+              to="/logowanie"
+            >
+              Logowanie
+            </StyledButton>
+            <StyledButton
+              variant="contained"
+              classes={{ root: 'root' }}
+              color="primary"
+              LinkComponent={Link}
+              to="/rejestracja"
+            >
+              Rejestracja
+            </StyledButton>
+          </>
+        ) : (
+          ''
+        )}
       </MobileNavigation>
     </Wrapper>
   );
@@ -91,7 +230,7 @@ const Wrapper = styled.div`
   position: fixed;
   right: 0;
   left: 0;
-  z-index: 50;
+  z-index: 5000;
   height: ${({ theme }) => theme.navHeight};
 
   @media ${responsive.laptop} {
@@ -127,7 +266,7 @@ const Title = styled(Typography)`
 const Actions = styled.div`
   z-index: 5;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
 `;
 

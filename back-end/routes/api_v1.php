@@ -33,7 +33,6 @@ Route::get('/users/{userId}', [UserController::class, 'getUser']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-
 //* Movie
 Route::post('/movies/genre/{genre}', [MovieController::class, 'createMovie']);
 Route::get('/movies', [MovieController::class, 'getMovies']);
@@ -62,6 +61,9 @@ Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 
 //* Proteced routes
 Route::middleware('auth:sanctum')->group(function () {
+  Route::get('/isLoggedIn', [AuthController::class, 'isLoggedIn']);
+
+
   Route::delete('/reviews/{reviewId}', [ReviewController::class, 'deleteReview']);
 
   //* User Authenticated func

@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
+import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
+import { setUser } from 'slices/authSlice';
 import theme from 'theme/MainTheme';
 import GlobalStyles from 'theme/GlobalStyles';
 import Navigation from 'components/Navigation/Navigation';
@@ -15,9 +18,21 @@ import Movies from './Movies';
 import MovieDetails from './MovieDetails';
 import AddReview from './AddReview';
 import WatchMovie from './WatchMovie';
+import axios from 'utils/axios';
 
 const Root = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(async () => {
+    try {
+      const user = await axios.get('/api/v1/isLoggedIn');
+      dispatch(setUser(user.data));
+    } catch (err) {
+      console.log(err.message);
+      Cookies.remove('token', { path: '' });
+    }
+  }, []);
   return (
     <>
       <GlobalStyles movieView={location.pathname.endsWith('ogladaj') ? 1 : 0} />

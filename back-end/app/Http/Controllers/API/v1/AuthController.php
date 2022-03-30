@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Http\Controllers\API\v1\ErrorController;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -111,13 +112,10 @@ class AuthController extends Controller
         //* Check Email
         $user = User::where('email', $fields['email'])->first();
 
-        error_log($user);
-
         //* Check Password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return ErrorController::handleError('Niepoprawny e-mail lub hasło', 401);
         }
-
         if($user?->banned) {
             return ErrorController::handleError('Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.', 401);
         }
@@ -132,6 +130,17 @@ class AuthController extends Controller
                 $user
             ]
         ],201);
+    }
+
+    public function isLoggedIn() {
+        if(Auth::check()) {
+            $user = auth()->user();
+            return response($user);
+        }
+
+        return response([
+        'message' => "Użytkownik nie jest zalogowany",
+        ], 401);
     }
     
     /**

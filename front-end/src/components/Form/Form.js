@@ -2,13 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
+import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 
-const Form = ({ submitFn, children, buttonText, buttonType }) => {
+const Form = ({ submitFn, children, buttonText, buttonType, processing }) => {
   return (
     <StyledForm onSubmit={submitFn}>
       {children}
       <StyledButton type="submit" variant={buttonType}>
-        {buttonText}
+        {buttonText} {processing && <ProcessingSpinner />}
       </StyledButton>
     </StyledForm>
   );
@@ -34,6 +35,7 @@ Form.propTypes = {
   children: PropTypes.node.isRequired,
   buttonText: PropTypes.string.isRequired,
   buttonType: PropTypes.string,
+  processing: PropTypes.bool,
 };
 
 Form.defaultProps = {
