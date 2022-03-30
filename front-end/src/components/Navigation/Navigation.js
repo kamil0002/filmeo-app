@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import Button from '@mui/material/Button';
 import MobileNavigation from './MobileNavigation';
@@ -30,6 +30,8 @@ const Navigation = ({ display }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [navVisible, setNavVisible] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const user = useSelector((state) => state.auth.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -121,7 +123,10 @@ const Navigation = ({ display }) => {
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  <Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
+                  <Avatar
+                    src={`http://127.0.0.1:8000/images/avatars/${user.avatar}`}
+                    sx={{ width: 40, height: 40 }}
+                  ></Avatar>
                 </IconButton>
               </Tooltip>
             </Box>
