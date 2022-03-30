@@ -34,9 +34,11 @@ const Login = () => {
       setProcessing(true);
       const csrf = await axios.get('/sanctum/csrf-cookie');
       const login = await axios.post('/api/v1/login', data);
+      if (login.data.statusCode === 401) {
+        throw new Error(login.data.message);
+      }
       Cookies.set('token', login.data.token, { path: '' });
-      setProcessing(false);
-      dispatch(setUser(login.data.data[0]));
+      dispatch(setUser(login.data.data));
       setSuccessMessage('Pomyślnie zalogowano.');
       setTimeout(() => {
         setSuccessMessage(null);
@@ -44,8 +46,10 @@ const Login = () => {
         location.reload();
       }, 1500);
     } catch (err) {
-      setErrMessage('Niepoprawny login lub hasło!');
+      setErrMessage(err.message);
       setTimeout(() => setErrMessage(null), 5000);
+    } finally {
+      setProcessing(false);
     }
   };
 

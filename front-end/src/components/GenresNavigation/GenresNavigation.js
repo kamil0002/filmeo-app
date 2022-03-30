@@ -37,6 +37,9 @@ const GenresNavigation = () => {
     try {
       const movieId = e.target.dataset.id;
       const movie = await axios.get(`api/v1/movies/${movieId}`);
+      if (movie.data.status !== 'success') {
+        throw new Error(movie.data.message);
+      }
       dispatch(setMovies(movie.data.data));
       dispatch(changeGenre(null));
       setSelectedMovie(newValue);
@@ -49,6 +52,9 @@ const GenresNavigation = () => {
   useEffect(async () => {
     try {
       const movies = await axios.get('api/v1/movies?fields=title,id');
+      if (movies.data.status !== 'success') {
+        throw new Error(movies.data.message);
+      }
       setAllMovies(movies.data.data[0]);
     } catch (err) {
       setErrMessage(err.message);

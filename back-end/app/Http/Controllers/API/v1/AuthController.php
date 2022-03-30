@@ -114,7 +114,7 @@ class AuthController extends Controller
 
         //* Check Password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return ErrorController::handleError('Niepoprawny e-mail lub hasło', 401);
+            return ErrorController::handleError('Niepoprawny e-mail lub hasło',401);
         }
         if($user?->banned) {
             return ErrorController::handleError('Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.', 401);
@@ -179,7 +179,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), $this->updatePasswordRules());
 
         if($validator->fails()) {
-            return ErrorController::handleError($validator->errors(), 400);
+            return ErrorController::handleError('Hasła nie pasują do siebie!', 400);
         }
 
         $user->update([

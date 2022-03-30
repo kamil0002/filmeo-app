@@ -65,7 +65,10 @@ const UserSettings = () => {
       console.log(data);
       setProcessingPasswordChange(true);
       const res = await axios.put('/api/v1/updateMyPassword', data);
-      console.log(res);
+
+      if (res.data.status !== 'success') {
+        throw new Error(res.data.message);
+      }
       setSuccessMessage('Twoje hasło zostało zmienione!');
     } catch (err) {
       setErrMessage(err.message);

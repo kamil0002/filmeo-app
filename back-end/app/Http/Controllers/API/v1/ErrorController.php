@@ -9,7 +9,8 @@ class ErrorController extends Controller
     public static function handleError(string $errorMsg, int $statusCode, string $status = 'error') {
         return response([
                 'status' => $status,
+                'statusCode' => $statusCode,
                 'message' => $errorMsg
-            ], $statusCode);
+            ]);
     }
 }

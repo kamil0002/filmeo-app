@@ -29,6 +29,10 @@ const MovieDetails = () => {
     try {
       setSpinnerVisible(true);
       const movie = await axios.get(`api/v1/movies/slug/${params.slug}`);
+      if (movie.data.status !== 'success') {
+        throw new Error(movie.data.message);
+      }
+
       console.log(movie);
       setMovie(movie.data.data[0][0]);
       setSpinnerVisible(false);
