@@ -77,13 +77,16 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
                 <img src=".././images/nav-settings.svg" />
                 <span>Ustawienia</span>
               </NavigationItem>
-              <NavigationItem
-                currentView={currentView === 'admin'}
-                onClick={() => handleViewChange('admin')}
-              >
-                <img src=".././images/nav-admin.svg" />
-                <span>Panel Admina</span>
-              </NavigationItem>
+              {user.role === 'moderator' ||
+                (user.role === 'administrator' && (
+                  <NavigationItem
+                    currentView={currentView === 'admin'}
+                    onClick={() => handleViewChange('admin')}
+                  >
+                    <img src=".././images/nav-admin.svg" />
+                    <span>Panel Admina</span>
+                  </NavigationItem>
+                ))}
             </NavigationList>
           </Navigation>
         </Sidebar>

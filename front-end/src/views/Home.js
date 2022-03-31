@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
-import { Button, LinearProgress } from '@mui/material';
+import { Button } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilterOutlined';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
@@ -13,6 +13,8 @@ import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import Chat from 'components/Chat/Chat';
 import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
+import Lottie from 'react-lottie';
+import lottieAnimation from 'lotties/loading-lottie.json';
 
 const Home = () => {
   const [lastAddedMovies, setLastAddedMovies] = useState([]);
@@ -64,9 +66,20 @@ const Home = () => {
               fontSize: 20,
             }}
           >
-            Ładowanie...
+            <Lottie
+              height={300}
+              width={300}
+              speed={0.75}
+              options={{
+                loop: true,
+                autoplay: true,
+                animationData: lottieAnimation,
+                rendererSettings: {
+                  preserveAspectRatio: 'xMidYMid slice',
+                },
+              }}
+            />
           </Typography>
-          <LinearProgress />
         </Backdrop>
       ) : (
         <Wrapper>

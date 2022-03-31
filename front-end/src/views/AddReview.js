@@ -1,14 +1,32 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { Button, FormControl, Paper, Rating } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
+import Form from 'components/Form/Form';
+import FormInput from 'components/Form/FormInput';
+import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import lottieAnimation from 'lotties/review-lottie.json';
 
 const AddReview = () => {
   const [ratingValue, setRatingValue] = useState(0);
+  const user = useSelector((state) => state.auth.user);
+
+  const {
+    register: register,
+    handleSubmit: handleSubmit,
+    formState: { errors },
+  } = useForm({
+    shouldFocusError: false,
+  });
+
+  const onSubmit = async (data) => {
+    console.log(data);
+  };
 
   return (
     <Wrapper>
@@ -35,27 +53,34 @@ const AddReview = () => {
             },
           }}
         />
-        <Form>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="review-title"
-              label="Tytuł"
-              type="text"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
-          <FormControl required={true} margin="normal">
-            <StyledTextField
-              id="description"
-              multiline
-              rows={5}
-              label="Opis"
-              type="text"
-              autoComplete="off"
-              variant="standard"
-            />
-          </FormControl>
+        <Form onSubmit={handleSubmit(onSubmit)} buttonText="Dodaj">
+          <FormInput
+            validator={{
+              ...register('title', {
+                required: true,
+                minLength: 5,
+              }),
+            }}
+            id="title"
+            label="Tytuł"
+            isValid={errors.surname ? true : false}
+            helperText="Podaj tytuł o długości co najmniej 5 znaków"
+          />
+          <FormInput
+            validator={{
+              ...register('Opis', {
+                required: true,
+                minLength: 15,
+              }),
+            }}
+            type="text"
+            multiline
+            rows={5}
+            id="title"
+            label="Opis"
+            isValid={errors.surname ? true : false}
+            helperText="Podaj opis o długości co najmniej 15 znaków"
+          />
           <FormControl required={true} margin="normal">
             <Typography
               component="legend"
@@ -74,12 +99,6 @@ const AddReview = () => {
               }}
             />
           </FormControl>
-          <Button
-            sx={{ alignSelf: 'baseline', marginTop: 3, fontFamily: 'Poppins' }}
-            variant="contained"
-          >
-            Dodaj
-          </Button>
         </Form>
       </StyledPaper>
     </Wrapper>
@@ -128,10 +147,10 @@ const StyledPaper = styled(Paper)`
   }
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
+// const StyledForm = styled(Form)`
+//   display: flex;
+//   flex-direction: column;
+// `;
 
 const StyledTextField = styled(TextField)`
   @media ${responsive.tablet} {
