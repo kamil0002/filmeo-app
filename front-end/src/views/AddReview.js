@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { Button, FormControl, Paper, Rating } from '@mui/material';
+import { FormControl, Paper, Rating } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
@@ -11,10 +11,17 @@ import FormInput from 'components/Form/FormInput';
 import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import lottieAnimation from 'lotties/review-lottie.json';
+import axios from 'utils/axios';
+import Alert from 'components/Alert/Alert';
+import { useParams } from 'react-router-dom';
 
 const AddReview = () => {
   const [ratingValue, setRatingValue] = useState(0);
+  const [errMessage, setErrMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [processing, setProcessing] = useState(false);
   const user = useSelector((state) => state.auth.user);
+  const params = useParams();
 
   const {
     register: register,
@@ -23,13 +30,34 @@ const AddReview = () => {
   } = useForm({
     shouldFocusError: false,
   });
-
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      console.log(data);
+      const review = await axios.post(`/api/v1/reviews/movie/${params.slug}`, {
+        title: data.title,
+        description: data.description,
+        rating: ratingValue,
+      });
+      console.log(review);
+
+      if (review.data.status !== 'success') {
+        throw new Error(review.data.message);
+      }
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => {
+        setSuccessMessage(null);
+        setErrMessage(null);
+      }, 5000);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
     <Wrapper>
+      {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
       <StyledPaper elevation={8}>
         <Typography
           fontFamily="Poppins"
@@ -53,7 +81,11 @@ const AddReview = () => {
             },
           }}
         />
-        <Form onSubmit={handleSubmit(onSubmit)} buttonText="Dodaj">
+        <Form
+          submitFn={handleSubmit(onSubmit)}
+          buttonText="Dodaj"
+          processing={processing}
+        >
           <FormInput
             validator={{
               ...register('title', {
@@ -68,7 +100,7 @@ const AddReview = () => {
           />
           <FormInput
             validator={{
-              ...register('Opis', {
+              ...register('description', {
                 required: true,
                 minLength: 15,
               }),

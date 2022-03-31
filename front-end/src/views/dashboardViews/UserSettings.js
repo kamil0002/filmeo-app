@@ -13,7 +13,6 @@ const UserSettings = () => {
   const [errMessage, setErrMessage] = useState(null);
   const [processingUserData, setProcessingUserData] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
-  // eslint-disable-next-line no-unused-vars
   const [processingPasswordChange, setProcessingPasswordChange] =
     useState(false);
 
