@@ -27,20 +27,23 @@ const AddReview = () => {
     register: register,
     handleSubmit: handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     shouldFocusError: false,
   });
   const onSubmit = async (data) => {
     try {
-      console.log(data);
-      console.log(ratingValue);
+      setProcessing(true);
       const review = await axios.post(`/api/v1/reviews/movie/${params.slug}`, {
         title: data.title,
         description: data.description,
         rating: +ratingValue,
       });
-      console.log(review);
 
+      setSuccessMessage('Opinia została dodana!');
+      reset();
+      setRatingValue(0);
+      setTimeout(() => setSuccessMessage(null), 3000);
       if (review.data.status !== 'success') {
         throw new Error(review.data.message);
       }

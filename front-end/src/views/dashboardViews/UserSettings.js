@@ -50,6 +50,7 @@ const UserSettings = () => {
       await axios.put('/api/v1/updateMyProfile', data);
       setSuccessMessage('Twoje dane zostały zaaktualizowane!');
       dispatch(updateUser(data));
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
       setErrMessage(
         'Na podany e-mail jest już zarejestrowany konto źle podałeś wartości w polach'
