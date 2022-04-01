@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Paper, Rating } from '@mui/material';
 import Typography from 'components/Typography/Typography';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import { Tooltip } from '@mui/material';
 
 const ReviewCard = ({
   profile,
@@ -23,6 +25,20 @@ const ReviewCard = ({
       }}
       elevation={4}
     >
+      {verified ? (
+        <Tooltip title="Zweryfikowana wpyożyczeniem">
+          <VerifiedIcon
+            sx={{
+              color: '#31CC79',
+              position: 'absolute',
+              right: '3%',
+              top: '3%',
+            }}
+          ></VerifiedIcon>
+        </Tooltip>
+      ) : (
+        ''
+      )}
       <ReviewContent>
         <Typography fontWeight={700} align={'center'}>
           {title}
@@ -63,7 +79,7 @@ const ReviewCard = ({
 export default ReviewCard;
 
 const ReviewContent = styled.div`
-  padding: 0 0.5rem;
+  padding: 1.1rem 0.8rem 0;
 `;
 
 const ReviewDetails = styled.div`

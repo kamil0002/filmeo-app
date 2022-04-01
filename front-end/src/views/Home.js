@@ -55,31 +55,25 @@ const Home = () => {
     <>
       {topRatedMovies.length === 0 ? (
         <Backdrop>
-          <Typography
-            sx={{
+          <Lottie
+            style={{
               position: 'fixed',
               left: '50%',
               top: '50%',
               transform: 'translate(-50%,-50%)',
-              color: '#1465C0',
-              fontWeight: 700,
-              fontSize: 20,
             }}
-          >
-            <Lottie
-              height={300}
-              width={300}
-              speed={0.75}
-              options={{
-                loop: true,
-                autoplay: true,
-                animationData: lottieAnimation,
-                rendererSettings: {
-                  preserveAspectRatio: 'xMidYMid slice',
-                },
-              }}
-            />
-          </Typography>
+            height={300}
+            width={300}
+            speed={0.75}
+            options={{
+              loop: true,
+              autoplay: true,
+              animationData: lottieAnimation,
+              rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice',
+              },
+            }}
+          />
         </Backdrop>
       ) : (
         <Wrapper>
@@ -161,12 +155,12 @@ const Backdrop = styled.div`
   position: fixed;
   inset: 0;
   z-index: 100000000;
+  opacity: 0.85;
 `;
 
 const Wrapper = styled.div`
   overflow-x: hidden;
   position: relative;
-  min-height: calc(100vh - 67px);
 `;
 
 const StartChatting = styled.div`

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Typography from 'components/Typography/Typography';
 import Form from 'components/Form/Form';
 import FormInput from 'components/Form/FormInput';
@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import responsive from 'theme/responsive';
 import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
+import { updateUser } from 'slices/authSlice';
 
 const UserSettings = () => {
   const [errMessage, setErrMessage] = useState(null);
@@ -17,6 +18,8 @@ const UserSettings = () => {
     useState(false);
 
   const user = useSelector((state) => state.auth.user);
+
+  const dispatch = useDispatch();
 
   const {
     register: registerData,
@@ -46,6 +49,7 @@ const UserSettings = () => {
       setProcessingUserData(true);
       await axios.put('/api/v1/updateMyProfile', data);
       setSuccessMessage('Twoje dane zostały zaaktualizowane!');
+      dispatch(updateUser(data));
     } catch (err) {
       setErrMessage(
         'Na podany e-mail jest już zarejestrowany konto źle podałeś wartości w polach'

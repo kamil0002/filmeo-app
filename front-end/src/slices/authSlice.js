@@ -12,10 +12,17 @@ export const userSlice = createSlice({
     setUserPhoto: (state, action) => {
       state.user.avatar = action.payload;
     },
+    updateUser: (state, action) => {
+      (state.user.name = action.payload.name),
+        (state.user.surname = action.payload.surname),
+        (state.user.birth_date = action.payload.birth_date),
+        (state.user.email = action.payload.email);
+      state.user.address = action.payload.address;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, setUserPhoto } = userSlice.actions;
+export const { setUser, setUserPhoto, updateUser } = userSlice.actions;
 
 export default userSlice.reducer;

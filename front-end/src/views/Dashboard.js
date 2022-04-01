@@ -7,7 +7,7 @@ import UserSettings from './dashboardViews/UserSettings';
 import DashboardTemplate from 'templates/DashboardTemplate';
 
 const Dashboard = () => {
-  const [currentView, setCurrentView] = useState('admin');
+  const [currentView, setCurrentView] = useState('movies');
 
   const handleCurrentViewChange = (newView) => setCurrentView(newView);
 

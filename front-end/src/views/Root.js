@@ -65,4 +65,5 @@ export default Root;
 
 const Content = styled.div`
   padding-top: ${({ theme, movieView }) => (movieView ? 0 : theme.navHeight)};
+  min-height: calc(100vh - 70px);
 `;

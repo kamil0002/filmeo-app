@@ -33,10 +33,11 @@ const AddReview = () => {
   const onSubmit = async (data) => {
     try {
       console.log(data);
+      console.log(ratingValue);
       const review = await axios.post(`/api/v1/reviews/movie/${params.slug}`, {
         title: data.title,
         description: data.description,
-        rating: ratingValue,
+        rating: +ratingValue,
       });
       console.log(review);
 

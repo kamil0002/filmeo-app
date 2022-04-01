@@ -21,11 +21,9 @@ class ReviewController extends Controller
      */
     private function rules() {
         return [
-            'title' => 'required|string|min:3|max:30',
-            'description' => 'required|string|min:20|max:100',
-            'rating' => 'required|numeric|between:0,5',
-            'user_id' => 'exists:users,id',
-            'movie_id' => 'exists:movies,id',
+            'title' => 'required|string|min:3|max:35',
+            'description' => 'required|string|min:15|max:100',
+            'rating' => 'required|numeric|min:1|max:5',
         ];
     }
     
@@ -46,8 +44,10 @@ class ReviewController extends Controller
         
         $validator = Validator::make($request->all(), $this->rules());
 
+
         if($validator->fails()) {
-            return response()->json($validator->errors(),500);
+            return response()->json([
+                'message' => 'Tytuł powinen zawierać między 3 a 30 znaków a opis między 15 a 100 znaków']);
         }
 
         $userId = auth()->user()->id;
