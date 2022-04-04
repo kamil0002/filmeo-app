@@ -7,7 +7,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\v1\ErrorController;
-
+use DateTime;
 
 class ChatController extends Controller
 {
@@ -39,13 +39,15 @@ class ChatController extends Controller
         }
 
         $userId = auth()->user()->id;
+        $userName = auth()->user()->name;
+        $userAvatar = auth()->user()->avatar;
 
         Message::create([
             'user_id' => $userId,
             'message' => $request['message']
         ]);
 
-        event(new MessageEvent($userId, $request['message']));
+        event(new MessageEvent($userName,$userId,$userAvatar, new DateTime(), $request['message']));
 
         return [];
     }

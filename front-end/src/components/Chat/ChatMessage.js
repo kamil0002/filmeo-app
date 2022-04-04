@@ -5,13 +5,13 @@ import Typography from 'components/Typography/Typography';
 import { Avatar } from '@mui/material';
 import responsive from 'theme/responsive';
 
-const ChatMessage = ({ text, userName, date, self }) => {
+const ChatMessage = ({ text, userName, date, self, userPhoto }) => {
   return (
     <Message self={self} variant="body1" as="div" fontSize={14}>
       <UserData>
         <UserAvatar
-          alt="Remy Sharp"
-          src="https://mui.com/static/images/avatar/1.jpg"
+          alt="User"
+          src={`http://127.0.0.1:8000/images/avatars/${userPhoto}`}
         />
         <Typography fontSize={12} fontWeight={700}>
           {userName}, {date}
@@ -62,4 +62,5 @@ ChatMessage.propTypes = {
   text: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   self: PropTypes.bool,
+  userPhoto: PropTypes.string.isRequired,
 };

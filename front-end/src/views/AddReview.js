@@ -34,6 +34,8 @@ const AddReview = () => {
   const onSubmit = async (data) => {
     try {
       setProcessing(true);
+      if (ratingValue === 0)
+        throw new Error('Oceń film w skali 1-5 zanim dodasz opinię!');
       const review = await axios.post(`/api/v1/reviews/movie/${params.slug}`, {
         title: data.title,
         description: data.description,
@@ -99,7 +101,7 @@ const AddReview = () => {
             }}
             id="title"
             label="Tytuł"
-            isValid={errors.surname ? true : false}
+            isValid={errors.title ? true : false}
             helperText="Podaj tytuł o długości co najmniej 5 znaków"
           />
           <FormInput
@@ -114,7 +116,7 @@ const AddReview = () => {
             rows={5}
             id="title"
             label="Opis"
-            isValid={errors.surname ? true : false}
+            isValid={errors.description ? true : false}
             helperText="Podaj opis o długości co najmniej 15 znaków"
           />
           <FormControl required={true} margin="normal">
@@ -182,11 +184,6 @@ const StyledPaper = styled(Paper)`
     width: 30vw;
   }
 `;
-
-// const StyledForm = styled(Form)`
-//   display: flex;
-//   flex-direction: column;
-// `;
 
 const StyledTextField = styled(TextField)`
   @media ${responsive.tablet} {

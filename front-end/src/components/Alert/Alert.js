@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Alert as AlertComponent } from '@mui/material';
 
 const Alert = ({ type, children }) => {
+  console.log(type);
   return (
     <StyledAlert variant="filled" severity={type}>
       {children}

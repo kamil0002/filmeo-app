@@ -33,7 +33,6 @@ const MovieDetails = () => {
         throw new Error(movie.data.message);
       }
 
-      console.log(movie);
       setMovie(movie.data.data[0][0]);
       setSpinnerVisible(false);
 
@@ -75,7 +74,7 @@ const MovieDetails = () => {
     return <Navigate to={`/film/${params.slug}/dodaj-opinie`} />;
 
   if (redirectToOrder) return <Navigate to={`/film/${params.slug}/zamow`} />;
-  console.log(movie);
+
   return (
     <Wrapper>
       {spinnerVisible && <Spinner />}

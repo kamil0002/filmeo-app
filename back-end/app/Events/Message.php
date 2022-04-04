@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-
+use DateTime;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -19,12 +19,18 @@ class Message implements ShouldBroadcast
      */
 
     public function __construct(
-        public string $username,
+        public string $senderName,
+        public string $senderId,
+        public string $senderAvatar,
+        public DateTime $date,
         public string $message
     )
     {
-        $this->username = $username;
+        $this->senderName = $senderName;
+        $this->senderId = $senderId;
+        $this->senderAvatar = $senderAvatar;
         $this->message = $message;
+        $this->msgDate = $date;
     }
 
     public function broadcastOn()

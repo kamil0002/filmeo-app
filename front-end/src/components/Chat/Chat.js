@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import Pusher from 'pusher-js';
 import { darken, Paper, TextField } from '@mui/material';
 import { Button } from '@mui/material';
@@ -9,18 +11,49 @@ import InputAdornment from '@mui/material/InputAdornment';
 import ChatIcon from '@mui/icons-material/Chat';
 import FormControl from '@mui/material/FormControl';
 import Typography from 'components/Typography/Typography';
+import Alert from 'components/Alert/Alert';
 import responsive from 'theme/responsive';
 import ChatMessage from './ChatMessage';
 import axios from 'utils/axios';
 
-const username = 'Kamil';
-const allMessages = [];
-
 const Chat = ({ id }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState();
+  const [errMessage, setErrMessage] = useState(null);
+
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(async () => {
+    //* Get already sent messages from last 12hrs from database
+    try {
+      const {
+        data: {
+          data: [messages],
+        },
+      } = await axios.get('/api/v1/getMessages');
+
+      if (!messages) return;
+      console.log(messages);
+      const formattedMessages = messages.map((msg) => ({
+        senderId: msg.user_id,
+        senderName: msg.user.name,
+        senderAvatar: msg.user.avatar,
+        date: {
+          date: msg.created_at,
+        },
+        message: msg.message,
+      }));
+
+      setMessages(formattedMessages);
+      const messagesContainer = document.querySelector('.messages-container');
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } catch (err) {
+      console.log(err.message);
+    }
+  }, []);
 
   useEffect(() => {
+    //* Configure Pusher
     Pusher.logToConsole = false;
 
     const pusher = new Pusher('8fb8f8eb332cab7a0878', {
@@ -29,8 +62,7 @@ const Chat = ({ id }) => {
 
     const channel = pusher.subscribe('chat');
     channel.bind('message', function (data) {
-      allMessages.push(data);
-      setMessages(allMessages);
+      setMessages((prevState) => [...prevState, data]);
 
       const messagesContainer = document.querySelector('.messages-container');
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -42,14 +74,21 @@ const Chat = ({ id }) => {
 
     try {
       await axios.post(
-        '/message',
+        '/api/v1/message',
         JSON.stringify({
-          username,
           message,
         })
       );
     } catch (err) {
-      console.error(err);
+      if (err.message.includes('401')) {
+        setErrMessage(
+          'Czat jest dostępny tylko dla zalogowanych uzytkowników!'
+        );
+      } else {
+        console.error(err.message);
+      }
+
+      setTimeout(() => setErrMessage(null), 2500);
     }
 
     e.target.parentNode.previousSibling.scrollTo(
@@ -65,46 +104,22 @@ const Chat = ({ id }) => {
 
   return (
     <Wrapper id={id}>
+      {errMessage && <StyledAlert>{errMessage}</StyledAlert>}
+
       <ChatWrapper elevation={8} className="messages-wrapper">
         <ChatHeading fontWeight={700} color={'#fff'}>
           Chat - podziel się wrażeniami
         </ChatHeading>
         <Messages className="messages-container">
-          <ChatMessage
-            text="Lorem laborum occaecat anim laborum cupidatat magna cupidatat laborum ullamco elit commodo. Fugiat ullamco culpa"
-            userName="Kamil"
-            date={new Date().toLocaleDateString('pl-PL', {
-              weekday: 'long',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          />
-          <ChatMessage
-            text="Lorem laborum occaecat anim laborum cupidatat magna cupidatat laborum ullamco elit commodo. Fugiat ullamco culpa"
-            userName="Kamil"
-            date={new Date().toLocaleDateString('pl-PL', {
-              weekday: 'long',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          />
-          <ChatMessage
-            text="Lorem laborum occaecat anim laborum cupidatat magna cupidatat laborum ullamco elit commodo. Fugiat ullamco culpa"
-            userName="Kamil"
-            self
-            date={new Date().toLocaleDateString('pl-PL', {
-              weekday: 'long',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          />
           {messages.map((message, i) => {
             return (
               <ChatMessage
                 key={i}
-                userName={message.username}
+                userName={message.senderName}
                 text={message.message}
-                date={new Date().toLocaleDateString('pl-PL', {
+                userPhoto={message.senderAvatar}
+                self={+message.senderId === user?.id}
+                date={new Date(message.date.date).toLocaleDateString('pl-PL', {
                   weekday: 'long',
                   hour: '2-digit',
                   minute: '2-digit',
@@ -161,6 +176,12 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   margin: 5rem 0;
+`;
+
+const StyledAlert = styled(Alert)`
+  position: fixed;
+  top: 70px;
+  z-index: 500000;
 `;
 
 const ChatWrapper = styled(Paper)`

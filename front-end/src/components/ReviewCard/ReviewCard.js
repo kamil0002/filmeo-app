@@ -26,7 +26,7 @@ const ReviewCard = ({
       elevation={4}
     >
       {verified ? (
-        <Tooltip title="Zweryfikowana wpyożyczeniem">
+        <Tooltip title="Zweryfikowana wypożyczeniem">
           <VerifiedIcon
             sx={{
               color: '#31CC79',

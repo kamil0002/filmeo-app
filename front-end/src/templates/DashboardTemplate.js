@@ -13,7 +13,6 @@ import { setUserPhoto } from 'slices/authSlice';
 const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-
   const imageChangeHandler = async (e) => {
     try {
       const formData = new FormData();
