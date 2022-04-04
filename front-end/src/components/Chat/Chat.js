@@ -33,7 +33,6 @@ const Chat = ({ id }) => {
       } = await axios.get('/api/v1/getMessages');
 
       if (!messages) return;
-      console.log(messages);
       const formattedMessages = messages.map((msg) => ({
         senderId: msg.user_id,
         senderName: msg.user.name,
