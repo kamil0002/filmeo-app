@@ -178,6 +178,7 @@ const UserSettings = () => {
         buttonText="Zmień hasło"
         buttonType="outlined"
         processing={processingPasswordChange}
+        spinnerDark={true}
       >
         <FormInput
           validator={{

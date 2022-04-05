@@ -74,7 +74,6 @@ const MovieDetails = () => {
     return <Navigate to={`/film/${params.slug}/dodaj-opinie`} />;
 
   if (redirectToOrder) return <Navigate to={`/film/${params.slug}/zamow`} />;
-
   return (
     <Wrapper>
       {spinnerVisible && <Spinner />}
@@ -197,6 +196,7 @@ const MovieDetails = () => {
                         createdAt={created_at}
                         profile={false}
                         author={author}
+                        reviewId={id}
                       />
                     </GridItem>
                   )

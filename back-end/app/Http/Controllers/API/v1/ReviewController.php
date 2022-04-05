@@ -98,22 +98,28 @@ class ReviewController extends Controller
 
         $user = auth()->user();
 
-        $review = Review::where('id', '=', $reviewId)->get()[0];
-        error_log($review);
-        error_log($review->user_id);
-        error_log($user->id);
+        $review = Review::where('id', '=', $reviewId)->get();
+
+        if(count($review) === 0) {
+            return ErrorController::handleError('Ta opinia nie istnieje.', 404);
+        }
+
+        $review = $review[0];
 
         //* Check if current review is the auth user review or if user isn't admin
-        if($review->user_id !== $user->id && $user->role !== 'administrator') {
-            return ErrorController::handleError('Możesz usuwać tylko własne opinie użytkowniku!', 403);
+        if($user->role !== 'administrator' && $user->role !== 'moderator') {
+            if($review->user_id !== $user->id)
+                return ErrorController::handleError('Możesz usuwać tylko własne opinie użytkowniku!', 403);
         }
-        
+
+        $movie = Movie::where('id', '=', $review->movie_id)->get()[0];
+
+        $movie->update([
+            'rating_quantitity' => $movie->rating_quantity--
+        ]);
+
 
         $review = Review::destroy($reviewId);
-
-        if(!$review) {
-            return ErrorController::handleError('Film o podanym ID nie istnieje!', 404);
-        }
 
 
         return response([
