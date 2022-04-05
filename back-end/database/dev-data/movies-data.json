@@ -448,5 +448,35 @@
     "trailer_url": "https://www.youtube.com/watch?v=2Iio8QmZY8A&t=39s",
     "details_url": "https://www.filmweb.pl/film/Wichry+nami%C4%99tno%C5%9Bci-1994-1229",
     "cost": 8.5
+  },
+    {
+    "title": "Logan: Wolverine",
+    "genres": ["Dramat", "Akcja", "Sci-Fi"],
+    "age_limit": 18,
+    "short_description": "Logan opiekuje się chorym Charlesem Xavierem, nie stroniąc od alkoholu. Jego wegetację przerywa prośba nieznajomej o przewiezienie małej Laury za kanadyjską granicę.",
+    "description": "Niedaleka przyszłość. Populacja mutantów skurczyła do kilku osobników. Zmęczony życiem Logan (Hugh Jackman) opiekuje się schorowanym Profesorem X (Patrick Stewart) w kryjówce przy granicy meksykańskiej. Pewnego dnia nieznajoma prosi by zaopiekował się Laurą (Dafne Keen) - młodą mutantką ściganą przez tajemniczą organizację. Czy Logan da radę ochronić dziewczynę, z którą ma więcej wspólnego niż mu się wydaje?",
+    "release_date": "2017-02-17",
+    "director": "James Mangold",
+    "running_time": 137,
+    "poster": "logan-poster.jpg",
+    "movie_url": "https://upstream.to/embed-ysaoctuy0ymv.html",
+    "trailer_url": "https://www.youtube.com/watch?v=Div0iP65aZo",
+    "details_url": "https://www.filmweb.pl/film/Logan%3A+Wolverine-2017-713552",
+    "cost": 8
+  },
+      {
+    "title": "Nowi mutanci",
+    "genres": ["Horror", "Akcja", "Sci-Fi"],
+    "age_limit": 18,
+    "short_description": "Pięcioro młodych mutantów, trzymanych w sekretnym ośrodku wbrew ich woli, przebudza swoje zdolności i walczy, by uciec od grzechów przeszłości.",
+    "description": "Rahne Sinclair (Williams), Illyana Rasputin (Taylor-Joy), Sam Guthrie (Heaton) i Roberto da Costa (Zaga) to czwórka nastoletnich mutantów przetrzymywanych pod obserwacją psychiatryczną w odizolowanym od świata szpitalu. Dr Cecilia Reyes (Braga) uważa, że stanowią oni zagrożenie tak dla siebie, jak i dla całego społeczeństwa, dlatego bacznie ich pilnuje, a jednocześnie stara się ich nauczyć panowania nad mutancimi zdolnościami. Kiedy do pozostałych pensjonariuszy dołącza Danielle „Dani\" Moonstar (Hunt), zaczynają dziać się dziwne rzeczy. Pacjentów nawiedzają halucynacje i wspomnienia dawnych doznań, a ich nowe mutancie zdolności – podobnie jak przyjaźń – zostaną poddane próbie w walce o przetrwanie. ",
+    "release_date": "2020-08-26",
+    "director": "Josh Boone",
+    "running_time": 98,
+    "poster": "new_mutants-poster.jpg",
+    "movie_url": "https://upstream.to/embed-73utgm9uck4h.html",
+    "trailer_url": "https://www.youtube.com/watch?v=y_nzO2hJSsw",
+    "details_url": "https://www.filmweb.pl/film/Nowi+mutanci-2020-763603",
+    "cost": 8.5
   }
 ]
