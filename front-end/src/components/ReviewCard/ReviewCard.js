@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Paper, Rating } from '@mui/material';
 import Typography from 'components/Typography/Typography';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Tooltip } from '@mui/material';
+import Alert from 'components/Alert/Alert';
+import axios from 'utils/axios';
 
 const ReviewCard = ({
   profile,
@@ -13,9 +15,31 @@ const ReviewCard = ({
   createdAt,
   rating,
   author,
-  // eslint-disable-next-line no-unused-vars
+  movie,
   verified,
+  reviewId,
 }) => {
+  const [errMessage, setErrMessage] = useState(null);
+  const [successMessage, setSuccesMessage] = useState(null);
+
+  const deleteReview = async (id) => {
+    try {
+      console.log(id);
+      const obj = await axios.delete(`/api/v1/reviews/${id}`);
+      if (obj.data.status !== 'success') {
+        throw new Error(obj.data.message);
+      }
+      setSuccesMessage('Opinia została pomyślnie usunięta!');
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      setTimeout(() => {
+        setErrMessage(null);
+        setSuccesMessage(true);
+      }, 2000);
+    }
+  };
+
   return (
     <Paper
       sx={{
@@ -25,6 +49,8 @@ const ReviewCard = ({
       }}
       elevation={4}
     >
+      {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
       {verified ? (
         <Tooltip title="Zweryfikowana wypożyczeniem">
           <VerifiedIcon
@@ -62,7 +88,11 @@ const ReviewCard = ({
           readOnly
           sx={{ display: 'flex', justifyContent: 'flex-end' }}
         />
-        {profile && <Button variant="text">Usuń</Button>}
+        {profile && (
+          <Button onClick={() => deleteReview(reviewId)} variant="text">
+            Usuń
+          </Button>
+        )}
         {!profile && (
           <Typography fontSize={12}>
             {new Intl.DateTimeFormat('pl-PL', {
@@ -71,7 +101,7 @@ const ReviewCard = ({
           </Typography>
         )}
       </ReviewDetails>
-      <ReviewCardFooter>{profile ? 'Uncharted' : author}</ReviewCardFooter>
+      <ReviewCardFooter>{profile ? movie : author}</ReviewCardFooter>
     </Paper>
   );
 };
@@ -111,7 +141,9 @@ const ReviewCardFooter = styled.div`
 
 ReviewCard.propTypes = {
   profile: PropTypes.bool,
+  reviewId: PropTypes.number,
   author: PropTypes.string,
+  movie: PropTypes.string,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,

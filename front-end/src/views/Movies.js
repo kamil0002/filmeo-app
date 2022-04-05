@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMovies } from 'slices/moviesSlice';
 import styled from 'styled-components';
-import { CircularProgress } from '@mui/material';
+import Spinner from 'components/Spinner/Spinner';
 import GenresNavigation from 'components/GenresNavigation/GenresNavigation';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import Alert from 'components/Alert/Alert';
@@ -49,11 +49,4 @@ export default Movies;
 
 const Wrapper = styled.div`
   min-height: calc(100vh - 76px - 70px);
-`;
-
-const Spinner = styled(CircularProgress)`
-  && {
-    display: block;
-    margin: 150px auto 50px auto;
-  }
 `;

@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
+import Spinner from 'components/Spinner/Spinner';
 import Typography from 'components/Typography/Typography';
 import RentedMovie from 'components/RentedMovieCard/RentedMovieCard';
 import responsive from 'theme/responsive';
 import axios from 'axios';
 
 const UserMovies = () => {
-  const [rentedMovies, setRentedMovies] = useState([]);
+  const [rentedMovies, setRentedMovies] = useState(undefined);
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
   useEffect(async () => {
     try {
+      setSpinnerVisible(true);
       const {
         data: { data: movies },
       } = await axios.get('/api/v1/rentals/myRentals');
+      setSpinnerVisible(false);
       setRentedMovies(movies[0]);
       console.log(movies[0]);
     } catch (err) {
@@ -25,31 +29,46 @@ const UserMovies = () => {
       <Typography fontSize={24} fontWeight={700} marginBottom={4}>
         Wypożyczone Filmy
       </Typography>
-      <GridContainer container columnSpacing={3} rowSpacing={3}>
-        {rentedMovies.map(
-          ({ title, slug, poster, rental_id, rating_average, expire_date }) => (
-            <GridItem
-              key={rental_id}
-              item
-              xs={10}
-              sm={6}
-              md={4}
-              lg={3.5}
-              xl={2.75}
-            >
-              <RentedMovie
-                title={title}
-                slug={slug}
-                expireDate={expire_date}
-                poster={poster}
-                rentalId={rental_id}
-                rating={rating_average}
-                active={new Date(expire_date) > Date.now() ? true : false}
-              />
-            </GridItem>
-          )
-        )}
-      </GridContainer>
+      {spinnerVisible && <Spinner />}
+      {rentedMovies && (
+        <GridContainer container columnSpacing={3} rowSpacing={3}>
+          {rentedMovies.length === 0 && (
+            <Typography marginLeft={3}>
+              Nic jeszcze nie wypożyczyłeś!
+            </Typography>
+          )}
+          {rentedMovies.map(
+            ({
+              title,
+              slug,
+              poster,
+              rental_id,
+              rating_average,
+              expire_date,
+            }) => (
+              <GridItem
+                key={rental_id}
+                item
+                xs={10}
+                sm={6}
+                md={4}
+                lg={3.5}
+                xl={2.75}
+              >
+                <RentedMovie
+                  title={title}
+                  slug={slug}
+                  expireDate={expire_date}
+                  poster={poster}
+                  rentalId={rental_id}
+                  rating={rating_average}
+                  active={new Date(expire_date) > Date.now() ? true : false}
+                />
+              </GridItem>
+            )
+          )}
+        </GridContainer>
+      )}
     </Wrapper>
   );
 };

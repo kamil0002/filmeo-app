@@ -98,7 +98,10 @@ class ReviewController extends Controller
 
         $user = auth()->user();
 
-        $review = Review::find($reviewId)->first();
+        $review = Review::where('id', '=', $reviewId)->get()[0];
+        error_log($review);
+        error_log($review->user_id);
+        error_log($user->id);
 
         //* Check if current review is the auth user review or if user isn't admin
         if($review->user_id !== $user->id && $user->role !== 'administrator') {
@@ -135,6 +138,12 @@ class ReviewController extends Controller
         }
 
         $reviews = Review::where('user_id', '=', $userId)->get();
+        
+        foreach($reviews as $review) {
+            $movieTitle = Movie::where('id', '=', $review->movie_id)->select('title')->get()[0]->title;
+            unset($review->movie_id);
+            $review->movie_title = $movieTitle;
+        }
 
         return response([
             'status' => 'success',
