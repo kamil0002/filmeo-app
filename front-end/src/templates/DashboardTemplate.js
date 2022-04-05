@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-
+import Alert from 'components/Alert/Alert';
 import { Paper, Typography } from '@mui/material';
 import responsive from 'theme/responsive';
 import { PhotoCamera } from '@mui/icons-material';
@@ -11,6 +11,8 @@ import axios from 'utils/axios';
 import { setUserPhoto } from 'slices/authSlice';
 
 const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errMessage, setErrMessage] = useState(null);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const imageChangeHandler = async (e) => {
@@ -18,15 +20,24 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
       const formData = new FormData();
       formData.append('avatar', e.target.files[0]);
       const res = await axios.post('/api/v1/uploadAvatar', formData);
-
+      if (res.data.status !== 'success') {
+        throw new Error(res.data.message);
+      }
       dispatch(setUserPhoto(res.data.data[0]));
+      setSuccessMessage('Zdjęcie zostało zmienione.');
     } catch (err) {
-      console.log(err.message);
+      setErrMessage(err.message);
+      setTimeout(() => {
+        setSuccessMessage(null);
+        setErrMessage(null);
+      }, 5000);
     }
   };
 
   return (
     <Wrapper>
+      {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
       <StyledPaper>
         <Sidebar>
           <User>
