@@ -6,10 +6,24 @@ import Typography from 'components/Typography/Typography';
 import RentedMovie from 'components/RentedMovieCard/RentedMovieCard';
 import responsive from 'theme/responsive';
 import axios from 'axios';
+import { FormControlLabel, Switch } from '@mui/material';
 
 const UserMovies = () => {
   const [rentedMovies, setRentedMovies] = useState(undefined);
+  const [filteredMovies, setFilteredMovies] = useState(undefined);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
+  const [showExpired, setShowExpired] = useState(true);
+
+  const handleMoviesDisplay = () => {
+    setShowExpired(!showExpired);
+
+    const movies = rentedMovies.filter(
+      (movie) => movie.active || movie.active === showExpired
+    );
+
+    setFilteredMovies(movies);
+  };
+
   useEffect(async () => {
     try {
       setSpinnerVisible(true);
@@ -18,6 +32,7 @@ const UserMovies = () => {
       } = await axios.get('/api/v1/rentals/myRentals');
       setSpinnerVisible(false);
       setRentedMovies(movies[0]);
+      setFilteredMovies(movies[0]);
       console.log(movies[0]);
     } catch (err) {
       console.error(err.message);
@@ -26,18 +41,29 @@ const UserMovies = () => {
 
   return (
     <Wrapper>
-      <Typography fontSize={24} fontWeight={700} marginBottom={4}>
+      <Typography fontSize={24} fontWeight={700}>
         Wypożyczone Filmy
       </Typography>
+      <FormControlLabel
+        sx={{ marginBottom: 4 }}
+        control={
+          <Switch
+            checked={showExpired}
+            onChange={handleMoviesDisplay}
+            name="expired rentals"
+          />
+        }
+        label="Pokaż wygaśnięte"
+      />
       {spinnerVisible && <Spinner />}
-      {rentedMovies && (
+      {filteredMovies && (
         <GridContainer container columnSpacing={3} rowSpacing={3}>
-          {rentedMovies.length === 0 && (
+          {filteredMovies.length === 0 && (
             <Typography marginLeft={3}>
               Nic jeszcze nie wypożyczyłeś!
             </Typography>
           )}
-          {rentedMovies.map(
+          {filteredMovies.map(
             ({
               title,
               slug,
