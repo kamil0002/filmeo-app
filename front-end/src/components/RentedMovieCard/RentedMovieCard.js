@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button, Paper, Rating } from '@mui/material';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
+import responsive from 'theme/responsive';
 
 const RentedMovieCard = ({
   title,
@@ -105,15 +106,16 @@ const Overlay = styled.span`
     transform: rotate(45deg);
     position: absolute;
     background: red;
-    top: 6%;
-    right: -28%;
+
     font-size: ${({ theme }) => theme.fontSize.xs};
     color: ${({ theme }) => theme.darkGray};
     font-weight: ${({ theme }) => theme.fontBold};
-    padding: 1px 3px;
-    width: 150px;
+    padding: 1px 40px;
+    right: -35px;
+    top: 15px;
+    width: min-content;
     text-align: center;
-    background: ${({ theme }) => theme.secondaryLight};
+    background: ${({ theme }) => theme.primaryLight};
     z-index: 30;
   }
 `;
