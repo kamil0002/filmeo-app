@@ -464,12 +464,12 @@
     "details_url": "https://www.filmweb.pl/film/Logan%3A+Wolverine-2017-713552",
     "cost": 8
   },
-      {
+  {
     "title": "Nowi mutanci",
     "genres": ["Horror", "Akcja", "Sci-Fi"],
     "age_limit": 18,
     "short_description": "Pięcioro młodych mutantów, trzymanych w sekretnym ośrodku wbrew ich woli, przebudza swoje zdolności i walczy, by uciec od grzechów przeszłości.",
-    "description": "Rahne Sinclair (Williams), Illyana Rasputin (Taylor-Joy), Sam Guthrie (Heaton) i Roberto da Costa (Zaga) to czwórka nastoletnich mutantów przetrzymywanych pod obserwacją psychiatryczną w odizolowanym od świata szpitalu. Dr Cecilia Reyes (Braga) uważa, że stanowią oni zagrożenie tak dla siebie, jak i dla całego społeczeństwa, dlatego bacznie ich pilnuje, a jednocześnie stara się ich nauczyć panowania nad mutancimi zdolnościami. Kiedy do pozostałych pensjonariuszy dołącza Danielle „Dani\" Moonstar (Hunt), zaczynają dziać się dziwne rzeczy. Pacjentów nawiedzają halucynacje i wspomnienia dawnych doznań, a ich nowe mutancie zdolności – podobnie jak przyjaźń – zostaną poddane próbie w walce o przetrwanie. ",
+    "description": "Rahne Sinclair (Williams), Illyana Rasputin (Taylor-Joy), Sam Guthrie (Heaton) i Roberto da Costa (Zaga) to czwórka nastoletnich mutantów przetrzymywanych pod obserwacją psychiatryczną w odizolowanym od świata szpitalu. Dr Cecilia Reyes (Braga) uważa, że stanowią oni zagrożenie tak dla siebie, jak i dla całego społeczeństwa, dlatego bacznie ich pilnuje, a jednocześnie stara się ich nauczyć panowania nad mutancimi zdolnościami. Kiedy do pozostałych pensjonariuszy dołącza Danielle „Dani\" Moonstar (Hunt), zaczynają dziać się dziwne rzeczy. Pacjentów nawiedzają halucynacje i wspomnienia dawnych doznań, a ich nowe mutancie zdolności – podobnie jak przyjaźń – zostaną poddane próbie w walce o przetrwanie.",
     "release_date": "2020-08-26",
     "director": "Josh Boone",
     "running_time": 98,
@@ -478,5 +478,20 @@
     "trailer_url": "https://www.youtube.com/watch?v=y_nzO2hJSsw",
     "details_url": "https://www.filmweb.pl/film/Nowi+mutanci-2020-763603",
     "cost": 8.5
+  },
+  {
+    "title": "X-Men: Mroczna Phoenix",
+    "genres": ["Akcja", "Sci-Fi"],
+    "age_limit": 18,
+    "short_description": "Kiedy Jean Gray zostaje uderzona przez tajemniczą kosmiczną siłę, która przemienia ją w kultową Dark Pheonix, X-Men musi się zjednoczyć, aby stawić czoła swojemu najbardziej niszczycielskiemu wrogowi - jednemu z nich.",
+    "description": "Jean Grey, jedna z pierwszych członkiń X-Men, nigdy w pełni nie rozumiała głębi i złożoności swojej mocy. Podobnie jak jej mentor i przyjaciel Charles Xavier, Jean potrafi dokonywać niezwykłych rzeczy siłą swego umysłu. Jest ona jednak znacznie potężniejsza niż Charles – i  każdy inny mutant na naszej planecie. Po tym, jak misja powstrzymania kosmicznej katastrofy prawie ją zabija, Jean powraca przemieniona, a doświadczenie, którego doznała, uwalnia prawdziwy potencjał jej nieprawdopodobnej mocy. Jean wymyka się spod kontroli i powoli przemienia się w swoje alter ego, nadprzyrodzoną siłę, znaną jako Mroczny Phoenix i zaczyna zagrażać więzom, które łączą drużynę X-Men. Kiedy X-Men przygotowują się, by odeprzeć kosmiczną inwazję, która może zniszczyć życie na Ziemi, muszą także stawić czoło zagrożeniu, jakie sprowadza na nich jeden z członków ich rodziny.",
+    "release_date": "2019-06-04",
+    "director": "Simon Kinberg",
+    "running_time": 114,
+    "poster": "dark_phoenix-poster.jpg",
+    "movie_url": "https://upstream.to/embed-n7algxbgf5o3.html",
+    "trailer_url": "https://www.youtube.com/watch?v=azvR__GRQic",
+    "details_url": "https://www.filmweb.pl/film/X-Men%3A+Mroczna+Phoenix-2019-785552",
+    "cost": 7.5
   }
 ]
