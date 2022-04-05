@@ -7,7 +7,7 @@ use App\Models\Payment;
 use App\Models\Rental;
 
 use App\Http\Controllers\API\v1\ErrorController;
-
+use App\Models\Review;
 
 class RentalController extends Controller
 {    
@@ -175,6 +175,11 @@ class RentalController extends Controller
                 //* Check all user rented movies
                 if($rental->user_id === $userId) {
                 $movie = Movie::find($movie->id);
+                $reviews = Review::where('movie_id', '=', $movie->id)->select('rating')->get();
+
+                $movie->expire_date = $rental->expire_date;
+
+                $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
 
                 //* Add bonus field if movie is not active or not
                 $movie['active'] = $rental->active;

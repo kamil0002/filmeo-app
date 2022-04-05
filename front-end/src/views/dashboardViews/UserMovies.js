@@ -1,26 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Typography from 'components/Typography/Typography';
 import RentedMovie from 'components/RentedMovieCard/RentedMovieCard';
 import responsive from 'theme/responsive';
+import axios from 'axios';
 
 const UserMovies = () => {
+  const [rentedMovies, setRentedMovies] = useState([]);
+  useEffect(async () => {
+    try {
+      const {
+        data: { data: movies },
+      } = await axios.get('/api/v1/rentals/myRentals');
+      setRentedMovies(movies[0]);
+      console.log(movies[0]);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }, []);
+
   return (
     <Wrapper>
       <Typography fontSize={24} fontWeight={700} marginBottom={4}>
         Wypożyczone Filmy
       </Typography>
       <GridContainer container columnSpacing={3} rowSpacing={3}>
-        <GridItem item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
-          <RentedMovie />
-        </GridItem>
-        <GridItem item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
-          <RentedMovie />
-        </GridItem>
-        <GridItem item xs={10} sm={6} md={4} lg={3.5} xl={2.75}>
-          <RentedMovie />
-        </GridItem>
+        {rentedMovies.map(
+          ({ title, slug, poster, rental_id, rating_average, expire_date }) => (
+            <GridItem
+              key={rental_id}
+              item
+              xs={10}
+              sm={6}
+              md={4}
+              lg={3.5}
+              xl={2.75}
+            >
+              <RentedMovie
+                title={title}
+                slug={slug}
+                expireDate={expire_date}
+                poster={poster}
+                rentalId={rental_id}
+                rating={rating_average}
+                active={new Date(expire_date) > Date.now() ? true : false}
+              />
+            </GridItem>
+          )
+        )}
       </GridContainer>
     </Wrapper>
   );
@@ -34,7 +62,21 @@ const Wrapper = styled.div`
   padding: 0.7rem 0;
 
   &::-webkit-scrollbar {
-    width: 0;
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 50%;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5%;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 `;
 

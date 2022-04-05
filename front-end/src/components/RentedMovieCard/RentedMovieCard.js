@@ -1,45 +1,79 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Button, Paper, Rating } from '@mui/material';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
 
-const RendtedMovie = () => {
+const RentedMovieCard = ({
+  title,
+  expireDate,
+  poster,
+  rating,
+  slug,
+  active,
+  rentalId,
+}) => {
+  const [redirectToMovie, setRedirectToMovie] = useState(false);
+
   return (
     <StyledPaper elevation={4}>
-      <MovieImg src="https://galaxydrivein.com.au/wp-content/uploads/2022/02/ABFCEA5B-4318-4FBB-BC60-E828F210E52C-800x600.jpeg" />
+      {!active && <Overlay></Overlay>}
+      <MovieImg src={`http://127.0.0.1:8000/images/movies/${poster}`} />
       <StyledRating
         name="read-only"
-        value={4.3}
+        value={rating}
         precision={0.1}
         defaultValue={0.0}
         size={'small'}
         readOnly
       ></StyledRating>
       <Typography fontWeight={600} align={'center'} marginTop={0.5}>
-        Uncharted
+        {title}
       </Typography>
-      <Typography fontSize={12} align={'center'} color={'rgba(0 0 0 / 60%)'}>
-        Expires at 22-04-2022
-      </Typography>
-      <Button
-        sx={{
-          backgroundColor: '#FFFFFF',
-          fontFamily: 'inherit',
-          textTransform: 'capitalize',
-          marginY: 2,
-          display: 'block',
-          marginX: 'auto',
-        }}
-        variant="outlined"
-        size={'small'}
-      >
-        Oglądaj
-      </Button>
+      {active ? (
+        <>
+          <Typography
+            fontSize={12}
+            align={'center'}
+            color={'rgba(0 0 0 / 60%)'}
+          >
+            Wygasa
+          </Typography>
+          <Typography
+            fontSize={12}
+            align={'center'}
+            color={'rgba(0 0 0 / 60%)'}
+          >
+            {expireDate}
+          </Typography>
+        </>
+      ) : (
+        <Typography fontSize={12} align={'center'} color={'rgba(0 0 0 / 60%)'}>
+          Film wygasł
+        </Typography>
+      )}
+      {active ? (
+        <StyledButton
+          variant="outlined"
+          size={'small'}
+          onClick={() => setRedirectToMovie(true)}
+          LinkComponent={Link}
+          to={`/film/${rentalId}/${slug}/ogladaj`}
+        >
+          Oglądaj
+        </StyledButton>
+      ) : (
+        <StyledButton variant="outlined" size={'small'}>
+          Odnów
+        </StyledButton>
+      )}
     </StyledPaper>
   );
 };
 
-export default RendtedMovie;
+export default RentedMovieCard;
 
 const MovieImg = styled.img`
   max-height: 100px;
@@ -52,15 +86,67 @@ const MovieImg = styled.img`
 const StyledPaper = styled(Paper)`
   && {
     background-color: ${({ theme }) => theme.primaryLight};
+
     position: relative;
-    padding-bottom: 0.25rem;
+    padding-bottom: 3.3rem;
+    height: 100%;
+  }
+`;
+
+const Overlay = styled.span`
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: 4px;
+  overflow: hidden;
+
+  &::after {
+    content: 'Expired';
+    transform: rotate(45deg);
+    position: absolute;
+    background: red;
+    top: 6%;
+    right: -28%;
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    color: ${({ theme }) => theme.darkGray};
+    font-weight: ${({ theme }) => theme.fontBold};
+    padding: 1px 3px;
+    width: 150px;
+    text-align: center;
+    background: ${({ theme }) => theme.secondaryLight};
+    z-index: 30;
   }
 `;
 
 const StyledRating = styled(Rating)`
   && {
+    z-index: 6;
     position: absolute;
     left: 4%;
     top: 4%;
   }
 `;
+
+const StyledButton = styled(Button)`
+  && {
+    background-color: ${({ theme }) => theme.secondaryLight};
+    position: absolute;
+    left: 50%;
+    bottom: 5%;
+    transform: translateX(-50%);
+    font-family: inherit;
+    text-transform: capitalize;
+    display: block;
+    z-index: 10;
+  }
+`;
+
+RentedMovieCard.propTypes = {
+  poster: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  expireDate: PropTypes.string.isRequired,
+  slug: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired,
+  active: PropTypes.bool.isRequired,
+  rentalId: PropTypes.number.isRequired,
+};

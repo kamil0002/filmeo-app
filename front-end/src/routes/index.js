@@ -6,5 +6,5 @@ export default {
   dashboard: '/profil',
   movieDetails: '/film/:slug',
   addReview: '/film/:slug/dodaj-opinie',
-  watchMovie: '/film/:slug/ogladaj',
+  watchMovie: '/film/:rentalId/:slug/ogladaj',
 };

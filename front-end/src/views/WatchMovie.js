@@ -1,34 +1,66 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Navigate, useParams } from 'react-router-dom';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
+import axios from 'utils/axios';
+import Alert from 'components/Alert/Alert';
 
 const WatchMovie = () => {
-  const [infoVisible, setInfoVisible] = useState(true);
+  const [redirect, setRedirect] = useState(false);
+  const [info, setInfo] = useState(true);
+  const [errMessage, setErrMessage] = useState(null);
   const [infoFirstTimeShown, setInfoFirstTimeShown] = useState(false);
+  const [movieUrl, setMovieUrl] = useState(null);
+  const params = useParams();
 
-  useEffect(() => {
+  useEffect(async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/rentals/${params.rentalId}/movies/${params.slug}/video`
+      );
+      if (data.status !== 'success') {
+        throw new Error(data.message);
+      }
+      setMovieUrl(data.data[0][0].movie_url);
+    } catch (err) {
+      setErrMessage(err.message);
+      setTimeout(() => setRedirect(true), 5000);
+    }
+  }, []);
+
+  useEffect(async () => {
     setTimeout(
       () => {
-        setInfoVisible(false);
+        setInfo(false);
         setInfoFirstTimeShown(true);
       },
       infoFirstTimeShown ? 7000 : 3000
     );
-  }, [infoVisible]);
+  }, [info]);
 
   useEffect(() => {
     window.addEventListener('mousemove', () => {
-      setInfoVisible(true);
+      setInfo(true);
     });
   });
 
+  if (redirect) {
+    return <Navigate to="/profil" />;
+  }
+
   return (
     <>
-      <Information className="frame" infoVisible={infoVisible ? 1 : 0}>
-        Naciśnij F11 aby wypełnić/pomniejszyć wyświetlany obraz
-      </Information>
-      <Movie log src="https://userload.co/embed/0cf245531139" />
+      {errMessage && <Alert videoError={true}>{errMessage}</Alert>}
+
+      {movieUrl && (
+        <>
+          <Information className="frame" info={info ? 1 : 0}>
+            Naciśnij F11 aby wypełnić/pomniejszyć wyświetlany obraz
+          </Information>
+          <Movie log src={movieUrl} />
+        </>
+      )}
     </>
   );
 };
@@ -44,7 +76,7 @@ const Movie = styled.iframe`
 
 const Information = styled(Typography)`
   && {
-    opacity: ${({ infoVisible }) => (infoVisible ? 1 : 0)};
+    opacity: ${({ info }) => (info ? 1 : 0)};
     transition: opacity 250ms ease;
     user-select: none;
     left: 0;

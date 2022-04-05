@@ -282,6 +282,11 @@ class MovieController extends Controller
     public function getMovieVideo(int $rentalId, string $movieSlug) {
         //* Find actual rental
         $rental = Rental::find($rentalId);
+        $rental = $rental::where('id', '=', $rentalId)->with('movies')->get()[0];
+
+        if($movieSlug !== $rental->movies[0]->slug) {
+            return ErrorController::handleError('Nie oszukuj...', 400, 'failed');
+        }
 
         //* If Rental Expired inform a user and return
         if($rental->expire_date < date('Y-m-d H:i:s')) {
