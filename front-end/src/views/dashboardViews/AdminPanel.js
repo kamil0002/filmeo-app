@@ -14,15 +14,24 @@ import { useForm } from 'react-hook-form';
 
 const AdminPanel = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
-  const [selectedToUnban, setSelectedToUnban] = useState('');
+  const [selectUnban, setSelectUnban] = useState('');
+  const [deleteMod, setDeleteMod] = useState('');
 
   const {
     register: registerUserBlock,
     handleSubmit: handleSubmitUserBlock,
+    formState: { errors: errors1 },
+  } = useForm({ shouldFocusError: false });
+
+  const {
+    register: registerAddModerator,
+    handleSubmit: handleSubmitAddModerator,
     formState: { errors: errors2 },
   } = useForm({ shouldFocusError: false });
 
   const blockUser = (data) => console.log(data);
+
+  const addModerator = (data) => console.log(data);
 
   return (
     <>
@@ -44,12 +53,7 @@ const AdminPanel = () => {
             <MenuItem value={'Sing 2'}>Sing 2</MenuItem>
           </StyledSelect>
         </FormControl>
-        <StyledButton
-          sx={{ alignSelf: 'baseline', fontFamily: 'Poppins' }}
-          variant="outlined"
-        >
-          Usuń film
-        </StyledButton>
+        <StyledButton variant="outlined">Usuń film</StyledButton>
         <Typography
           color="#C02020"
           sx={{ marginTop: 2, fontWeight: 600, fontSize: 11 }}
@@ -75,7 +79,7 @@ const AdminPanel = () => {
             id="email"
             label="Adres E-Mail"
             type="email"
-            isValid={errors2.email ? true : false}
+            isValid={errors1.email ? true : false}
             helperText="Adres E-mail nie poprawny"
           />
         </Form>
@@ -91,17 +95,66 @@ const AdminPanel = () => {
           <StyledSelect
             labelId="blocked-user"
             id="blocked-users"
-            value={selectedToUnban}
+            value={selectUnban}
             label="Wybierz"
             inputProps={{ MenuProps: { disableScrollLock: true } }}
-            onChange={(e) => setSelectedToUnban(e.target.value)}
+            onChange={(e) => setSelectUnban(e.target.value)}
           >
             <MenuItem value={'laura@example.com'}>laura@example.com.</MenuItem>
             <MenuItem value={'john@example.com'}>john@example.com.</MenuItem>
             <MenuItem value={'adam@example.com'}>adam@example.com.</MenuItem>
           </StyledSelect>
         </FormControl>
+        <StyledButton sx={{ marginTop: 2 }} variant="outlined">
+          Wykonaj
+        </StyledButton>
       </UnblockUserWrapper>
+      <AddModeratorWrapper>
+        <Typography marginTop={3}>Dodaj moderatora</Typography>
+        <Form
+          submitFn={handleSubmitAddModerator(addModerator())}
+          buttonText="Dodaj"
+          buttonType="outlined"
+        >
+          <FormInput
+            validator={{
+              ...registerAddModerator('email', {
+                required: true,
+                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
+              }),
+            }}
+            id="email"
+            label="Adres E-Mail"
+            type="email"
+            isValid={errors2.email ? true : false}
+            helperText="Adres E-mail nie poprawny"
+          />
+        </Form>
+      </AddModeratorWrapper>
+      <DeleteModeratorWrapper>
+        <Typography marginTop={3} marginBottom={3}>
+          Usuń moderatora
+        </Typography>
+        <FormControl>
+          <InputLabel id="moderators">Wybierz</InputLabel>
+
+          <StyledSelect
+            labelId="modeerator"
+            id="modeerator"
+            value={deleteMod}
+            label="Wybierz"
+            inputProps={{ MenuProps: { disableScrollLock: true } }}
+            onChange={(e) => setDeleteMod(e.target.value)}
+          >
+            <MenuItem value={'laura@example.com'}>laura@example.com.</MenuItem>
+            <MenuItem value={'john@example.com'}>john@example.com.</MenuItem>
+            <MenuItem value={'adam@example.com'}>adam@example.com.</MenuItem>
+          </StyledSelect>
+        </FormControl>
+        <StyledButton sx={{ marginTop: 2 }} variant="outlined">
+          Wykonaj
+        </StyledButton>
+      </DeleteModeratorWrapper>
     </>
   );
 };
@@ -120,6 +173,8 @@ const StyledForm = styled.form`
 
 const StyledButton = styled(Button)`
   && {
+    align-self: baseline;
+    font-family: 'Poppins';
     display: block;
     font-size: ${({ theme }) => theme.fontSize.xs};
 
@@ -144,4 +199,8 @@ const BlockUserWrapper = styled.div`
   margin-top: 5rem;
 `;
 
+const AddModeratorWrapper = styled(BlockUserWrapper)``;
+
 const UnblockUserWrapper = styled(BlockUserWrapper)``;
+
+const DeleteModeratorWrapper = styled(BlockUserWrapper)``;
