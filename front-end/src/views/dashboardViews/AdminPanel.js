@@ -58,8 +58,11 @@ const AdminPanel = () => {
     formState: { errors: errors2 },
   } = useForm({ shouldFocusError: false });
 
-  const blockUser = (data) => {
-    console.log(data);
+  const blockUser = async (data) => {
+    // try {
+    // } catch (err) {
+    //   setErrMessage(err.message);
+    // }
   };
 
   const addModerator = (data) => console.log(data);
@@ -117,7 +120,6 @@ const AdminPanel = () => {
           />
         </Form>
       </BlockUserWrapper>
-
       <UnblockUserWrapper>
         <Typography marginTop={3} marginBottom={3}>
           Odblokuj użytkownika

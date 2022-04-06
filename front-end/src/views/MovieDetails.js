@@ -14,6 +14,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import Header from 'components/MovieDetailsHeader/MovieDetailsHeader';
 import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
 import Alert from 'components/Alert/Alert';
+import asyncErrorMsg from 'utils/asyncErrorMsg';
 
 const MovieDetails = () => {
   const [redirectToReviews, setRedirectToReviews] = useState(false);
@@ -45,8 +46,7 @@ const MovieDetails = () => {
         await axios.get(`api/v1/rentMovie/${movieId}/${userId}`);
       }
     } catch (err) {
-      setErrMessage(err.message);
-      setTimeout(() => setErrMessage(null), 5000);
+      asyncErrorMsg(null, setErrMessage, err.message);
     }
   }, []);
 
@@ -59,15 +59,23 @@ const MovieDetails = () => {
   };
 
   const rentMovie = async (e) => {
-    e.preventDefault();
-    const stripe = await loadStripe(
-      'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
-    );
-    const session = await axios.get(`api/v1//getSession/${movie.id}`);
+    try {
+      e.preventDefault();
+      const stripe = await loadStripe(
+        'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
+      );
+      const session = await axios.get(`api/v1//getSession/${movie.id}`);
 
-    await stripe.redirectToCheckout({
-      sessionId: session.data.id,
-    });
+      await stripe.redirectToCheckout({
+        sessionId: session.data.id,
+      });
+    } catch (err) {
+      asyncErrorMsg(
+        null,
+        setErrMessage,
+        'Transakcja zakończyła się niepowodzeniem!'
+      );
+    }
   };
 
   if (redirectToReviews)

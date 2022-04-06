@@ -14,6 +14,7 @@ import lottieAnimation from 'lotties/review-lottie.json';
 import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
 import { useParams } from 'react-router-dom';
+import asyncErrorMsg from 'utils/asyncErrorMsg';
 
 const AddReview = () => {
   const [ratingValue, setRatingValue] = useState(0);
@@ -50,11 +51,7 @@ const AddReview = () => {
         throw new Error(review.data.message);
       }
     } catch (err) {
-      setErrMessage(err.message);
-      setTimeout(() => {
-        setSuccessMessage(null);
-        setErrMessage(null);
-      }, 5000);
+      asyncErrorMsg(setSuccessMessage, setErrMessage, err.message);
     } finally {
       setProcessing(false);
     }

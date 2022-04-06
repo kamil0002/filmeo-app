@@ -9,6 +9,7 @@ import responsive from 'theme/responsive';
 import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
 import { updateUser } from 'slices/authSlice';
+import asyncErrorMsg from 'utils/asyncErrorMsg';
 
 const UserSettings = () => {
   const [errMessage, setErrMessage] = useState(null);
@@ -53,13 +54,11 @@ const UserSettings = () => {
       dispatch(updateUser(data));
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      setErrMessage(
+      asyncErrorMsg(
+        setSuccessMessage,
+        setErrMessage,
         'Na podany e-mail jest już zarejestrowany konto źle podałeś wartości w polach'
       );
-      setTimeout(() => {
-        setErrMessage(null);
-        setSuccessMessage(null);
-      }, 5000);
     } finally {
       setProcessingUserData(false);
     }
@@ -77,11 +76,7 @@ const UserSettings = () => {
       setSuccessMessage('Twoje hasło zostało zmienione!');
       reset();
     } catch (err) {
-      setErrMessage(err.message);
-      setTimeout(() => {
-        setSuccessMessage(null);
-        setErrMessage(null);
-      }, 5000);
+      asyncErrorMsg(setSuccessMessage, setErrMessage, err.message);
     } finally {
       setProcessingPasswordChange(false);
     }
