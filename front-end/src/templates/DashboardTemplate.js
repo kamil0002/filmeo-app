@@ -155,6 +155,7 @@ const Sidebar = styled.div`
 `;
 
 const User = styled.div`
+  width: inherit;
   height: 20%;
   display: flex;
   flex-direction: column;
@@ -232,7 +233,11 @@ const ChangeAvatarInput = styled.input`
 
 const UserName = styled(Typography)`
   && {
+    width: inherit;
     font-size: 0.6rem;
+    text-align: center;
+    word-wrap: break-word;
+    padding: 0 0.7rem;
 
     @media ${responsive.tablet} {
       font-size: ${({ theme }) => theme.fontSize.s};

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,11 +11,40 @@ import responsive from 'theme/responsive';
 import Form from 'components/Form/Form';
 import FormInput from 'components/Form/FormInput';
 import { useForm } from 'react-hook-form';
+import axios from 'utils/axios';
 
 const AdminPanel = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [selectUnban, setSelectUnban] = useState('');
   const [deleteMod, setDeleteMod] = useState('');
+  const [bannedUsers, setBannedUsers] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [moderators, setModerators] = useState([]);
+
+  useEffect(async () => {
+    try {
+      const users = await axios.get('/api/v1/users');
+
+      const bannedUsers = users.data.data[0]
+        .filter((user) => user.banned === 1)
+        .map((user) => ({
+          id: user.id,
+          name: user.name,
+          surname: user.surname,
+          email: user.email,
+        }));
+      setBannedUsers(bannedUsers);
+
+      const movies = await axios.get('/api/v1/movies');
+      setMovies(movies.data.data[0]);
+
+      const moderators = await axios.get('/api/v1/users?moderators=true');
+      setModerators(moderators.data.data[0]);
+      console.log(moderators.data.data[0]);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }, []);
 
   const {
     register: registerUserBlock,
@@ -29,7 +58,9 @@ const AdminPanel = () => {
     formState: { errors: errors2 },
   } = useForm({ shouldFocusError: false });
 
-  const blockUser = (data) => console.log(data);
+  const blockUser = (data) => {
+    console.log(data);
+  };
 
   const addModerator = (data) => console.log(data);
 
@@ -48,9 +79,11 @@ const AdminPanel = () => {
             inputProps={{ MenuProps: { disableScrollLock: true } }}
             onChange={(e) => setSelectedMovie(e.target.value)}
           >
-            <MenuItem value={'Uncharted'}>Uncharted</MenuItem>
-            <MenuItem value={'The Batman'}>The Batman</MenuItem>
-            <MenuItem value={'Sing 2'}>Sing 2</MenuItem>
+            {movies.map((movie) => (
+              <MenuItem key={movie.id} value={movie.id}>
+                {movie.title}
+              </MenuItem>
+            ))}
           </StyledSelect>
         </FormControl>
         <StyledButton variant="outlined">Usuń film</StyledButton>
@@ -65,7 +98,7 @@ const AdminPanel = () => {
       <BlockUserWrapper>
         <Typography marginTop={3}>Zablokuj użytkownika</Typography>
         <Form
-          submitFn={handleSubmitUserBlock(blockUser())}
+          submitFn={handleSubmitUserBlock(blockUser)}
           buttonText="Szukaj"
           buttonType="outlined"
         >
@@ -100,9 +133,11 @@ const AdminPanel = () => {
             inputProps={{ MenuProps: { disableScrollLock: true } }}
             onChange={(e) => setSelectUnban(e.target.value)}
           >
-            <MenuItem value={'laura@example.com'}>laura@example.com.</MenuItem>
-            <MenuItem value={'john@example.com'}>john@example.com.</MenuItem>
-            <MenuItem value={'adam@example.com'}>adam@example.com.</MenuItem>
+            {bannedUsers.map((user) => (
+              <MenuItem key={user.id} value={user.id}>
+                {user.name} {user.surname} ({user.email})
+              </MenuItem>
+            ))}
           </StyledSelect>
         </FormControl>
         <StyledButton sx={{ marginTop: 2 }} variant="outlined">
@@ -112,7 +147,7 @@ const AdminPanel = () => {
       <AddModeratorWrapper>
         <Typography marginTop={3}>Dodaj moderatora</Typography>
         <Form
-          submitFn={handleSubmitAddModerator(addModerator())}
+          submitFn={handleSubmitAddModerator(addModerator)}
           buttonText="Dodaj"
           buttonType="outlined"
         >
@@ -139,16 +174,18 @@ const AdminPanel = () => {
           <InputLabel id="moderators">Wybierz</InputLabel>
 
           <StyledSelect
-            labelId="modeerator"
+            labelId="moderator"
             id="modeerator"
             value={deleteMod}
             label="Wybierz"
             inputProps={{ MenuProps: { disableScrollLock: true } }}
             onChange={(e) => setDeleteMod(e.target.value)}
           >
-            <MenuItem value={'laura@example.com'}>laura@example.com.</MenuItem>
-            <MenuItem value={'john@example.com'}>john@example.com.</MenuItem>
-            <MenuItem value={'adam@example.com'}>adam@example.com.</MenuItem>
+            {moderators.map((user) => (
+              <MenuItem key={user.id} value={user.id}>
+                {user.name} {user.surname} ({user.email})
+              </MenuItem>
+            ))}
           </StyledSelect>
         </FormControl>
         <StyledButton sx={{ marginTop: 2 }} variant="outlined">

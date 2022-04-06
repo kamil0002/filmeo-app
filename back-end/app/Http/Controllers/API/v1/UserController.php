@@ -33,8 +33,18 @@ class UserController extends Controller
      *
      * @return json wszystkich użytkowników
      */
-    public function getAllUsers() {
-        return User::all();
+    public function getAllUsers(Request $request) {
+        if($request->moderators) {
+            $users = User::where('role', '=', 'moderator')->get();
+        }
+        else $users = User::all();
+
+        return response([
+            'status' => 'success',
+            'data' => [
+                $users
+            ]
+        ]);
     }
     
     /**

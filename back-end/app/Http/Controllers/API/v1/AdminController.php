@@ -17,7 +17,7 @@ class AdminController extends Controller
      * @return json wiadomość o akcji
      */
     public function addModerator(Request $request) {
-        $user = User::where('email', '=', $request['email'])->get()[0];
+        $user = User::where('id', '=', $request['id'])->get()[0];
         
         if(!$user) {
             return ErrorController::handleError('Nie znaleziono podanego użytkownika', 404, 'error');
@@ -59,7 +59,7 @@ class AdminController extends Controller
      */
     public function banUser(Request $request) {
 
-        $user = User::where('email', '=', $request['email'])->get()[0];
+        $user = User::find($request['userId']);
 
         $user->update([
             'banned' => true
