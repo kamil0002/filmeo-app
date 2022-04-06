@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
 import Typography from 'components/Typography/Typography';
 import { Button } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
@@ -107,17 +108,21 @@ const Home = () => {
                   Wszystkie Filmy
                 </StyledButton>
               </Slide>
-              <Slide right>
-                <StyledButton
-                  sx={{ fontFamily: 'inherit' }}
-                  variant="contained"
-                  endIcon={<LoginIcon />}
-                  LinkComponent={Link}
-                  to="/rejestracja"
-                >
-                  Dołącz Do Nas!
-                </StyledButton>
-              </Slide>
+              {Cookies.get('token') ? (
+                ''
+              ) : (
+                <Slide right>
+                  <StyledButton
+                    sx={{ fontFamily: 'inherit' }}
+                    variant="contained"
+                    endIcon={<LoginIcon />}
+                    LinkComponent={Link}
+                    to="/rejestracja"
+                  >
+                    Dołącz Do Nas!
+                  </StyledButton>
+                </Slide>
+              )}
             </Actions>
           </Header>
           <Fade left>
