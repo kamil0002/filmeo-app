@@ -266,7 +266,6 @@ class MovieController extends Controller
     public function deleteMovie(int $movieId) {
 
         $movie = Movie::destroy($movieId);
-
         if(!$movie) {
             return ErrorController::handleError('Film o podanym ID nie istnieje', 404);
         }

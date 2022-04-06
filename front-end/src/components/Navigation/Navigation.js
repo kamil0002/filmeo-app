@@ -234,7 +234,7 @@ const Wrapper = styled.div`
   position: fixed;
   right: 0;
   left: 0;
-  z-index: 5000;
+  z-index: 200;
   height: ${({ theme }) => theme.navHeight};
 
   @media ${responsive.laptop} {

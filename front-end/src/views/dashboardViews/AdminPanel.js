@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import InputLabel from '@mui/material/InputLabel';
@@ -22,6 +21,7 @@ const AdminPanel = () => {
   const [processingUserUnban, setProcessingUserUnban] = useState(false);
   const [processingAddModerator, setProcessingAddModerator] = useState(false);
   const [processingDeleteMod, setProcessingDeleteMod] = useState(false);
+  const [processingDeleteMovie, setProcessingDeleteMovie] = useState();
   const [successMessage, setSuccessMessage] = useState();
   const [errMessage, setErrMessage] = useState();
   const [selectedMovie, setSelectedMovie] = useState('');
@@ -66,6 +66,25 @@ const AdminPanel = () => {
     }
   }, []);
 
+  const deleteMovie = async () => {
+    try {
+      setProcessingDeleteMovie(true);
+      const res = await axios.delete(`/api/v1/admin/movies/${selectedMovie}`);
+      if (res.data !== '') {
+        throw new Error(res.data.message);
+      }
+      setSuccessMessage('Film został usunięty');
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(
+        setSuccessMessage,
+        setErrMessage,
+        setProcessingDeleteMovie
+      );
+    }
+  };
+
   const blockUser = async (data) => {
     try {
       setProcessingUserBan(true);
@@ -86,7 +105,6 @@ const AdminPanel = () => {
 
   const unbanUser = async () => {
     try {
-      console.log(bannedUsers);
       setProcessingUserUnban(true);
       await axios.put('/api/v1/admin/unban', {
         userId: selectUnban,
@@ -110,9 +128,7 @@ const AdminPanel = () => {
   const addModerator = async (data) => {
     try {
       setProcessingAddModerator(true);
-      console.log(data);
       const res = await axios.put('/api/v1/admin/add-moderator', data);
-      console.log(res);
       if (res.data.status !== 'success') {
         throw new Error(res.data.message);
       }
@@ -156,35 +172,42 @@ const AdminPanel = () => {
     <>
       {errMessage && <Alert>{errMessage}</Alert>}
       {successMessage && <Alert type="success">{successMessage}</Alert>}
-      <Typography fontWeight={700}>Panel Admina</Typography>
-      <StyledForm>
-        <Typography marginTop={3}>Usuwanie Filmów</Typography>
-        <FormControl sx={{ marginY: 2 }}>
-          <InputLabel id="movie">Film</InputLabel>
-          <StyledSelect
-            labelId="movie"
-            id="movie-select"
-            value={selectedMovie}
-            label="Film"
-            inputProps={{ MenuProps: { disableScrollLock: true } }}
-            onChange={(e) => setSelectedMovie(e.target.value)}
+      <DeleteMovieWrapper>
+        <Typography fontWeight={700}>Panel Admina</Typography>
+        <StyledForm>
+          <Typography marginTop={3}>Usuwanie Filmów</Typography>
+          <FormControl sx={{ marginY: 2 }}>
+            <InputLabel id="movie">Film</InputLabel>
+            <StyledSelect
+              labelId="movie"
+              id="movie-select"
+              value={selectedMovie}
+              label="Film"
+              inputProps={{
+                MenuProps: { disableScrollLock: true },
+              }}
+              onChange={(e) => setSelectedMovie(e.target.value)}
+            >
+              {movies.map((movie) => (
+                <MenuItem key={movie.id} value={movie.id}>
+                  {movie.title}
+                </MenuItem>
+              ))}
+            </StyledSelect>
+          </FormControl>
+          <StyledButton onClick={deleteMovie} variant="outlined">
+            Usuń film
+            {processingDeleteMovie && <ProcessingSpinner spinnerDark={true} />}
+          </StyledButton>
+          <Typography
+            color="#C02020"
+            sx={{ marginTop: 2, fontWeight: 600, fontSize: 11 }}
           >
-            {movies.map((movie) => (
-              <MenuItem key={movie.id} value={movie.id}>
-                {movie.title}
-              </MenuItem>
-            ))}
-          </StyledSelect>
-        </FormControl>
-        <StyledButton variant="outlined">Usuń film</StyledButton>
-        <Typography
-          color="#C02020"
-          sx={{ marginTop: 2, fontWeight: 600, fontSize: 11 }}
-        >
-          Uwaga! Film zostanie usunięty łącznie z wszystkimi wypożyczeniami oraz
-          recenzjami!
-        </Typography>
-      </StyledForm>
+            Uwaga! Film zostanie usunięty łącznie z wszystkimi wypożyczeniami
+            oraz recenzjami!
+          </Typography>
+        </StyledForm>
+      </DeleteMovieWrapper>
       <BlockUserWrapper>
         <Typography marginTop={3}>Zablokuj użytkownika</Typography>
         <Form
@@ -336,6 +359,8 @@ const BlockUserWrapper = styled.div`
   margin-left: 1rem;
   margin-top: 5rem;
 `;
+
+const DeleteMovieWrapper = styled.div``;
 
 const AddModeratorWrapper = styled(BlockUserWrapper)``;
 

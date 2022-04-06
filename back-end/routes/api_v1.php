@@ -80,7 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
   
   //* Only Admin func
   Route::middleware('restrictToAdmin')->group(function() {
-    Route::delete('/movies/admin/{movieId}', [MovieController::class, 'deleteMovie']);
+    Route::delete('/admin/movies/{movieId}', [MovieController::class, 'deleteMovie']);
     Route::put('/admin/add-moderator', [AdminController::class, 'addModerator']);
     Route::put('/admin/delete-moderator', [AdminController::class, 'deleteModerator']);
     Route::put('/admin/ban', [AdminController::class, 'banUser']);
