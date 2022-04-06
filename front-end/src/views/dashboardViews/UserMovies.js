@@ -31,9 +31,9 @@ const UserMovies = () => {
         data: { data: movies },
       } = await axios.get('/api/v1/rentals/myRentals');
       setSpinnerVisible(false);
+      if (!movies) return;
       setRentedMovies(movies[0]);
       setFilteredMovies(movies[0]);
-      console.log(movies[0]);
     } catch (err) {
       console.error(err.message);
     }

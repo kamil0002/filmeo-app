@@ -18,7 +18,7 @@ const UserReviews = () => {
         data: { data: reviews },
       } = await axios.get('/api/v1/myReviews');
       setSpinnerVisible(false);
-      console.log(reviews[0][0]);
+      if (!reviews) return;
       setMyReviews(reviews[0]);
     } catch (err) {
       console.error(err.message);

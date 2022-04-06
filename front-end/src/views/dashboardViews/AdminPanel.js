@@ -14,17 +14,33 @@ import { useForm } from 'react-hook-form';
 import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
+import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 
 const AdminPanel = () => {
+  const [selectMod, setSelectMod] = useState('');
   const [processingUserBan, setProcessingUserBan] = useState(false);
+  const [processingUserUnban, setProcessingUserUnban] = useState(false);
+  const [processingAddModerator, setProcessingAddModerator] = useState(false);
+  const [processingDeleteMod, setProcessingDeleteMod] = useState(false);
   const [successMessage, setSuccessMessage] = useState();
   const [errMessage, setErrMessage] = useState();
   const [selectedMovie, setSelectedMovie] = useState('');
   const [selectUnban, setSelectUnban] = useState('');
-  const [deleteMod, setDeleteMod] = useState('');
   const [bannedUsers, setBannedUsers] = useState([]);
   const [movies, setMovies] = useState([]);
   const [moderators, setModerators] = useState([]);
+
+  const {
+    register: registerUserBlock,
+    handleSubmit: handleSubmitUserBlock,
+    formState: { errors: errors1 },
+  } = useForm({ shouldFocusError: false });
+
+  const {
+    register: registerAddModerator,
+    handleSubmit: handleSubmitAddModerator,
+    formState: { errors: errors2 },
+  } = useForm({ shouldFocusError: false });
 
   useEffect(async () => {
     try {
@@ -42,26 +58,13 @@ const AdminPanel = () => {
 
       const movies = await axios.get('/api/v1/movies');
       setMovies(movies.data.data[0]);
-
       const moderators = await axios.get('/api/v1/users?moderators=true');
+
       setModerators(moderators.data.data[0]);
-      console.log(moderators.data.data[0]);
     } catch (err) {
       console.error(err.message);
     }
   }, []);
-
-  const {
-    register: registerUserBlock,
-    handleSubmit: handleSubmitUserBlock,
-    formState: { errors: errors1 },
-  } = useForm({ shouldFocusError: false });
-
-  const {
-    register: registerAddModerator,
-    handleSubmit: handleSubmitAddModerator,
-    formState: { errors: errors2 },
-  } = useForm({ shouldFocusError: false });
 
   const blockUser = async (data) => {
     try {
@@ -81,7 +84,73 @@ const AdminPanel = () => {
     }
   };
 
-  const addModerator = (data) => console.log(data);
+  const unbanUser = async () => {
+    try {
+      console.log(bannedUsers);
+      setProcessingUserUnban(true);
+      await axios.put('/api/v1/admin/unban', {
+        userId: selectUnban,
+      });
+      setSuccessMessage(`Użytkownik o id ${selectUnban} został odbanowany`);
+      setBannedUsers((prevState) =>
+        prevState.filter((user) => user.id !== selectUnban)
+      );
+      setSelectUnban('');
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(
+        setSuccessMessage,
+        setErrMessage,
+        setProcessingUserUnban
+      );
+    }
+  };
+
+  const addModerator = async (data) => {
+    try {
+      setProcessingAddModerator(true);
+      console.log(data);
+      const res = await axios.put('/api/v1/admin/add-moderator', data);
+      console.log(res);
+      if (res.data.status !== 'success') {
+        throw new Error(res.data.message);
+      }
+      setSuccessMessage(res.data.message);
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(
+        setSuccessMessage,
+        setErrMessage,
+        setProcessingAddModerator
+      );
+    }
+  };
+
+  const deleteMod = async () => {
+    try {
+      setProcessingDeleteMod(true);
+      await axios.put('/api/v1/admin/delete-moderator', {
+        userId: selectMod,
+      });
+      setSuccessMessage(
+        `Użytkownik o id ${selectMod} stracił rangę moderatora!`
+      );
+      setModerators((prevState) =>
+        prevState.filter((user) => user.id !== selectMod)
+      );
+      setSelectMod('');
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(
+        setSuccessMessage,
+        setErrMessage,
+        setProcessingDeleteMod
+      );
+    }
+  };
 
   return (
     <>
@@ -157,13 +226,14 @@ const AdminPanel = () => {
           >
             {bannedUsers.map((user) => (
               <MenuItem key={user.id} value={user.id}>
-                {user.name} {user.surname} ({user.email})
+                {user.name} {user.surname} ({user.email}, {user.id})
               </MenuItem>
             ))}
           </StyledSelect>
         </FormControl>
-        <StyledButton sx={{ marginTop: 2 }} variant="outlined">
+        <StyledButton onClick={unbanUser} variant="outlined">
           Wykonaj
+          {processingUserUnban && <ProcessingSpinner spinnerDark={true} />}
         </StyledButton>
       </UnblockUserWrapper>
       <AddModeratorWrapper>
@@ -172,6 +242,8 @@ const AdminPanel = () => {
           submitFn={handleSubmitAddModerator(addModerator)}
           buttonText="Dodaj"
           buttonType="outlined"
+          processing={processingAddModerator}
+          spinnerDark={true}
         >
           <FormInput
             validator={{
@@ -198,20 +270,25 @@ const AdminPanel = () => {
           <StyledSelect
             labelId="moderator"
             id="modeerator"
-            value={deleteMod}
+            value={selectMod}
             label="Wybierz"
             inputProps={{ MenuProps: { disableScrollLock: true } }}
-            onChange={(e) => setDeleteMod(e.target.value)}
+            onChange={(e) => setSelectMod(e.target.value)}
           >
             {moderators.map((user) => (
               <MenuItem key={user.id} value={user.id}>
-                {user.name} {user.surname} ({user.email})
+                {user.name} {user.surname} ({user.email}, {user.id})
               </MenuItem>
             ))}
           </StyledSelect>
         </FormControl>
-        <StyledButton sx={{ marginTop: 2 }} variant="outlined">
+        <StyledButton
+          onClick={deleteMod}
+          sx={{ marginTop: 2 }}
+          variant="outlined"
+        >
           Wykonaj
+          {processingDeleteMod && <ProcessingSpinner spinnerDark={true} />}
         </StyledButton>
       </DeleteModeratorWrapper>
     </>
@@ -234,7 +311,9 @@ const StyledButton = styled(Button)`
   && {
     align-self: baseline;
     font-family: 'Poppins';
-    display: block;
+    display: flex;
+    align-items: center;
+    margin-top: 1.4rem;
     font-size: ${({ theme }) => theme.fontSize.xs};
 
     @media ${responsive.mobile} {
