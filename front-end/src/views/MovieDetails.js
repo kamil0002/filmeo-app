@@ -14,7 +14,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import Header from 'components/MovieDetailsHeader/MovieDetailsHeader';
 import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
 import Alert from 'components/Alert/Alert';
-import asyncErrorMsg from 'utils/asyncErrorMsg';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const MovieDetails = () => {
   const [redirectToReviews, setRedirectToReviews] = useState(false);
@@ -46,7 +46,9 @@ const MovieDetails = () => {
         await axios.get(`api/v1/rentMovie/${movieId}/${userId}`);
       }
     } catch (err) {
-      asyncErrorMsg(null, setErrMessage, err.message);
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(null, setErrMessage);
     }
   }, []);
 
@@ -70,11 +72,9 @@ const MovieDetails = () => {
         sessionId: session.data.id,
       });
     } catch (err) {
-      asyncErrorMsg(
-        null,
-        setErrMessage,
-        'Transakcja zakończyła się niepowodzeniem!'
-      );
+      setErrMessage('Transakcja zakończyła się niepowodzeniem!');
+    } finally {
+      clearAsyncMessages(null, setErrMessage);
     }
   };
 

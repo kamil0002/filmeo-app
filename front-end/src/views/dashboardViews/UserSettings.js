@@ -9,7 +9,7 @@ import responsive from 'theme/responsive';
 import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
 import { updateUser } from 'slices/authSlice';
-import asyncErrorMsg from 'utils/asyncErrorMsg';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const UserSettings = () => {
   const [errMessage, setErrMessage] = useState(null);
@@ -50,17 +50,20 @@ const UserSettings = () => {
     try {
       setProcessingUserData(true);
       await axios.put('/api/v1/updateMyProfile', data);
+
       setSuccessMessage('Twoje dane zostały zaaktualizowane!');
       dispatch(updateUser(data));
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      asyncErrorMsg(
-        setSuccessMessage,
-        setErrMessage,
-        'Na podany e-mail jest już zarejestrowany konto źle podałeś wartości w polach'
+      setErrMessage(
+        'Na podany e-mail jest już zarejestrowane konto lub źle podałeś wartości w polach'
       );
     } finally {
-      setProcessingUserData(false);
+      clearAsyncMessages(
+        setSuccessMessage,
+        setErrMessage,
+        setProcessingUserData
+      );
     }
   };
 
@@ -76,9 +79,13 @@ const UserSettings = () => {
       setSuccessMessage('Twoje hasło zostało zmienione!');
       reset();
     } catch (err) {
-      asyncErrorMsg(setSuccessMessage, setErrMessage, err.message);
+      setErrMessage(err.message);
     } finally {
-      setProcessingPasswordChange(false);
+      clearAsyncMessages(
+        setSuccessMessage,
+        setErrMessage,
+        setProcessingPasswordChange
+      );
     }
   };
 

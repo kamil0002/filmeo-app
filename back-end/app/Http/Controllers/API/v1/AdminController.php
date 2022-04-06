@@ -59,7 +59,7 @@ class AdminController extends Controller
      */
     public function banUser(Request $request) {
 
-        $user = User::find($request['userId']);
+        $user = User::where('email', '=', $request['email'])->get()[0];
 
         $user->update([
             'banned' => true

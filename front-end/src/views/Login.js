@@ -13,8 +13,7 @@ import responsive from 'theme/responsive';
 import axios from 'utils/axios';
 import { setUser } from 'slices/authSlice';
 import Alert from 'components/Alert/Alert';
-import asyncAlertMsg from 'utils/asyncErrorMsg';
-import asyncErrorMsg from 'utils/asyncErrorMsg';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const Login = () => {
   const [errMessage, setErrMessage] = useState(null);
@@ -48,9 +47,9 @@ const Login = () => {
         location.reload();
       }, 1500);
     } catch (err) {
-      asyncErrorMsg(setSuccessMessage, setErrMessage, err.message);
+      setErrMessage(err.message);
     } finally {
-      setProcessing(false);
+      clearAsyncMessages(setSuccessMessage, setErrMessage, setProcessing);
     }
   };
 

@@ -16,7 +16,7 @@ import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
 import Lottie from 'react-lottie';
 import lottieAnimation from 'lotties/loading-lottie.json';
-import asyncErrorMsg from 'utils/asyncErrorMsg';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const Home = () => {
   const [lastAddedMovies, setLastAddedMovies] = useState([]);
@@ -48,7 +48,9 @@ const Home = () => {
       setTopRatedMovies(topRated.data.data[0]);
       setfrequentlyRentedMovies(frequentlyRentedMovies.data.data[0].data);
     } catch (err) {
-      asyncErrorMsg(null, setErrMessage, err.message);
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(null, setErrMessage);
     }
   }, []);
 

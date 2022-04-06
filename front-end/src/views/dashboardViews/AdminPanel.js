@@ -12,8 +12,13 @@ import Form from 'components/Form/Form';
 import FormInput from 'components/Form/FormInput';
 import { useForm } from 'react-hook-form';
 import axios from 'utils/axios';
+import Alert from 'components/Alert/Alert';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const AdminPanel = () => {
+  const [processingUserBan, setProcessingUserBan] = useState(false);
+  const [successMessage, setSuccessMessage] = useState();
+  const [errMessage, setErrMessage] = useState();
   const [selectedMovie, setSelectedMovie] = useState('');
   const [selectUnban, setSelectUnban] = useState('');
   const [deleteMod, setDeleteMod] = useState('');
@@ -59,16 +64,29 @@ const AdminPanel = () => {
   } = useForm({ shouldFocusError: false });
 
   const blockUser = async (data) => {
-    // try {
-    // } catch (err) {
-    //   setErrMessage(err.message);
-    // }
+    try {
+      setProcessingUserBan(true);
+      await axios.put('/api/v1/admin/ban', data);
+      setSuccessMessage(
+        `Użytkownik o adresie email ${data.email} został zbanowany`
+      );
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(
+        setSuccessMessage,
+        setErrMessage,
+        setProcessingUserBan
+      );
+    }
   };
 
   const addModerator = (data) => console.log(data);
 
   return (
     <>
+      {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
       <Typography fontWeight={700}>Panel Admina</Typography>
       <StyledForm>
         <Typography marginTop={3}>Usuwanie Filmów</Typography>
@@ -102,8 +120,10 @@ const AdminPanel = () => {
         <Typography marginTop={3}>Zablokuj użytkownika</Typography>
         <Form
           submitFn={handleSubmitUserBlock(blockUser)}
-          buttonText="Szukaj"
+          buttonText="Wykonaj"
           buttonType="outlined"
+          spinnerDark={true}
+          processing={processingUserBan}
         >
           <FormInput
             validator={{

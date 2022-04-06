@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMovies } from 'slices/moviesSlice';
@@ -8,7 +7,7 @@ import GenresNavigation from 'components/GenresNavigation/GenresNavigation';
 import MovieCardGrid from 'components/MovieCard/MovieCardGrid';
 import Alert from 'components/Alert/Alert';
 import axios from 'utils/axios';
-import asyncErrorMsg from 'utils/asyncErrorMsg';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const Movies = () => {
   const genre = useSelector((state) => state.browsingGenre.genreName);
@@ -29,7 +28,9 @@ const Movies = () => {
       setSpinnerVisible(false);
       dispatch(setMovies(data.data.data[0]));
     } catch (err) {
-      asyncErrorMsg(null, setErrMessage, err.message);
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(null, setErrMessage);
     }
   }, [genre]);
 
