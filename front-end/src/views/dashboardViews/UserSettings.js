@@ -42,6 +42,7 @@ const UserSettings = () => {
     register: registerPassword,
     handleSubmit: handleSubmitPassword,
     formState: { errors: errors2 },
+    reset,
   } = useForm({ shouldFocusError: false });
 
   const changeUserData = async (data) => {
@@ -74,6 +75,7 @@ const UserSettings = () => {
         throw new Error(res.data.message);
       }
       setSuccessMessage('Twoje hasło zostało zmienione!');
+      reset();
     } catch (err) {
       setErrMessage(err.message);
       setTimeout(() => {

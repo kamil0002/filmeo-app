@@ -117,7 +117,7 @@ class AuthController extends Controller
             return ErrorController::handleError('Niepoprawny e-mail lub hasło',401);
         }
         if($user?->banned) {
-            return ErrorController::handleError('Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyna skontaktuj się z'.env('MAIL_FROM_ADDRESS').'.', 401);
+            return ErrorController::handleError('Przykro nam, lecz zostałeś zbanowany. W celu wyjaśnienia przyczyny skontaktuj się z '.env('MAIL_FROM_ADDRESS').'.', 401);
         }
 
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\v1\ErrorController;
 use DateTime;
+use DateTimeZone;
 
 class ChatController extends Controller
 {
@@ -47,7 +48,7 @@ class ChatController extends Controller
             'message' => $request['message']
         ]);
 
-        event(new MessageEvent($userName,$userId,$userAvatar, new DateTime(), $request['message']));
+        event(new MessageEvent($userName,$userId,$userAvatar, date_timezone_set(new DateTime(), new DateTimeZone('Europe/Warsaw')), $request['message']));
 
         return [];
     }
