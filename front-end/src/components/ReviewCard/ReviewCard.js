@@ -125,7 +125,7 @@ const DeleteButton = styled(Button)`
   && {
     font-family: inherit;
     position: absolute;
-    right: 1.5%;
+    left: 1.5%;
     top: 0;
     font-weight: ${({ theme }) => theme.fontBold};
   }

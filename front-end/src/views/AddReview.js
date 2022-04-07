@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import { FormControl, Paper, Rating } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import Form from 'components/Form/Form';
@@ -17,11 +15,11 @@ import { useParams } from 'react-router-dom';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const AddReview = () => {
+  const [redirect, setRedirect] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [processing, setProcessing] = useState(false);
-  const user = useSelector((state) => state.auth.user);
   const params = useParams();
 
   const {
@@ -46,7 +44,10 @@ const AddReview = () => {
       setSuccessMessage('Opinia została dodana!');
       reset();
       setRatingValue(0);
-      setTimeout(() => setSuccessMessage(null), 3000);
+      setTimeout(() => {
+        setRedirect(true);
+        setSuccessMessage(null);
+      }, 3000);
       if (review.data.status !== 'success') {
         throw new Error(review.data.message);
       }
@@ -56,6 +57,10 @@ const AddReview = () => {
       clearAsyncMessages(setSuccessMessage, setErrMessage, setProcessing);
     }
   };
+
+  if (redirect) {
+    return <Navigate to={`/film/${params.slug}`} />;
+  }
 
   return (
     <Wrapper>
@@ -179,11 +184,5 @@ const StyledPaper = styled(Paper)`
 
   @media ${responsive.desktop} {
     width: 30vw;
-  }
-`;
-
-const StyledTextField = styled(TextField)`
-  @media ${responsive.tablet} {
-    width: 350px;
   }
 `;
