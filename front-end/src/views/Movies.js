@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { setMovies } from 'slices/moviesSlice';
 import styled from 'styled-components';
 import Spinner from 'components/Spinner/Spinner';
@@ -16,6 +17,23 @@ const Movies = () => {
 
   const [errMessage, setErrMessage] = useState(null);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
+
+  const { search } = useLocation();
+
+  useEffect(async () => {
+    //* Transaction
+    if (search.length !== 0) {
+      const searchParams = new URLSearchParams(search);
+
+      const movieId = +searchParams.get('movie');
+      console.log(movieId);
+      await axios.post(`api/v1/rentMovie`, {
+        data: {
+          movieId,
+        },
+      });
+    }
+  }, []);
 
   useEffect(async () => {
     try {

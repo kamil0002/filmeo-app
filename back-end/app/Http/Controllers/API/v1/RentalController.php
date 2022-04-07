@@ -19,16 +19,17 @@ class RentalController extends Controller
      */
     public function getCheckoutSession(int $movieId) {
 
-        $movie = Movie::find($movieId);;
+        $movie = Movie::find($movieId);
+        error_log($movie);
 
         $stripe = new \Stripe\StripeClient(env('STRIPE_API_KEY'));
 
         $session = $stripe->checkout->sessions->create([
         'payment_method_types' => ['card'],
         'mode' => 'payment',
-        'success_url' => 'http://localhost:3000/film/Uncharted-payment_success?user='.$movie->id.'&movie='.$movie->id,
+        'success_url' => 'http://localhost:3000/filmy?movie='.$movie->id,
         'cancel_url' => 'http://localhost:3000/filmy/'.$movie->slug.'payment_failed',
-        'customer_email' => 'kamil@example.com',
+        'customer_email' => auth()->user()->email,
         'line_items' => [[
             # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
             'price_data' => [
@@ -36,7 +37,7 @@ class RentalController extends Controller
                 'unit_amount' => $movie->cost * 100,
                 'product_data' => [
                     'name' => $movie->title,
-                    'images' => ['https://www.thewrap.com/wp-content/uploads/2022/01/The-Batman-Poster-Bat-and-Cat-1024x1024.jpg'],
+                    'images' => ['https://thumbs.dreamstime.com/b/retro-cinema-video-camera-text-place-movie-poster-placard-banner-film-vector-illustration-flat-style-98856046.jpg'],
                     'description' => $movie->short_description,
                 ],
             ],
@@ -54,10 +55,11 @@ class RentalController extends Controller
      * @param  mixed $movieId id filmu
      * @return json wiadomość z komunikatem
      */
-    public function rentMovie(int $movieId) {
-        
-        $movie = Movie::find($movieId);
+    public function rentMovie(Request $request) {
+        error_log('CALLED!');
+        $movie = Movie::find($request['movieId'])->get()[0];
 
+        error_log($movie);
         //TODO Later get auth user
         $userId = auth()->user()->id;
 
@@ -66,7 +68,7 @@ class RentalController extends Controller
 
         foreach($rentals as $rental) {
             foreach($rental->movies as $rentedMovie) {
-                if($rentedMovie->id === $movieId) {
+                if($rentedMovie->id === $movie->id) {
                     return ErrorController::handleError('Ten film jest już przez Ciebie wypożyczony!', 400, 'failed');
 
                 }

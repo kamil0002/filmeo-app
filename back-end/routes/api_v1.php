@@ -104,7 +104,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //* Payments with Stripe and Rentals
     Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
-    Route::get('/rentMovie/movie/{movieId}', [RentalController::class, 'rentMovie']);
+    Route::post('/rentMovie', [RentalController::class, 'rentMovie']);
     Route::get('/rentals/myRentals', [RentalController::class, 'getUserMovies']);
 
     //* Review

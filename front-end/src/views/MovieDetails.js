@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Grid, Paper } from '@mui/material';
 import { CircularProgress } from '@mui/material';
@@ -24,7 +24,6 @@ const MovieDetails = () => {
   const [spinnerVisible, setSpinnerVisible] = useState(false);
 
   const params = useParams();
-  const { search } = useLocation();
 
   useEffect(async () => {
     try {
@@ -36,15 +35,6 @@ const MovieDetails = () => {
 
       setMovie(movie.data.data[0][0]);
       setSpinnerVisible(false);
-
-      //* Transaction
-      if (search.length !== 0) {
-        const searchParams = new URLSearchParams(search);
-
-        const userId = searchParams.get('user');
-        const movieId = searchParams.get('movie');
-        await axios.get(`api/v1/rentMovie/${movieId}/${userId}`);
-      }
     } catch (err) {
       setErrMessage(err.message);
     } finally {
@@ -66,7 +56,7 @@ const MovieDetails = () => {
       const stripe = await loadStripe(
         'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
       );
-      const session = await axios.get(`api/v1//getSession/${movie.id}`);
+      const session = await axios.get(`api/v1/getSession/${movie.id}`);
 
       await stripe.redirectToCheckout({
         sessionId: session.data.id,
