@@ -65,6 +65,7 @@ const UserMovies = () => {
           )}
           {filteredMovies.map(
             ({
+              id,
               title,
               slug,
               poster,
@@ -87,6 +88,7 @@ const UserMovies = () => {
                   expireDate={expire_date}
                   poster={poster}
                   rentalId={rental_id}
+                  movieId={id}
                   rating={rating_average}
                   active={new Date(expire_date) > Date.now() ? true : false}
                 />

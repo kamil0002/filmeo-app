@@ -8,6 +8,7 @@ use App\Models\Rental;
 
 use App\Http\Controllers\API\v1\ErrorController;
 use App\Models\Review;
+use Illuminate\Http\Request;
 
 class RentalController extends Controller
 {    
@@ -17,17 +18,19 @@ class RentalController extends Controller
      * @param  mixed $movieId id filmu
      * @return object sesja transakcji
      */
-    public function getCheckoutSession(int $movieId) {
+    public function getCheckoutSession(int $movieId, int $rentalId) {
 
         $movie = Movie::find($movieId);
         error_log($movie);
+
+        $successURL = $rentalId ? 'http://localhost:3000/profil?movie='.$movie->id.'&rental='.$rentalId : 'http://localhost:3000/filmy?movie='.$movie->id;
 
         $stripe = new \Stripe\StripeClient(env('STRIPE_API_KEY'));
 
         $session = $stripe->checkout->sessions->create([
         'payment_method_types' => ['card'],
         'mode' => 'payment',
-        'success_url' => 'http://localhost:3000/filmy?movie='.$movie->id,
+        'success_url' => $successURL,
         'cancel_url' => 'http://localhost:3000/filmy/'.$movie->slug.'payment_failed',
         'customer_email' => auth()->user()->email,
         'line_items' => [[
@@ -56,11 +59,9 @@ class RentalController extends Controller
      * @return json wiadomość z komunikatem
      */
     public function rentMovie(Request $request) {
-        error_log('CALLED!');
-        $movie = Movie::find($request['movieId'])->get()[0];
-
+        $movie = Movie::where('id','=',$request['movieId'])->get()[0];
         error_log($movie);
-        //TODO Later get auth user
+
         $userId = auth()->user()->id;
 
         //* Check if current movie is owned by a user
@@ -69,6 +70,7 @@ class RentalController extends Controller
         foreach($rentals as $rental) {
             foreach($rental->movies as $rentedMovie) {
                 if($rentedMovie->id === $movie->id) {
+                    error_log($rentedMovie->id.' -> '.$movie->id);
                     return ErrorController::handleError('Ten film jest już przez Ciebie wypożyczony!', 400, 'failed');
 
                 }
@@ -106,11 +108,14 @@ class RentalController extends Controller
      * @param  mixed $movieId id filmu
      * @return json wiadomość z komunikatem
      */
-    public function renewRental(int $rentalId, $movieId) {
+    public function renewRental(Request $request) {
+
+        $rentalId = $request['rentalId'];
+        $movieId = $request['movieId'];
 
         $userId = auth()->user()->id;
 
-        $rental = Rental::where('id', '=', $rentalId)->first();
+        $rental = Rental::where('id', '=', $rentalId)->get()[0];
 
         $movieCost = Movie::find($movieId)->cost;
         
@@ -146,7 +151,7 @@ class RentalController extends Controller
 
         return [
             'status' => 'success',
-            'message' => 'Status wypożyczenia został odnowiony. Miłego oglądania!'
+            'message' => 'Status wypożyczenia został odnowiony. Odśwież stronę aby zaaktualizować bibliotekę. Miłego oglądania!'
         ];
     }
 

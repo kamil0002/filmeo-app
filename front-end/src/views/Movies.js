@@ -14,7 +14,7 @@ const Movies = () => {
   const genre = useSelector((state) => state.browsingGenre.genreName);
   const movies = useSelector((state) => state.movies.all);
   const dispatch = useDispatch();
-
+  const [successMessage, setSuccessMessage] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
 
@@ -22,16 +22,24 @@ const Movies = () => {
 
   useEffect(async () => {
     //* Transaction
-    if (search.length !== 0) {
-      const searchParams = new URLSearchParams(search);
+    try {
+      if (search.length !== 0) {
+        const searchParams = new URLSearchParams(search);
 
-      const movieId = +searchParams.get('movie');
-      console.log(movieId);
-      await axios.post(`api/v1/rentMovie`, {
-        data: {
+        const movieId = +searchParams.get('movie');
+        console.log(movieId);
+        const res = await axios.post('api/v1/rentMovie', {
           movieId,
-        },
-      });
+        });
+        if (res.data.status !== 'success') {
+          throw new Error(res.data.message);
+        }
+        setSuccessMessage(res.data.message);
+      }
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(setSuccessMessage, setErrMessage, null);
     }
   }, []);
 
@@ -54,6 +62,8 @@ const Movies = () => {
 
   return (
     <Wrapper>
+      {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
       {errMessage && <Alert>{errMessage}</Alert>}
       <GenresNavigation />
       {spinnerVisible && <Spinner />}

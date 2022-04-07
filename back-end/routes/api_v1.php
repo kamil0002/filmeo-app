@@ -100,10 +100,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/rentals/{rentalId}/movies/{movieSlug}/video', [MovieController::class, 'getMovieVideo']);
 
     //* Rentals
-    Route::patch('/renewRental/rental/{rentalId}/movie/{movieId}', [RentalController::class, 'renewRental']);
+    Route::patch('/renewRental', [RentalController::class, 'renewRental']);
 
     //* Payments with Stripe and Rentals
-    Route::get('/getSession/{movieId}', [RentalController::class, 'getCheckoutSession']);
+    Route::get('/getSession/{movieId}/rental/{rentalId}', [RentalController::class, 'getCheckoutSession']);
+
+    //* Get Rewnew Movie Session
+    Route::get('/getSession/{movieId}/rental/{rentalId}', [RentalController::class, 'getCheckoutSession']);
+
     Route::post('/rentMovie', [RentalController::class, 'rentMovie']);
     Route::get('/rentals/myRentals', [RentalController::class, 'getUserMovies']);
 

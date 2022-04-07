@@ -15,8 +15,10 @@ import Header from 'components/MovieDetailsHeader/MovieDetailsHeader';
 import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
 import Alert from 'components/Alert/Alert';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
+import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 
 const MovieDetails = () => {
+  const [processing, setProcessing] = useState(false);
   const [redirectToReviews, setRedirectToReviews] = useState(false);
   const [redirectToOrder, setRedirectToOrder] = useState(false);
   const [movie, setMovie] = useState(null);
@@ -38,7 +40,7 @@ const MovieDetails = () => {
     } catch (err) {
       setErrMessage(err.message);
     } finally {
-      clearAsyncMessages(null, setErrMessage);
+      clearAsyncMessages(null, setErrMessage, setProcessing);
     }
   }, []);
 
@@ -46,17 +48,16 @@ const MovieDetails = () => {
     setRedirectToReviews(true);
   };
 
-  const handleRedirectToOrder = () => {
-    setRedirectToOrder(true);
-  };
-
   const rentMovie = async (e) => {
     try {
       e.preventDefault();
+      setProcessing(true);
       const stripe = await loadStripe(
         'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
       );
-      const session = await axios.get(`api/v1/getSession/${movie.id}`);
+      const session = await axios.get(
+        `api/v1/getSession/${movie.id}/rental/-1`
+      );
 
       await stripe.redirectToCheckout({
         sessionId: session.data.id,
@@ -64,7 +65,7 @@ const MovieDetails = () => {
     } catch (err) {
       setErrMessage('Transakcja zakończyła się niepowodzeniem!');
     } finally {
-      clearAsyncMessages(null, setErrMessage);
+      clearAsyncMessages(null, setErrMessage, setProcessing);
     }
   };
 
@@ -85,6 +86,7 @@ const MovieDetails = () => {
             poster={movie.poster}
             releaseYear={movie.release_date.split('-')[0]}
             cost={+movie.cost}
+            processing={processing}
           />
           <MovieData>
             <MovieInformationWrapper>
@@ -208,8 +210,9 @@ const MovieDetails = () => {
                 src={`http://127.0.0.1:8000/images/movies/${movie.poster}`}
                 alt="movie-poster"
               />
-              <StyledButton onClick={handleRedirectToOrder} variant="contained">
+              <StyledButton onClick={rentMovie} variant="contained">
                 Wypożycz
+                {processing && <ProcessingSpinner />}
               </StyledButton>
             </RentMovie>
           </RentMovieWrapper>

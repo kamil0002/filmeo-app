@@ -7,6 +7,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
+import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 
 const MovieDetailsHeader = ({
   rentMovieFn,
@@ -15,6 +16,7 @@ const MovieDetailsHeader = ({
   releaseYear,
   cost,
   poster,
+  processing,
 }) => {
   return (
     <Wrapper>
@@ -43,6 +45,7 @@ const MovieDetailsHeader = ({
         <HeaderAction>
           <HeaderButton onClick={rentMovieFn} variant="contained">
             Zamów teraz!
+            {processing ? <ProcessingSpinner /> : ''}
           </HeaderButton>
         </HeaderAction>
         <HeaderImage src={`http://127.0.0.1:8000/images/movies/${poster}`} />
@@ -211,4 +214,5 @@ MovieDetailsHeader.propTypes = {
   cost: PropTypes.number.isRequired,
   poster: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
+  processing: PropTypes.bool,
 };

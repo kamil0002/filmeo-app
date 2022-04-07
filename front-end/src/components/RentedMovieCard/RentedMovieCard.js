@@ -1,14 +1,16 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button, Paper, Rating } from '@mui/material';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
-import responsive from 'theme/responsive';
+import { loadStripe } from '@stripe/stripe-js';
+import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
+import axios from 'utils/axios';
 
 const RentedMovieCard = ({
   title,
+  movieId,
   expireDate,
   poster,
   rating,
@@ -16,7 +18,26 @@ const RentedMovieCard = ({
   active,
   rentalId,
 }) => {
-  const [redirectToMovie, setRedirectToMovie] = useState(false);
+  const [processing, setProcessing] = useState(false);
+
+  const renewRental = async (e, rentalId, movieId) => {
+    try {
+      alert(rentalId, movieId);
+      setProcessing(true);
+      const stripe = await loadStripe(
+        'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
+      );
+      const session = await axios.get(
+        `api/v1/getSession/${movieId}/rental/${rentalId}`
+      );
+
+      await stripe.redirectToCheckout({
+        sessionId: session.data.id,
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
   return (
     <StyledPaper elevation={4}>
@@ -59,15 +80,19 @@ const RentedMovieCard = ({
         <StyledButton
           variant="outlined"
           size={'small'}
-          onClick={() => setRedirectToMovie(true)}
           LinkComponent={Link}
           to={`/film/${rentalId}/${slug}/ogladaj`}
         >
           Oglądaj
         </StyledButton>
       ) : (
-        <StyledButton variant="outlined" size={'small'}>
+        <StyledButton
+          onClick={(e) => renewRental(e, rentalId, movieId)}
+          variant="outlined"
+          size={'small'}
+        >
           Odnów
+          {processing && <ProcessingSpinner spinnerDark={true} />}
         </StyledButton>
       )}
     </StyledPaper>
@@ -140,6 +165,8 @@ const StyledButton = styled(Button)`
     text-transform: capitalize;
     display: block;
     z-index: 10;
+    display: flex;
+    align-items: center;
   }
 `;
 
@@ -151,4 +178,5 @@ RentedMovieCard.propTypes = {
   rating: PropTypes.number.isRequired,
   active: PropTypes.bool.isRequired,
   rentalId: PropTypes.number.isRequired,
+  movieId: PropTypes.number,
 };
