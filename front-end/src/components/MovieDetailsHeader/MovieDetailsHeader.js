@@ -8,6 +8,8 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
+import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 const MovieDetailsHeader = ({
   rentMovieFn,
@@ -43,10 +45,19 @@ const MovieDetailsHeader = ({
           </Typography>
         </MovieCost>
         <HeaderAction>
-          <HeaderButton onClick={rentMovieFn} variant="contained">
-            Zamów teraz!
-            {processing ? <ProcessingSpinner /> : ''}
-          </HeaderButton>
+          {Cookies.get('token') ? (
+            <HeaderButton onClick={rentMovieFn} variant="contained">
+              {processing ? <ProcessingSpinner /> : ''}
+            </HeaderButton>
+          ) : (
+            <HeaderButton
+              variant="contained"
+              LinkComponent={Link}
+              to="/logowanie"
+            >
+              Zaloguj się aby zamówić
+            </HeaderButton>
+          )}
         </HeaderAction>
         <HeaderImage src={`http://127.0.0.1:8000/images/movies/${poster}`} />
         <ImageOverlay></ImageOverlay>

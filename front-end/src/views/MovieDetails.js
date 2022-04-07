@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Grid, Paper } from '@mui/material';
 import { CircularProgress } from '@mui/material';
@@ -16,11 +15,11 @@ import MovieTrailer from 'components/MovieTrailer/MovieTrailer';
 import Alert from 'components/Alert/Alert';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
 import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
+import Cookies from 'js-cookie';
 
 const MovieDetails = () => {
   const [processing, setProcessing] = useState(false);
   const [redirectToReviews, setRedirectToReviews] = useState(false);
-  const [redirectToOrder, setRedirectToOrder] = useState(false);
   const [movie, setMovie] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
@@ -72,7 +71,6 @@ const MovieDetails = () => {
   if (redirectToReviews)
     return <Navigate to={`/film/${params.slug}/dodaj-opinie`} />;
 
-  if (redirectToOrder) return <Navigate to={`/film/${params.slug}/zamow`} />;
   return (
     <Wrapper>
       {spinnerVisible && <Spinner />}
@@ -210,10 +208,20 @@ const MovieDetails = () => {
                 src={`http://127.0.0.1:8000/images/movies/${movie.poster}`}
                 alt="movie-poster"
               />
-              <StyledButton onClick={rentMovie} variant="contained">
-                Wypożycz
-                {processing && <ProcessingSpinner />}
-              </StyledButton>
+              {Cookies.get('token') ? (
+                <StyledButton onClick={rentMovie} variant="contained">
+                  Wypożycz
+                  {processing && <ProcessingSpinner />}
+                </StyledButton>
+              ) : (
+                <StyledButton
+                  LinkComponent={Link}
+                  to="/logowanie"
+                  variant="contained"
+                >
+                  Zaloguj się...
+                </StyledButton>
+              )}
             </RentMovie>
           </RentMovieWrapper>
         </>
@@ -442,13 +450,13 @@ const RentMovie = styled(Paper)`
 const StyledButton = styled(Button)`
   && {
     position: absolute;
-    right: 10%;
+    right: 5%;
     top: 50%;
     transform: translateY(-50%);
     font-weight: ${({ theme }) => theme.fontBold};
 
     @media ${responsive.tablet} {
-      width: 200px;
+      width: 240px;
       height: 50px;
       font-size: ${({ theme }) => theme.fontSize.m};
     }
