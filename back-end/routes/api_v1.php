@@ -62,6 +62,7 @@ Route::get('/reviews{reviewId}', [ReviewController::class, 'getReview']);
 //* Proteced routes
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/isLoggedIn', [AuthController::class, 'isLoggedIn']);
+  Route::get('/hasUserMovie/{movieId}', [RentalController::class, 'hasMovie']);
 
 
   Route::delete('/reviews/{reviewId}', [ReviewController::class, 'deleteReview']);

@@ -22,8 +22,12 @@ class RentalController extends Controller
 
         $movie = Movie::find($movieId);
         error_log($movie);
-
-        $successURL = $rentalId ? 'http://localhost:3000/profil?movie='.$movie->id.'&rental='.$rentalId : 'http://localhost:3000/filmy?movie='.$movie->id;
+        if($rentalId !== -1) {
+            $successURL = 'http://localhost:3000/profil?movie='.$movie->id.'&rental='.$rentalId;
+        }
+        else {
+           $successURL = 'http://localhost:3000/filmy?movie='.$movie->id;
+        }
 
         $stripe = new \Stripe\StripeClient(env('STRIPE_API_KEY'));
 
@@ -204,5 +208,23 @@ class RentalController extends Controller
                 $userMovies
             ]
         ];
+    }
+
+    public function hasMovie(int $movieId) {
+        $hasUserMovie = false;
+        $userId = auth()->user()->id;
+        $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
+        
+        foreach($rentals as $rental) {
+            if($rental->movies[0]->id === $movieId) {
+                $hasUserMovie = true;
+                break;
+            }
+        }
+
+        return response([
+            'owned' => $hasUserMovie
+        ]);
+        
     }
 }

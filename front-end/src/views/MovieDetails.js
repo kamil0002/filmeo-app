@@ -18,6 +18,7 @@ import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 import Cookies from 'js-cookie';
 
 const MovieDetails = () => {
+  const [ownedByUser, setOwnedByUser] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [redirectToReviews, setRedirectToReviews] = useState(false);
   const [movie, setMovie] = useState(null);
@@ -35,6 +36,15 @@ const MovieDetails = () => {
       }
 
       setMovie(movie.data.data[0][0]);
+
+      if (Cookies.get('token')) {
+        const res = await axios.get(
+          `api/v1/hasUserMovie/${movie.data.data[0][0].id}`
+        );
+
+        setOwnedByUser(res.data.owned);
+      }
+
       setSpinnerVisible(false);
     } catch (err) {
       setErrMessage(err.message);
@@ -85,6 +95,7 @@ const MovieDetails = () => {
             releaseYear={movie.release_date.split('-')[0]}
             cost={+movie.cost}
             processing={processing}
+            ownedByUser={ownedByUser}
           />
           <MovieData>
             <MovieInformationWrapper>
@@ -208,7 +219,11 @@ const MovieDetails = () => {
                 src={`http://127.0.0.1:8000/images/movies/${movie.poster}`}
                 alt="movie-poster"
               />
-              {Cookies.get('token') ? (
+              {ownedByUser ? (
+                <StyledButton disabled variant="contained">
+                  Wypożycz
+                </StyledButton>
+              ) : Cookies.get('token') ? (
                 <StyledButton onClick={rentMovie} variant="contained">
                   Wypożycz
                   {processing && <ProcessingSpinner />}

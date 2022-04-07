@@ -19,6 +19,7 @@ const MovieDetailsHeader = ({
   cost,
   poster,
   processing,
+  ownedByUser,
 }) => {
   return (
     <Wrapper>
@@ -45,8 +46,13 @@ const MovieDetailsHeader = ({
           </Typography>
         </MovieCost>
         <HeaderAction>
-          {Cookies.get('token') ? (
+          {ownedByUser ? (
+            <HeaderButton disabled variant="contained">
+              Zamów teraz!
+            </HeaderButton>
+          ) : Cookies.get('token') ? (
             <HeaderButton onClick={rentMovieFn} variant="contained">
+              Zamów teraz!
               {processing ? <ProcessingSpinner /> : ''}
             </HeaderButton>
           ) : (
@@ -226,4 +232,5 @@ MovieDetailsHeader.propTypes = {
   poster: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
   processing: PropTypes.bool,
+  ownedByUser: PropTypes.bool,
 };
