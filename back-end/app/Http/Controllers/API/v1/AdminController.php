@@ -5,7 +5,8 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\v1\ErrorController;
-
+use Error;
+use Monolog\ErrorHandler;
 
 class AdminController extends Controller
 {
@@ -74,6 +75,14 @@ class AdminController extends Controller
 
     public function muteUser(Request $request) {
         $user = User::find($request['userId']);
+
+        if(!$user) {
+            return ErrorController::handleError('Użytkownik nie istnieje!', 404);
+        }
+
+        if($user->role === 'moderator' || $user->role === 'administrator') {
+            return ErrorController::handleError('Nie możesz mutować innych moderatorów i administratorów!', 500);
+        }
 
         $user->update([
             'muted' => true

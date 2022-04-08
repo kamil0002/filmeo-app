@@ -42,6 +42,9 @@ class ChatController extends Controller
         $userId = auth()->user()->id;
         $userName = auth()->user()->name;
         $userAvatar = auth()->user()->avatar;
+        if(auth()->user()->muted === 1) {
+            return ErrorController::handleError('Przykro nam lecz zostałeś zmutowany!', 405);
+        }
 
         Message::create([
             'user_id' => $userId,

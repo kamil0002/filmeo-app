@@ -15,10 +15,12 @@ import Alert from 'components/Alert/Alert';
 import responsive from 'theme/responsive';
 import ChatMessage from './ChatMessage';
 import axios from 'utils/axios';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const Chat = ({ id }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState();
+  const [successMessage, setSuccessMessage] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
 
   const user = useSelector((state) => state.auth.user);
@@ -61,6 +63,8 @@ const Chat = ({ id }) => {
 
     const channel = pusher.subscribe('chat');
     channel.bind('message', function (data) {
+      if (data.message.startsWith('/')) return;
+      console.log(user);
       setMessages((prevState) => [...prevState, data]);
 
       const messagesContainer = document.querySelector('.messages-container');
@@ -72,22 +76,63 @@ const Chat = ({ id }) => {
     e.preventDefault();
 
     try {
-      await axios.post(
+      if (message.startsWith('/')) {
+        const command = message.slice(1);
+        if (
+          !command.startsWith('mute') &&
+          !command.startsWith('unmute') &&
+          user.role !== 'user'
+        ) {
+          setErrMessage(
+            'Ta komenda nie jest dostępna, wykonaj /mute {ID} lub /unmute {ID}'
+          );
+          setMessage('');
+          return;
+        }
+
+        //* Mute user
+        if (command.startsWith('mute')) {
+          const res = await axios.put('api/v1/admin/mute', {
+            userId: +command.split(' ')[1],
+          });
+          if (res.data.status !== 'success') {
+            throw new Error(res.data.message);
+          }
+          setSuccessMessage(res.data.message);
+          setMessage('');
+        }
+
+        //* Unmute user
+        if (command.startsWith('unmute')) {
+          const res = await axios.put('api/v1/admin/unmute', {
+            userId: +command.split(' ')[1],
+          });
+          if (res.data.status !== 'success' || res.data.statusCode === 500) {
+            throw new Error(res.data.message);
+          }
+
+          setSuccessMessage(res.data.message);
+          setMessage('');
+        }
+
+        setMessage('');
+        return;
+      }
+
+      const res = await axios.post(
         '/api/v1/message',
         JSON.stringify({
           message,
         })
       );
-    } catch (err) {
-      if (err.message.includes('401')) {
-        setErrMessage(
-          'Czat jest dostępny tylko dla zalogowanych uzytkowników!'
-        );
-      } else {
-        console.error(err.message);
+      //* Inform user that he is muted
+      if (res.data.status !== 'success') {
+        throw new Error(res.data.message);
       }
-
-      setTimeout(() => setErrMessage(null), 2500);
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(setSuccessMessage, setErrMessage);
     }
 
     e.target.parentNode.previousSibling.scrollTo(
@@ -104,6 +149,9 @@ const Chat = ({ id }) => {
   return (
     <Wrapper id={id}>
       {errMessage && <StyledAlert>{errMessage}</StyledAlert>}
+      {successMessage && (
+        <StyledAlert type="success">{successMessage}</StyledAlert>
+      )}
 
       <ChatWrapper elevation={8} className="messages-wrapper">
         <ChatHeading fontWeight={700} color={'#fff'}>
@@ -118,6 +166,7 @@ const Chat = ({ id }) => {
                 text={message.message}
                 userPhoto={message.senderAvatar}
                 self={+message.senderId === user?.id}
+                senderId={+message.senderId}
                 date={new Date(message.date.date).toLocaleDateString('pl-PL', {
                   weekday: 'long',
                   hour: '2-digit',

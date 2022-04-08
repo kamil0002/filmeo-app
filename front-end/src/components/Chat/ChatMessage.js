@@ -1,11 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
 import { Avatar } from '@mui/material';
 import responsive from 'theme/responsive';
 
-const ChatMessage = ({ text, userName, date, self, userPhoto }) => {
+const ChatMessage = ({ text, userName, date, self, userPhoto, senderId }) => {
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <Message self={self} variant="body1" as="div" fontSize={14}>
       <UserData>
@@ -14,7 +18,7 @@ const ChatMessage = ({ text, userName, date, self, userPhoto }) => {
           src={`http://127.0.0.1:8000/images/avatars/${userPhoto}`}
         />
         <Typography fontSize={12} fontWeight={700}>
-          {userName}, {date}
+          {userName}, {date} {user.role === 'user' ? '' : `(${senderId})`}
         </Typography>
       </UserData>
       <Typography>{text}</Typography>
@@ -63,4 +67,5 @@ ChatMessage.propTypes = {
   date: PropTypes.string.isRequired,
   self: PropTypes.bool,
   userPhoto: PropTypes.string.isRequired,
+  senderId: PropTypes.number,
 };

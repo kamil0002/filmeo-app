@@ -49,6 +49,7 @@ const ReviewCard = ({
       <Paper
         sx={{
           paddingTop: 2,
+          paddingBottom: 3,
           height: '100%',
           position: 'relative',
         }}
@@ -144,14 +145,14 @@ const ReviewDetails = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 45px;
+  bottom: 57px;
 `;
 
 const ReviewCardFooter = styled.div`
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   font-weight: 500;
   color: ${({ theme }) => theme.darkBlue};
   background: ${({ theme }) => theme.primaryLight};
@@ -160,6 +161,7 @@ const ReviewCardFooter = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 0 0 4px 4px;
+  text-align: center;
 `;
 
 ReviewCard.propTypes = {

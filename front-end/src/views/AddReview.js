@@ -47,7 +47,7 @@ const AddReview = () => {
       setTimeout(() => {
         setRedirect(true);
         setSuccessMessage(null);
-      }, 3000);
+      }, 1500);
       if (review.data.status !== 'success') {
         throw new Error(review.data.message);
       }
