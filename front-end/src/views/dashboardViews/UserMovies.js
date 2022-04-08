@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Spinner from 'components/Spinner/Spinner';
@@ -9,8 +11,8 @@ import axios from 'axios';
 import { FormControlLabel, Switch } from '@mui/material';
 
 const UserMovies = () => {
-  const [rentedMovies, setRentedMovies] = useState(undefined);
-  const [filteredMovies, setFilteredMovies] = useState(undefined);
+  const [rentedMovies, setRentedMovies] = useState(null);
+  const [filteredMovies, setFilteredMovies] = useState(null);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
   const [showExpired, setShowExpired] = useState(true);
 

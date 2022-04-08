@@ -64,7 +64,6 @@ const Chat = ({ id }) => {
     const channel = pusher.subscribe('chat');
     channel.bind('message', function (data) {
       if (data.message.startsWith('/')) return;
-      console.log(user);
       setMessages((prevState) => [...prevState, data]);
 
       const messagesContainer = document.querySelector('.messages-container');

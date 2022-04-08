@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
@@ -42,9 +42,36 @@ const Root = () => {
           <Routes>
             <Route path={routes.home} element={<Home />} />
             <Route path={routes.movies} element={<Movies />} />
-            <Route path={routes.login} element={<Login />} />
-            <Route path={routes.register} element={<Register />} />
-            <Route path={routes.dashboard} element={<Dashboard />} />
+            <Route
+              path={routes.login}
+              element={
+                Cookies.get('token') ? (
+                  <Navigate to={routes.dashboard} />
+                ) : (
+                  <Login />
+                )
+              }
+            />
+            <Route
+              path={routes.register}
+              element={
+                Cookies.get('token') ? (
+                  <Navigate to={routes.dashboard} />
+                ) : (
+                  <Register />
+                )
+              }
+            />
+            <Route
+              path={routes.dashboard}
+              element={
+                Cookies.get('token') ? (
+                  <Dashboard />
+                ) : (
+                  <Navigate to={routes.login} />
+                )
+              }
+            />
             <Route path={routes.movieDetails} element={<MovieDetails />} />
             <Route path={routes.addReview} element={<AddReview />} />
             <Route path={routes.watchMovie} element={<WatchMovie />} />
