@@ -52,7 +52,9 @@ const AddReview = () => {
         throw new Error(review.data.message);
       }
     } catch (err) {
-      setErrMessage(err.message);
+      if (err.message.includes(401)) {
+        setErrMessage('Musisz się zalogować aby dodać opinię!');
+      } else setErrMessage(err.message);
     } finally {
       clearAsyncMessages(setSuccessMessage, setErrMessage, setProcessing);
     }
