@@ -14,6 +14,7 @@ import axios from 'utils/axios';
 import { setUser } from 'slices/authSlice';
 import Alert from 'components/Alert/Alert';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
+import routes from 'routes';
 
 const Login = () => {
   const [errMessage, setErrMessage] = useState(null);
@@ -100,7 +101,7 @@ const Login = () => {
         </Form>
         <Typography fontFamily="Poppins" marginTop={5} fontSize={13}>
           Nie masz jeszcze konta?
-          <StyledLink to="/rejestracja">Załóż konto!</StyledLink>
+          <StyledLink to={routes.login}>Załóż konto!</StyledLink>
         </Typography>
       </StyledPaper>
     </Wrapper>

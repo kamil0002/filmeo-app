@@ -7,6 +7,7 @@ import FormInput from 'components/Form/FormInput';
 import { useForm } from 'react-hook-form';
 import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
+import routes from 'routes';
 
 const Register = () => {
   const {
@@ -102,7 +103,7 @@ const Register = () => {
         </Form>
         <Typography marginTop={5} fontSize={13}>
           Masz już konto?
-          <StyledLink to="/logowanie">Zaloguj się!</StyledLink>
+          <StyledLink to={routes.login}>Zaloguj się!</StyledLink>
         </Typography>
       </StyledPaper>
     </Wrapper>

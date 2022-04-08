@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,10 +20,11 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { Logout, PersonAdd, Settings } from '@mui/icons-material';
+import { Logout } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import Tooltip from '@mui/material/Tooltip';
 import { setUser } from 'slices/authSlice';
+import routes from 'routes';
 
 const Navigation = ({ display }) => {
   const [successMessage, setSuccessMessage] = useState(null);
@@ -43,7 +43,7 @@ const Navigation = ({ display }) => {
       setTimeout(() => {
         setSuccessMessage(null);
         dispatch(setUser({}));
-        navigate('/');
+        navigate(routes.home);
         location.reload();
       }, 1500);
     } catch (err) {
@@ -85,7 +85,7 @@ const Navigation = ({ display }) => {
                 color="primary"
                 spacing="true"
                 LinkComponent={Link}
-                to="/logowanie"
+                to={routes.login}
               >
                 Logowanie
               </StyledButton>
@@ -95,7 +95,7 @@ const Navigation = ({ display }) => {
                 color="primary"
                 spacing="true"
                 LinkComponent={Link}
-                to="/rejestracja"
+                to={routes.register}
               >
                 Rejestracja
               </StyledButton>
@@ -167,7 +167,7 @@ const Navigation = ({ display }) => {
             >
               <Link
                 style={{ textDecoration: 'none', color: '#040714' }}
-                to="profil"
+                to={routes.dashboard}
               >
                 <MenuItem>
                   <Avatar />

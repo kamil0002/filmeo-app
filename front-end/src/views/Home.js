@@ -17,6 +17,7 @@ import Alert from 'components/Alert/Alert';
 import Lottie from 'react-lottie';
 import lottieAnimation from 'lotties/loading-lottie.json';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
+import routes from 'routes';
 
 const Home = () => {
   const [lastAddedMovies, setLastAddedMovies] = useState([]);
@@ -105,7 +106,7 @@ const Home = () => {
                   variant="contained"
                   endIcon={<MovieFilterOutlinedIcon />}
                   LinkComponent={Link}
-                  to="/filmy"
+                  to={routes.movies}
                 >
                   Wszystkie Filmy
                 </StyledButton>
@@ -119,7 +120,7 @@ const Home = () => {
                     variant="contained"
                     endIcon={<LoginIcon />}
                     LinkComponent={Link}
-                    to="/rejestracja"
+                    to={routes.register}
                   >
                     Dołącz Do Nas!
                   </StyledButton>

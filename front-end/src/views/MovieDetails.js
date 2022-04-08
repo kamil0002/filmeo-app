@@ -16,6 +16,7 @@ import Alert from 'components/Alert/Alert';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
 import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 import Cookies from 'js-cookie';
+import routes from 'routes';
 
 const MovieDetails = () => {
   const [ownedByUser, setOwnedByUser] = useState(false);
@@ -231,7 +232,7 @@ const MovieDetails = () => {
               ) : (
                 <StyledButton
                   LinkComponent={Link}
-                  to="/logowanie"
+                  to={routes.login}
                   variant="contained"
                 >
                   Zaloguj się...

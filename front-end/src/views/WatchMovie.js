@@ -5,6 +5,7 @@ import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
+import routes from 'routes';
 
 const WatchMovie = () => {
   const [redirect, setRedirect] = useState(false);
@@ -46,7 +47,7 @@ const WatchMovie = () => {
   });
 
   if (redirect) {
-    return <Navigate to="/profil" />;
+    return <Navigate to={routes.dashboard} />;
   }
 
   return (

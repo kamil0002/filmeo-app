@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import routes from 'routes';
 
 const MobileNavigation = ({ children, visible }) => {
   const location = useLocation();
@@ -11,11 +12,11 @@ const MobileNavigation = ({ children, visible }) => {
       <Wrapper visible={visible}>
         {children}
         <MobileNavList>
-          <ListItem active={location.pathname === '/'}>
-            <Link to="/">Strona główna</Link>
+          <ListItem active={location.pathname === routes.home}>
+            <Link to={routes.home}>Strona główna</Link>
           </ListItem>
-          <ListItem active={location.pathname === '/filmy'}>
-            <Link to="/filmy">Filmy</Link>
+          <ListItem active={location.pathname === routes.movies}>
+            <Link to={routes.movies}>Filmy</Link>
           </ListItem>
         </MobileNavList>
       </Wrapper>
