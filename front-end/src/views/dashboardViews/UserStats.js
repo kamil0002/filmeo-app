@@ -1,65 +1,105 @@
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import Typography from 'components/Typography/Typography';
-import React from 'react';
 import styled from 'styled-components';
 import Paper from '@mui/material/Paper';
-// import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import DoughnutChart from 'components/DoughnutChart/DoughnutChart';
 import responsive from 'theme/responsive';
 import LineChart from 'components/LineChart/LineChart';
 import BarChart from 'components/BarChart/BarChart';
+import axios from 'utils/axios';
+import Spinner from 'components/Spinner/Spinner';
 
 const UserStats = () => {
+  const [myBaseData, setMyBaseData] = useState(null);
+  const [myFavouriteGenres, setMyFavouriteGenres] = useState(null);
+
+  useEffect(async () => {
+    const baseDataURL = axios.get('api/v1/myBaseStats');
+    const favouriteGenresURL = axios.get('api/v1/myFavouriteGenres');
+    const lastWeekRentalsNumberURL = axios.get(
+      'api/v1/last-7-days-rentals-number'
+    );
+    const lastWeekSpendingURL = axios.get('api/v1/last-7-days-spendings');
+    const [
+      baseData,
+      favouriteGenres,
+      lastWeekRentalsNumber,
+      lastWeekSpendings,
+    ] = await Promise.all([
+      baseDataURL,
+      favouriteGenresURL,
+      lastWeekRentalsNumberURL,
+      lastWeekSpendingURL,
+    ]);
+    console.log(
+      baseData,
+      favouriteGenres,
+      lastWeekRentalsNumber,
+      lastWeekSpendings
+    );
+
+    //* Setters
+    setMyBaseData(baseData.data);
+    setMyFavouriteGenres(favouriteGenres.data.data.slice(0, 6));
+  }, []);
+
   return (
     <Wrapper>
       <Typography fontSize={24} fontWeight={700} marginBottom={4}>
         Statystyki
       </Typography>
-      <TopRow>
-        <GeneralStats elevation={4}>
-          <GeneralStatsHeading marginBottom={6} align="center">
-            Ogólne Dane
-          </GeneralStatsHeading>
-          <TotalMoviesRented>
-            <GeneralStatsHeaders>Łącznie wypożyczone</GeneralStatsHeaders>
-            <Typography
-              align="center"
-              marginTop={0.5}
-              fontWeight={600}
-              fontSize={36}
-              color="#1465C0"
-            >
-              242
-            </Typography>
-          </TotalMoviesRented>
+      {!myBaseData && <Spinner />}
+      {myBaseData && (
+        <>
+          <TopRow>
+            <GeneralStats elevation={4}>
+              <GeneralStatsHeading marginBottom={6} align="center">
+                Ogólne Dane
+              </GeneralStatsHeading>
+              <TotalMoviesRented>
+                <GeneralStatsHeaders>Łącznie wypożyczone</GeneralStatsHeaders>
+                <Typography
+                  align="center"
+                  marginTop={0.5}
+                  fontWeight={600}
+                  fontSize={36}
+                  color="#1465C0"
+                >
+                  {myBaseData.totalBorrowed || ''}
+                </Typography>
+              </TotalMoviesRented>
 
-          <TotalExpanses>
-            <TotalMoviesRented>
-              <GeneralStatsHeaders>Łącznie wydatki</GeneralStatsHeaders>
-              <Typography
-                align="center"
-                marginTop={0.5}
-                fontWeight={600}
-                fontSize={36}
-                color="#1465C0"
-              >
-                500 zł
-              </Typography>
-            </TotalMoviesRented>
-          </TotalExpanses>
-        </GeneralStats>
+              <TotalExpanses>
+                <TotalMoviesRented>
+                  <GeneralStatsHeaders>Łącznie wydatki</GeneralStatsHeaders>
+                  <Typography
+                    align="center"
+                    marginTop={0.5}
+                    fontWeight={600}
+                    fontSize={36}
+                    color="#1465C0"
+                  >
+                    {myBaseData.payments || '-'} PLN
+                  </Typography>
+                </TotalMoviesRented>
+              </TotalExpanses>
+            </GeneralStats>
 
-        <DoughnutChartWrapper elevation={4}>
-          <DoughnutChart />
-        </DoughnutChartWrapper>
-      </TopRow>
-      <BottomRow>
-        <LineChartWrapper>
-          <LineChart />
-        </LineChartWrapper>
-        <BarChartWrapper>
-          <BarChart />
-        </BarChartWrapper>
-      </BottomRow>
+            <DoughnutChartWrapper elevation={4}>
+              <DoughnutChart />
+            </DoughnutChartWrapper>
+          </TopRow>
+          <BottomRow>
+            <LineChartWrapper>
+              <LineChart />
+            </LineChartWrapper>
+            <BarChartWrapper>
+              <BarChart />
+            </BarChartWrapper>
+          </BottomRow>
+        </>
+      )}
     </Wrapper>
   );
 };
