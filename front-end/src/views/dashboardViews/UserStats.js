@@ -87,7 +87,7 @@ const UserStats = () => {
             </GeneralStats>
 
             <DoughnutChartWrapper elevation={4}>
-              <DoughnutChart />
+              {myFavouriteGenres && <DoughnutChart data={myFavouriteGenres} />}
             </DoughnutChartWrapper>
           </TopRow>
           <BottomRow>

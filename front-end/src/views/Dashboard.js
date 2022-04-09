@@ -11,7 +11,7 @@ import clearAsyncMessages from 'utils/clearAsyncMessages';
 import Alert from 'components/Alert/Alert';
 
 const Dashboard = () => {
-  const [currentView, setCurrentView] = useState('movies');
+  const [currentView, setCurrentView] = useState('stats');
   const { search } = useLocation();
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
