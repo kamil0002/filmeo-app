@@ -33,10 +33,10 @@ const UserStats = () => {
       lastWeekSpendingURL,
     ]);
     console.log(
-      baseData,
-      favouriteGenres,
-      lastWeekRentalsNumber,
-      lastWeekSpendings
+      // baseData,
+      // favouriteGenres,
+      lastWeekRentalsNumber
+      // lastWeekSpendings
     );
 
     //* Setters

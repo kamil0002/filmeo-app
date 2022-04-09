@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Payment;
 use App\Models\Rental;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class BusinessController extends Controller
@@ -67,18 +68,19 @@ class BusinessController extends Controller
 
         $userId = auth()->user()->id;
 
-        $recentExpenses = Payment::where('user_id', '=', $userId)        
+        $recentExpenses = Payment::where('user_id', '=', $userId)
+        ->where('created_at', '>=', now()->subDays(7))       
         ->select('created_at', 'amount', 
         DB::raw('sum(payments.amount) as spendings'), 
         DB::raw('day(created_at) Day'))
         ->orderBy('created_at', 'desc')
         ->groupBy('Day')
+        ->take(7)
         ->get()
         ->groupBy(function($date) {
             // group data by day
             return Carbon::parse($date->created_at)->format('d');
         });
-
 
         return response([
             'status' => 'success',

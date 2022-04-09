@@ -39,7 +39,6 @@ const options = {
 
 const DoughnutChart = ({ data }) => {
   const [chartData, setChartData] = useState(null);
-  console.log(data);
 
   useEffect(() => {
     const dataLabels = data.map((genre) => genre.name);
