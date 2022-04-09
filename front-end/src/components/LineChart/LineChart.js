@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import PropTypes from 'prop-types';
 import { Line } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 
@@ -22,7 +24,15 @@ ChartJS.register(
   Legend
 );
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+const days = [
+  'Niedziela',
+  'Poniedziałek',
+  'Wtorek',
+  'Środa',
+  'Czwartek',
+  'Piątek',
+  'Sobota',
+];
 
 const options = {
   responsive: true,
@@ -43,19 +53,47 @@ const options = {
   },
 };
 
-const data = {
-  labels,
-  datasets: [
-    {
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
+// const testData = {
+//   labels,
+//   datasets: [
+//     {
+//       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+//       borderColor: 'rgb(255, 99, 132)',
+//       backgroundColor: 'rgba(255, 99, 132, 0.5)',
+//     },
+//   ],
+// };
 
-const LineChart = () => {
-  return <Line options={options} data={data} />;
+const LineChart = ({ data }) => {
+  const [chartData, setChartData] = useState(null);
+  useEffect(() => {
+    const date = new Date();
+    const labels = [];
+
+    for (let i = 0; i < 7; i++) {
+      labels.push(days[date.getDay() - i]);
+    }
+    labels.reverse();
+
+    setChartData({
+      labels,
+      datasets: [
+        {
+          data: labels.map(() =>
+            faker.datatype.number({ min: -1000, max: 1000 })
+          ),
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+      ],
+    });
+  }, []);
+
+  return chartData && <Line options={options} data={chartData} />;
 };
 
 export default LineChart;
+
+LineChart.propTypes = {
+  data: PropTypes.array.isRequired,
+};
