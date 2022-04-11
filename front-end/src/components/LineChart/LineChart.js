@@ -67,11 +67,14 @@ const options = {
 const LineChart = ({ data }) => {
   const [chartData, setChartData] = useState(null);
   useEffect(() => {
-    const date = new Date();
+    const today = new Date();
     const labels = [];
 
     for (let i = 0; i < 7; i++) {
-      labels.push(days[date.getDay() - i]);
+      const pastDate = new Date(
+        today.setDate(today.getDate() - (i === 0 ? 0 : 1))
+      );
+      labels.push(days[pastDate.getDay()]);
     }
     labels.reverse();
 
