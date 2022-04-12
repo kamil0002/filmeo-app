@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import PropTypes from 'prop-types';
 import { Line } from 'react-chartjs-2';
-import { formatData, getWeekDays } from 'utils/formatLineChartData';
+import { formatData, getWeekDays } from 'utils/formatChartData';
 import numeral from 'numeral';
 
 ChartJS.register(

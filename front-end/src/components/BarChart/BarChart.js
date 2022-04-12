@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +10,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
+import { formatData, getWeekDays } from 'utils/formatChartData';
+import numeral from 'numeral';
 
 ChartJS.register(
   CategoryScale,
@@ -44,37 +46,53 @@ const options = {
     },
   },
   maintainAspectRatio: false,
-};
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-const data = {
-  labels,
-  datasets: [
-    {
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.5)',
-        'rgba(54, 162, 235, 0.5)',
-        'rgba(255, 206, 86, 0.5)',
-        'rgba(75, 192, 192, 0.5)',
-        'rgba(153, 102, 255, 0.5)',
-        'rgba(255, 159, 64, 0.5)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-      ],
+  scales: {
+    y: {
+      ticks: {
+        // Include a dollar sign in the ticks
+        callback: function (value) {
+          return numeral(value).format('0.0');
+        },
+      },
     },
-  ],
+  },
 };
 
-const BarChart = () => {
-  return <Bar options={options} data={data} />;
+const BarChart = ({ data }) => {
+  const [chartData, setChartData] = useState(null);
+
+  useEffect(() => {
+    setChartData({
+      labels: getWeekDays(),
+      datasets: [
+        {
+          data: formatData(data, 'rentals'),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+            'rgba(255, 159, 64, 0.5)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+          ],
+        },
+      ],
+    });
+  }, []);
+  return chartData && <Bar options={options} data={chartData} />;
 };
 
 export default BarChart;
+
+BarChart.propTypes = {
+  data: PropTypes.array.isRequired,
+};

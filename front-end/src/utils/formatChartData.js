@@ -21,9 +21,9 @@ export const getWeekDays = () => {
   return labels.reverse();
 };
 
-export const formatData = (data) => {
+export const formatData = (data, dataType = 'spendings') => {
   const today = new Date();
-  const expanses = [];
+  const formatedData = [];
 
   for (let i = 0; i < 7; i++) {
     const pastDate = new Date(
@@ -34,9 +34,9 @@ export const formatData = (data) => {
     const day = pastDate.getDate().toString().padStart(2, '0');
 
     if (data[day]) {
-      expanses.push(+data[day][0].spendings);
-    } else expanses.push(0);
+      formatedData.push(+data[day][0][dataType]);
+    } else formatedData.push(0);
   }
 
-  return expanses.reverse();
+  return formatedData.reverse();
 };

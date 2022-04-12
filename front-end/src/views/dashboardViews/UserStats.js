@@ -14,6 +14,7 @@ const UserStats = () => {
   const [myBaseData, setMyBaseData] = useState(null);
   const [myFavouriteGenres, setMyFavouriteGenres] = useState(null);
   const [myLastSpendings, setMyLastSpendings] = useState(null);
+  const [rentalsNumber, setRentalsNumber] = useState(null);
 
   useEffect(async () => {
     const baseDataURL = axios.get('api/v1/myBaseStats');
@@ -33,17 +34,12 @@ const UserStats = () => {
       lastWeekRentalsNumberURL,
       lastWeekSpendingURL,
     ]);
-    // console.log(
-    // baseData,
-    // favouriteGenres,
-    // lastWeekRentalsNumber
-    // lastWeekSpendings.data.data[0]
-    // );
 
     //* Setters
     setMyBaseData(baseData.data);
     setMyFavouriteGenres(favouriteGenres.data.data.slice(0, 6));
     setMyLastSpendings(lastWeekSpendings.data.data[0]);
+    setRentalsNumber(lastWeekRentalsNumber.data.data[0]);
   }, []);
 
   return (
@@ -97,7 +93,7 @@ const UserStats = () => {
               {myLastSpendings && <LineChart data={myLastSpendings} />}
             </LineChartWrapper>
             <BarChartWrapper>
-              <BarChart />
+              {rentalsNumber && <BarChart data={rentalsNumber} />}
             </BarChartWrapper>
           </BottomRow>
         </>
