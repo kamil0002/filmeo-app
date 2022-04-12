@@ -48,6 +48,7 @@ const MovieDetails = () => {
 
       setSpinnerVisible(false);
     } catch (err) {
+      console.log(err);
       setErrMessage(err.message);
     } finally {
       clearAsyncMessages(null, setErrMessage, setProcessing);

@@ -211,9 +211,11 @@ class RentalController extends Controller
     }
 
     public function hasMovie(int $movieId) {
+        error_log('HELLO!');
         $hasUserMovie = false;
         $userId = auth()->user()->id;
         $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
+
         
         foreach($rentals as $rental) {
             if($rental->movies[0]->id === $movieId) {

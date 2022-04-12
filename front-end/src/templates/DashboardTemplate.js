@@ -49,7 +49,7 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
             <AvatarWrapper htmlFor="file-input">
               <ChangePhotoIcon />
               <Avatar
-                src={`http://127.0.0.1:8000/images/avatars/${user.avatar}`}
+                src={`http://127.0.0.1:8000/images/avatars/${user?.avatar}`}
                 alt="user"
               />
             </AvatarWrapper>
