@@ -69,7 +69,7 @@ class BusinessController extends Controller
         $userId = auth()->user()->id;
 
         $recentExpenses = Payment::where('user_id', '=', $userId)
-        ->where('created_at', '>=', now()->subDays(6))       
+        ->where('created_at', '>=', now()->subDays(7))       
         ->select('created_at', 'amount', 
         DB::raw('sum(payments.amount) as spendings'), 
         DB::raw('day(created_at) Day'))
