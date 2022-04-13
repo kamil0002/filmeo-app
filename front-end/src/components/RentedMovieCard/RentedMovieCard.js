@@ -22,7 +22,6 @@ const RentedMovieCard = ({
 
   const renewRental = async (e, rentalId, movieId) => {
     try {
-      alert(rentalId, movieId);
       setProcessing(true);
       const stripe = await loadStripe(
         'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
