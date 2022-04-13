@@ -157,7 +157,7 @@ const UserSettings = () => {
           id="date"
           label="Data urodzenia"
           type="date"
-          isValid={errors1.birthDate ? true : false}
+          isValid={errors1.birth_date ? true : false}
           helperText="Nie podane daty urodzenia"
         />
         <FormInput
@@ -220,7 +220,7 @@ const UserSettings = () => {
           id="repeatPassword"
           label="Powtórz hasło"
           type="password"
-          isValid={errors2.password ? true : false}
+          isValid={errors2.password_confirmation ? true : false}
           helperText="Hasło musi zawierać dużą oraz małą literę, cyfrę i mieć długość co najmniej 6 znaków"
         />
       </Form>
