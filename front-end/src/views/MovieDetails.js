@@ -187,31 +187,41 @@ const MovieDetails = () => {
                   Ten film nie ma jeszcze żadnych opnii
                 </NoReviewsText>
               ) : (
-                movie.reviews.map(
-                  ({
-                    author,
-                    title,
-                    id,
-                    description,
-                    created_at,
-                    rating,
-                    verified,
-                  }) => (
-                    <GridItem key={id} item xs={10} sm={6} md={4} lg={3} xl={2}>
-                      <DeleteReviewIcon />
-                      <ReviewCard
-                        title={title}
-                        description={description}
-                        verified={verified}
-                        rating={+rating}
-                        createdAt={created_at}
-                        profile={false}
-                        author={author}
-                        reviewId={id}
-                      />
-                    </GridItem>
+                movie.reviews
+                  .reverse()
+                  .map(
+                    ({
+                      author,
+                      title,
+                      id,
+                      description,
+                      created_at,
+                      rating,
+                      verified,
+                    }) => (
+                      <GridItem
+                        key={id}
+                        item
+                        xs={10}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                      >
+                        <DeleteReviewIcon />
+                        <ReviewCard
+                          title={title}
+                          description={description}
+                          verified={verified}
+                          rating={+rating}
+                          createdAt={created_at}
+                          profile={false}
+                          author={author}
+                          reviewId={id}
+                        />
+                      </GridItem>
+                    )
                   )
-                )
               )}
             </GridContainer>
           </Reviews>
