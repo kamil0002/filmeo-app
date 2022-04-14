@@ -173,7 +173,7 @@ const AvatarWrapper = styled.label`
     cursor: pointer;
 
     svg {
-      opacity: 1;
+      opacity: 0.95;
     }
   }
 
@@ -213,7 +213,7 @@ const ChangePhotoIcon = styled(PhotoCamera)`
     transform: translate(-50%, -50%);
     z-index: 101;
     font-size: 20px;
-    color: ${({ theme }) => theme.lightBlue};
+    color: ${({ theme }) => theme.secondaryLight};
     opacity: 0;
     transition: opacity 250ms ease;
 

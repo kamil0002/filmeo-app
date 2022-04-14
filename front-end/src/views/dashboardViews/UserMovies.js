@@ -116,12 +116,10 @@ const Wrapper = styled.div`
 
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
-    border-radius: 50%;
   }
 
   ::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: 5%;
   }
 
   ::-webkit-scrollbar-thumb:hover {

@@ -1,8 +1,11 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import routes from 'routes';
+import Cookies from 'js-cookie';
+import NavItem from './NavItem';
 
 const MobileNavigation = ({ children, visible }) => {
   const location = useLocation();
@@ -11,13 +14,21 @@ const MobileNavigation = ({ children, visible }) => {
     <>
       <Wrapper visible={visible}>
         {children}
-        <MobileNavList>
-          <ListItem active={location.pathname === routes.home}>
-            <Link to={routes.home}>Strona główna</Link>
-          </ListItem>
-          <ListItem active={location.pathname === routes.movies}>
-            <Link to={routes.movies}>Filmy</Link>
-          </ListItem>
+        <MobileNavList userLoggedIn={Cookies.get('token') ? true : false}>
+          <NavItem
+            as={Link}
+            to={routes.home}
+            active={location.pathname === routes.home}
+          >
+            Strona główna
+          </NavItem>
+          <NavItem
+            to={routes.movies}
+            as={Link}
+            active={location.pathname === routes.movies}
+          >
+            Filmy
+          </NavItem>
         </MobileNavList>
       </Wrapper>
     </>
@@ -38,8 +49,12 @@ const Wrapper = styled.nav`
   right: 0;
   bottom: 0;
   z-index: 2;
-  background-color: ${({ theme }) => theme.secondaryLight};
-  border-left: 1px solid ${({ theme }) => theme.lightBlue};
+  background: linear-gradient(
+    116.82deg,
+    rgba(236, 239, 241, 0.99) 0%,
+    rgba(246, 248, 250, 0.97) 100%
+  );
+
   transition: all 500ms ease-out;
   transform: ${({ visible }) =>
     visible ? 'translateX(0)' : 'translateX(100%)'};
@@ -47,29 +62,12 @@ const Wrapper = styled.nav`
 
 const MobileNavList = styled.ul`
   width: 70%;
-  border-top: 1px solid ${({ theme }) => theme.darkGray};
+  border-top: 1px solid
+    ${({ theme, userLoggedIn }) =>
+      userLoggedIn ? 'transparent' : theme.darkGray};
   margin-top: 2rem;
   padding: 2rem 0;
   text-align: center;
-`;
-
-const ListItem = styled.li`
-  margin: 1rem 0;
-  list-style: none;
-  cursor: pointer;
-  padding: 1rem 0;
-  transition: all 250ms ease-in;
-  background: ${({ theme, active }) =>
-    active ? theme.lightBlue : ' transparent'};
-
-  a {
-    text-decoration: none;
-    color: ${({ theme }) => theme.darkBlue};
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.lightBlue};
-  }
 `;
 
 MobileNavigation.propTypes = {
