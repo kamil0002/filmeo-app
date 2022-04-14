@@ -123,7 +123,7 @@ const Navigation = ({ display }) => {
                   aria-expanded={open ? 'true' : undefined}
                 >
                   <Avatar
-                    src={`http://127.0.0.1:8000/images/avatars/${user.avatar}`}
+                    src={`http://127.0.0.1:8000/images/avatars/${user?.avatar}`}
                     sx={{ width: 40, height: 40 }}
                   ></Avatar>
                 </IconButton>

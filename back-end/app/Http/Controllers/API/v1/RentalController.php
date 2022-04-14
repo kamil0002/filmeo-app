@@ -21,7 +21,7 @@ class RentalController extends Controller
     public function getCheckoutSession(int $movieId, int $rentalId) {
 
         $movie = Movie::find($movieId);
-        error_log($movie);
+
         if($rentalId !== -1) {
             $successURL = 'http://localhost:3000/profil?movie='.$movie->id.'&rental='.$rentalId;
         }
@@ -177,26 +177,28 @@ class RentalController extends Controller
         foreach($movies as $movie) {
             foreach($movie->rentals as $rental) {
 
-                //* If rental expired make active status as false
-                if($rental->expire_date < $today) {
-                    $rental->update([
-                        'active' => false
-                    ]);
-                }    
-                //* Check all user rented movies
-                if($rental->user_id === $userId) {
-                $movie = Movie::find($movie->id);
-                $reviews = Review::where('movie_id', '=', $movie->id)->select('rating')->get();
+                if($rental->user_id === $userId) {;
+                    //* If rental expired make active status as false
+                    error_log($rental->expire_date < $today);
+                    if($rental->expire_date < $today) {
+                        error_log($rental);
+                        $rental->update([
+                            'active' => false
+                        ]);
+                    }    
 
-                $movie->expire_date = $rental->expire_date;
+                    $movie = Movie::find($movie->id);
+                    $reviews = Review::where('movie_id', '=', $movie->id)->select('rating')->get();
 
-                $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
+                    $movie->expire_date = $rental->expire_date;
 
-                //* Add bonus field if movie is not active or not
-                $movie['active'] = $rental->active;
-                $movie['rental_id'] = $rental->id;
-                array_push($userMovies, $movie);
-                break;
+                    $movie['rating_average'] = floatval(floor($reviews->avg('rating')) . substr(str_replace(floor($reviews->avg('rating')), '', $reviews->avg('rating')), 0, 2 + 1)) ?? 0;
+
+                    //* Add bonus field if movie is not active or not
+                    $movie['active'] = $rental->active;
+                    $movie['rental_id'] = $rental->id;
+                    array_push($userMovies, $movie);
+                    break;
                 }
             }
         }
@@ -211,9 +213,11 @@ class RentalController extends Controller
     }
 
     public function hasMovie(int $movieId) {
+        error_log('HELLO!');
         $hasUserMovie = false;
         $userId = auth()->user()->id;
         $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
+
         
         foreach($rentals as $rental) {
             if($rental->movies[0]->id === $movieId) {

@@ -43,10 +43,10 @@ class BusinessController extends Controller
     public function amountOfRecentRentals() {
         $userId = auth()->user()->id;
 
-        $recentRentals = Rental::where('created_at', '>=', now()->subDays(7))
-        ->where('user_id', '=', $userId)
+        $recentRentals = Rental::where('user_id', '=', $userId)
+        ->where('created_at', '>=', now()->subDays(7))
         ->orderBy('created_at', 'desc')
-        ->select(DB::raw('count(*) as total'), 
+        ->select(DB::raw('count(rentals.user_id) as rentals'), 
         DB::raw('day(created_at) Day'), 'created_at')
         ->groupBy('Day')
         ->take(7)

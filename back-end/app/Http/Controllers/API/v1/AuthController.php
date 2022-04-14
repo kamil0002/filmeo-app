@@ -57,12 +57,16 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), $this->registerRules());
 
         if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            // return response()->json($validator->errors(), 400);
+            return ErrorController::handleError($validator->errors(), 400);
         }
 
         //* Check if user is banned
 
-        $request['role'] = $request['role'] ?? 'user';
+        // $request['role'] = $request['role'] ?? 'user';
+        
+        $request['role'] = 'user';
+
 
 
         //* Create User
