@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -59,27 +58,31 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
           </User>
           <Navigation>
             <NavigationList>
-              <NavigationItem
-                currentView={currentView === 'movies'}
-                onClick={() => handleViewChange('movies')}
-              >
-                <img src=".././images/nav-movie.svg" />
-                <span>Filmy</span>
-              </NavigationItem>
-              <NavigationItem
-                currentView={currentView === 'reviews'}
-                onClick={() => handleViewChange('reviews')}
-              >
-                <img src=".././images/nav-reviews.svg" />
-                <span>Oceny</span>
-              </NavigationItem>
-              <NavigationItem
-                currentView={currentView === 'stats'}
-                onClick={() => handleViewChange('stats')}
-              >
-                <img src=".././images/nav-stats.svg" />
-                <span>Wydatki</span>
-              </NavigationItem>
+              {user.role !== 'administrator' && (
+                <>
+                  <NavigationItem
+                    currentView={currentView === 'movies'}
+                    onClick={() => handleViewChange('movies')}
+                  >
+                    <img src=".././images/nav-movie.svg" />
+                    <span>Filmy</span>
+                  </NavigationItem>
+                  <NavigationItem
+                    currentView={currentView === 'reviews'}
+                    onClick={() => handleViewChange('reviews')}
+                  >
+                    <img src=".././images/nav-reviews.svg" />
+                    <span>Oceny</span>
+                  </NavigationItem>
+                  <NavigationItem
+                    currentView={currentView === 'stats'}
+                    onClick={() => handleViewChange('stats')}
+                  >
+                    <img src=".././images/nav-stats.svg" />
+                    <span>Wydatki</span>
+                  </NavigationItem>
+                </>
+              )}
               <NavigationItem
                 currentView={currentView === 'settings'}
                 onClick={() => handleViewChange('settings')}

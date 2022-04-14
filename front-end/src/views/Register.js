@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -20,10 +19,6 @@ const Register = () => {
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [processing, setProcessing] = useState(false);
-  const [passwordConfirmValidationMsg, setPasswordConfirmValidationMsg] =
-    useState(
-      'Hasło musi zawierać dużą oraz małą literę, cyfrę i mieć długość co najmniej 6 znaków'
-    );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

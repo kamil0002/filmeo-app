@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -34,7 +33,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setProcessing(true);
-      const csrf = await axios.get('/sanctum/csrf-cookie');
+      await axios.get('/sanctum/csrf-cookie');
       const login = await axios.post('/api/v1/login', data);
       if (login.data.statusCode === 401) {
         throw new Error(login.data.message);
