@@ -48,6 +48,9 @@ const UserSettings = () => {
 
   const changeUserData = async (data) => {
     try {
+      if (new Date(data.birth_date).getTime() > Date.now()) {
+        throw new Error('Podaj poprawną datę urodzenia!');
+      }
       setProcessingUserData(true);
       await axios.put('/api/v1/updateMyProfile', data);
 
@@ -55,9 +58,7 @@ const UserSettings = () => {
       dispatch(updateUser(data));
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      setErrMessage(
-        'Na podany e-mail jest już zarejestrowane konto lub źle podałeś wartości w polach'
-      );
+      setErrMessage(err.message);
     } finally {
       clearAsyncMessages(
         setSuccessMessage,

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 use App\Http\Controllers\API\v1\ErrorController;
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -84,7 +85,7 @@ class AuthController extends Controller
 
         // TODO ENABLE EMAIL
         //* Send Welcome Mail To a User
-        // Mail::to($fields['email'])->send(new WelcomeMail($fields['name']));
+        Mail::to($request['email'])->send(new WelcomeMail($request['name']));
 
         return response([
             'status' => 'success',
