@@ -43,19 +43,25 @@ const NavList = styled.ul`
 
 const ListItem = styled.li`
   margin: 0 0.5rem;
-  padding: 0.25rem 0.9rem;
+  padding: 0.4rem 1.35rem;
   transition: background-color 100ms ease-out;
   cursor: pointer;
+  border-radius: 25px;
   background: ${({ theme, active }) =>
-    active ? theme.lightBlue : ' transparent'};
+    active ? theme.primaryBlue : ' transparent'};
 
   a {
     text-decoration: none;
-    color: ${({ theme }) => theme.darkBlue};
+    color: ${({ theme, active }) =>
+      active ? theme.primaryLight : theme.darkBlue};
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.lightBlue};
+    background-color: ${({ theme }) => theme.primaryBlue};
+
+    a {
+      color: ${({ theme }) => theme.primaryLight};
+    }
   }
 `;
 

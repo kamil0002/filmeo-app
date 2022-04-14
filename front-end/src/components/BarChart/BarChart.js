@@ -34,7 +34,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Wypożyczenia w ostatnich miesiącach',
+      text: 'Wypożyczenia w ostatnim tygodniu',
       padding: {
         bottom: 15,
       },

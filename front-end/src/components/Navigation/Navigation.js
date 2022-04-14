@@ -225,7 +225,12 @@ const Navigation = ({ display }) => {
 export default Navigation;
 
 const Wrapper = styled.div`
-  background-color: ${({ theme }) => theme.primaryLight};
+  background: linear-gradient(
+    116.82deg,
+    rgba(236, 239, 241, 0.85) 0%,
+    rgba(246, 248, 250, 0.8) 100%
+  );
+
   padding: 0 0.4rem 0 0.8rem;
   display: flex;
   align-items: center;
