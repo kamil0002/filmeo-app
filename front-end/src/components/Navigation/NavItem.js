@@ -43,10 +43,10 @@ const ListItem = styled.li`
 NavItem.propTypes = {
   to: PropTypes.string.isRequired,
   children: PropTypes.string.isRequired,
-  active: PropTypes.bool,
-  desktop: PropTypes.bool,
+  active: PropTypes.string,
+  desktop: PropTypes.string,
 };
 
 NavItem.defaultProps = {
-  desktop: false,
+  desktop: '',
 };

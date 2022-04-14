@@ -1,6 +1,6 @@
-import { CircularProgress } from '@mui/material';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { CircularProgress } from '@mui/material';
 
 const ProcessingSpinner = ({ spinnerDark }) => {
   const color = spinnerDark ? '#1465C0' : '#ECEFF1';

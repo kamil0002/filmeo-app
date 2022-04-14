@@ -13,10 +13,10 @@ const MovieTrailer = ({ url }) => {
     <Wrapper>
       <VideoActions>
         <VolumeUpBtn
-          onClick={() => setVideoVolume((prevVolume) => prevVolume + 0.05)}
+          onClick={() => setVideoVolume((prevVolume) => prevVolume + 0.1)}
         />
         <VolumeDownBtn
-          onClick={() => setVideoVolume((prevVolume) => prevVolume - 0.05)}
+          onClick={() => setVideoVolume((prevVolume) => prevVolume - 0.1)}
         />
       </VideoActions>
       <ReactPlayer

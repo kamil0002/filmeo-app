@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { Button, Grid, Paper } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,6 +19,7 @@ import clearAsyncMessages from 'utils/clearAsyncMessages';
 import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 import Cookies from 'js-cookie';
 import routes from 'routes';
+import userAge from 'utils/userAge';
 
 const MovieDetails = () => {
   const [ownedByUser, setOwnedByUser] = useState(false);
@@ -25,6 +28,8 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
+
+  const user = useSelector((state) => state.auth.user);
 
   const params = useParams();
 
@@ -62,6 +67,13 @@ const MovieDetails = () => {
   const rentMovie = async (e) => {
     try {
       e.preventDefault();
+
+      if (movie.age_limit > userAge(user.birth_date)) {
+        throw new Error(
+          'Przykro nam, lecz nie masz wystarczająco lat aby wypożyczyć ten film!'
+        );
+      }
+
       setProcessing(true);
       const stripe = await loadStripe(
         'pk_test_51Kf8hsKYZjL0RBuc6T5sIluifzljkgB78Q4ZVuciIorxA5IbJhZD26wE9LpqDCuslwPyYcIPhlReykc0SmYZFe4V00TqKNhMsE'
@@ -74,7 +86,8 @@ const MovieDetails = () => {
         sessionId: session.data.id,
       });
     } catch (err) {
-      setErrMessage('Transakcja zakończyła się niepowodzeniem!');
+      if (err.message.includes('Przykro')) setErrMessage(err.message);
+      else setErrMessage('Transakcja zakończyła się niepowodzeniem!');
     } finally {
       clearAsyncMessages(null, setErrMessage, setProcessing);
     }

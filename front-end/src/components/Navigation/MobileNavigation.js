@@ -18,14 +18,14 @@ const MobileNavigation = ({ children, visible }) => {
           <NavItem
             as={Link}
             to={routes.home}
-            active={location.pathname === routes.home}
+            active={location.pathname === routes.home ? '1' : ''}
           >
             Strona główna
           </NavItem>
           <NavItem
             to={routes.movies}
             as={Link}
-            active={location.pathname === routes.movies}
+            active={location.pathname === routes.movies ? '1' : ''}
           >
             Filmy
           </NavItem>

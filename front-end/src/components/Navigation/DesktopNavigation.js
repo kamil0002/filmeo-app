@@ -12,20 +12,19 @@ const DesktopNavigation = ({ children }) => {
   return (
     <Wrapper>
       <NavList>
-        {/* <ListItem active={location.pathname === '/'}> */}
         <NavItem
-          desktop
+          desktop={'1'}
           as={Link}
           to={routes.home}
-          active={location.pathname === routes.home}
+          active={location.pathname === routes.home ? '1' : ''}
         >
           Strona główna
         </NavItem>
         <NavItem
-          desktop
+          desktop={'1'}
           to={routes.movies}
           as={Link}
-          active={location.pathname === routes.movies}
+          active={location.pathname === routes.movies ? '1' : ''}
         >
           Filmy
         </NavItem>

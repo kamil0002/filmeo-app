@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import Typography from 'components/Typography/Typography';
 import styled from 'styled-components';
