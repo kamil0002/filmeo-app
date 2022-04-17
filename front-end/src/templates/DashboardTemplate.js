@@ -8,6 +8,7 @@ import responsive from 'theme/responsive';
 import { PhotoCamera } from '@mui/icons-material';
 import axios from 'utils/axios';
 import { setUserPhoto } from 'slices/authSlice';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
 
 const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   const [successMessage, setSuccessMessage] = useState(null);
@@ -26,10 +27,8 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
       setSuccessMessage('Zdjęcie zostało zmienione.');
     } catch (err) {
       setErrMessage(err.message);
-      setTimeout(() => {
-        setSuccessMessage(null);
-        setErrMessage(null);
-      }, 5000);
+    } finally {
+      clearAsyncMessages(setSuccessMessage, setErrMessage);
     }
   };
 

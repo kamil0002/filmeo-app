@@ -12,7 +12,6 @@ export const browsingGenreSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { changeGenre } = browsingGenreSlice.actions;
 
 export default browsingGenreSlice.reducer;

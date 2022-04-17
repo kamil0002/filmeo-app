@@ -36,6 +36,7 @@ const MovieDetails = () => {
     try {
       setSpinnerVisible(true);
       const movie = await axios.get(`api/v1/movies/slug/${params.slug}`);
+      console.log(movie);
       if (movie.data.status !== 'success') {
         throw new Error(movie.data.message);
       }
@@ -107,7 +108,7 @@ const MovieDetails = () => {
             time={+movie.running_time}
             poster={movie.poster}
             releaseYear={movie.release_date.split('-')[0]}
-            cost={+movie.cost}
+            cost={movie.cost}
             processing={processing}
             ownedByUser={ownedByUser}
           />
@@ -258,7 +259,7 @@ const MovieDetails = () => {
                   to={routes.login}
                   variant="contained"
                 >
-                  Zaloguj się...
+                  Zaloguj się ...
                 </StyledButton>
               )}
             </RentMovie>

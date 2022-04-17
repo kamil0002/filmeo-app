@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
@@ -9,7 +10,6 @@ import Typography from 'components/Typography/Typography';
 import responsive from 'theme/responsive';
 import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
 import Cookies from 'js-cookie';
-import { Link } from 'react-router-dom';
 
 const MovieDetailsHeader = ({
   rentMovieFn,
@@ -42,7 +42,7 @@ const MovieDetailsHeader = ({
         <MovieCost>
           <MovieCostIcon></MovieCostIcon>
           <Typography fontWeight={700} color={'#fff'} fontSize={24}>
-            {cost}zł/48h
+            {cost} zł/48h
           </Typography>
         </MovieCost>
         <HeaderAction>
@@ -228,7 +228,7 @@ MovieDetailsHeader.propTypes = {
   rentMovieFn: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   releaseYear: PropTypes.string.isRequired,
-  cost: PropTypes.number.isRequired,
+  cost: PropTypes.string.isRequired,
   poster: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
   processing: PropTypes.bool,

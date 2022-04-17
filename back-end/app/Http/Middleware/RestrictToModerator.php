@@ -22,7 +22,7 @@ class RestrictToModerator
 
         return response([
             'status' => 'error',
-            'message' => 'Ta funkcjonalnoć udostępniona jest tylko dla administratora lub moderatora!'
+            'message' => 'Ta funkcjonalność udostępniona jest tylko dla administratora lub moderatora!'
         ]);
     }
 }

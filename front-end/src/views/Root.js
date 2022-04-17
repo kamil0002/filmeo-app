@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
@@ -29,7 +28,6 @@ const Root = () => {
       const user = await axios.get('/api/v1/isLoggedIn');
       dispatch(setUser(user.data));
     } catch (err) {
-      console.log(err.message);
       Cookies.remove('token', { path: '' });
     }
   }, []);

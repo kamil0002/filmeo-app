@@ -128,7 +128,9 @@ const Chat = ({ id }) => {
         throw new Error(res.data.message);
       }
     } catch (err) {
-      setErrMessage(err.message);
+      if (err.message.includes('401')) {
+        setErrMessage('Aby pisać na chacie musisz być zalogowany!');
+      } else setErrMessage(err.message);
     } finally {
       clearAsyncMessages(setSuccessMessage, setErrMessage);
     }

@@ -38,7 +38,7 @@ Route::post('/movies/genre/{genre}', [MovieController::class, 'createMovie']);
 Route::get('/movies', [MovieController::class, 'getMovies']);
 Route::get('/movies/slug/{movieSlug}', [MovieController::class, 'getMovieBySlug']);
 Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
-Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
+Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']); //* -
 
 //* top 5
 Route::get('/top-5-frequently-rented', [MovieController::class, 'frequentlyRented']);
@@ -48,9 +48,9 @@ Route::get('/last-added-movies', [MovieController::class, 'lastAdded']);
 Route::get('/movies', [MovieController::class, 'getMovies']);
 
 //* Genre
-Route::post('/genres', [GenreController::class, 'createGenre']);
+Route::post('/genres', [GenreController::class, 'createGenre']); //* -
 Route::get('/genres', [GenreController::class, 'getAllGenres']);
-Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']);
+Route::get('/genres/{genreId}', [GenreController::class, 'getGenre']); //* -
 
 //* Get Messages
 Route::get('/getMessages', [ChatController::class, 'getMessages']);

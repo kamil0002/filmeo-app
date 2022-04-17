@@ -100,7 +100,7 @@ const Login = () => {
         </Form>
         <Typography fontFamily="Poppins" marginTop={5} fontSize={13}>
           Nie masz jeszcze konta?
-          <StyledLink to={routes.login}>Załóż konto!</StyledLink>
+          <StyledLink to={routes.register}>Załóż konto!</StyledLink>
         </Typography>
       </StyledPaper>
     </Wrapper>

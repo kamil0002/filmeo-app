@@ -10,7 +10,7 @@ const Footer = ({ display }) => {
   return (
     <Wrapper>
       <Typography color="#fff" fontWeight={700} align="center">
-        Aplikacje Internetowe - Kamil Noga
+        Wszelkie prawa zastrzeżone &copy; Kamil Noga
       </Typography>
     </Wrapper>
   );

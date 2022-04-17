@@ -17,6 +17,7 @@ const FormInput = ({
   return (
     <FormControl required={true} margin="normal">
       <StyledTextField
+        autoComplete="new-password"
         settings={settings}
         {...props}
         error={isValid}
@@ -24,9 +25,11 @@ const FormInput = ({
         id={id}
         label={label}
         type={type}
-        autoComplete="off"
         variant="standard"
         helperText={isValid ? helperText : ''}
+        inputProps={{
+          autoComplete: 'new-password',
+        }}
       />
     </FormControl>
   );

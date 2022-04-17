@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Typography from 'components/Typography/Typography';
 import { Avatar } from '@mui/material';
 import responsive from 'theme/responsive';
+import Cookie from 'js-cookie';
 
 const ChatMessage = ({ text, userName, date, self, userPhoto, senderId }) => {
   const user = useSelector((state) => state.auth.user);
@@ -17,7 +18,8 @@ const ChatMessage = ({ text, userName, date, self, userPhoto, senderId }) => {
           src={`http://127.0.0.1:8000/images/avatars/${userPhoto}`}
         />
         <Typography fontSize={12} fontWeight={700}>
-          {userName}, {date} {user.role === 'user' ? '' : `(${senderId})`}
+          {userName}, {date}{' '}
+          {user?.role === 'user' || !Cookie.get('token') ? '' : `(${senderId})`}
         </Typography>
       </UserData>
       <Typography>{text}</Typography>

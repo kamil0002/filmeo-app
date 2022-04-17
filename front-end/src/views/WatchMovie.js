@@ -30,7 +30,7 @@ const WatchMovie = () => {
     }
   }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
     setTimeout(
       () => {
         setInfo(false);
@@ -52,7 +52,7 @@ const WatchMovie = () => {
 
   return (
     <>
-      {errMessage && <Alert videoError={true}>{errMessage}</Alert>}
+      {errMessage && <Alert videoError={'1'}>{errMessage}</Alert>}
 
       {movieUrl && (
         <>

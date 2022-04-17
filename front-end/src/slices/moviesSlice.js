@@ -13,7 +13,6 @@ export const moviesSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setMovies } = moviesSlice.actions;
 
 export default moviesSlice.reducer;

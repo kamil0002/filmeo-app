@@ -38,11 +38,11 @@ const StyledAlert = styled(AlertComponent)`
 
 Alert.propTypes = {
   type: PropTypes.oneOf(['success', 'error']),
-  videoError: PropTypes.bool,
+  videoError: PropTypes.string,
   children: PropTypes.string.isRequired,
 };
 
 Alert.defaultProps = {
   type: 'error',
-  videoError: false,
+  videoError: '',
 };
