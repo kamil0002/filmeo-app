@@ -55,15 +55,16 @@ const ReviewCard = ({
         }}
         elevation={4}
       >
-        {(user?.role === 'administrator' || user?.role === 'moderator') && (
-          <DeleteButton
-            onClick={() => deleteReview(reviewId)}
-            color="error"
-            variant="text"
-          >
-            Usuń
-          </DeleteButton>
-        )}
+        {(user?.role === 'administrator' || user?.role === 'moderator') &&
+          !profile && (
+            <DeleteButton
+              onClick={() => deleteReview(reviewId)}
+              color="error"
+              variant="text"
+            >
+              Usuń
+            </DeleteButton>
+          )}
         {verified ? (
           <Tooltip title="Zweryfikowana wypożyczeniem">
             <VerifiedIcon
