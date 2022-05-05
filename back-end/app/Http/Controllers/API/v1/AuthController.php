@@ -57,13 +57,12 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), $this->registerRules());
 
         if($validator->fails()) {
-            // return response()->json($validator->errors(), 400);
             return ErrorController::handleError($validator->errors(), 400);
         }
 
         //* Check if user is banned
 
-        // $request['role'] = $request['role'] ?? 'user';
+
         
         $request['role'] = 'user';
 
@@ -175,7 +174,6 @@ class AuthController extends Controller
 
         //* Check if old password is correct
         if (!$user || !Hash::check($request['old_password'], $user->password)) {
-            // return response(['message'=>'Bledne stare haslo']);
             return ErrorController::handleError('Niepoprawne stare hasło.', 401);
         }
 
