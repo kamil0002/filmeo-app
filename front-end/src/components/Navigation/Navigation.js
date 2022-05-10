@@ -224,7 +224,7 @@ const Navigation = ({ display }) => {
 
 export default Navigation;
 
-const Wrapper = styled.div`
+const Wrapper = styled.nav`
   background: linear-gradient(
     116.82deg,
     rgba(236, 239, 241, 0.85) 0%,
