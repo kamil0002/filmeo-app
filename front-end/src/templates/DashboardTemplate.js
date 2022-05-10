@@ -15,7 +15,6 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   const [errMessage, setErrMessage] = useState(null);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-
   const imageChangeHandler = async (e) => {
     try {
       const formData = new FormData();
