@@ -35,7 +35,7 @@ class RentalController extends Controller
         'payment_method_types' => ['card'],
         'mode' => 'payment',
         'success_url' => $successURL,
-        'cancel_url' => 'http://localhost:3000/filmy/'.$movie->slug.'payment_failed',
+        'cancel_url' => 'http://localhost:8000/filmy/'.$movie->slug.'payment_failed',
         'customer_email' => auth()->user()->email,
         'line_items' => [[
             'price_data' => [
