@@ -21,14 +21,14 @@ class RentalController extends Controller
     public function getCheckoutSession(int $movieId, int $rentalId) {
 
         $movie = Movie::find($movieId);
-
         if($rentalId !== -1) {
-            $successURL = 'http://localhost:3000/profil?movie='.$movie->id.'&rental='.$rentalId;
+            $successURL = 'http://localhost:8000/profil?movie='.$movie->id.'&rental='.$rentalId;
         }
         else {
-           $successURL = 'http://localhost:3000/filmy?movie='.$movie->id;
+            $successURL = 'http://localhost:8000/filmy?movie='.$movie->id;
         }
 
+        
         $stripe = new \Stripe\StripeClient(env('STRIPE_API_KEY'));
 
         $session = $stripe->checkout->sessions->create([
@@ -38,7 +38,6 @@ class RentalController extends Controller
         'cancel_url' => 'http://localhost:3000/filmy/'.$movie->slug.'payment_failed',
         'customer_email' => auth()->user()->email,
         'line_items' => [[
-            # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
             'price_data' => [
                 'currency' => 'pln',
                 'unit_amount' => $movie->cost * 100,
