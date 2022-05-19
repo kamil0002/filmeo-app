@@ -52,7 +52,7 @@ const WatchMovie = () => {
 
   return (
     <>
-      {errMessage && <Alert videoError={'1'}>{errMessage}</Alert>}
+      {errMessage && <Alert>{errMessage}</Alert>}
 
       {movieUrl && (
         <>

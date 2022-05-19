@@ -80,7 +80,11 @@ const ReviewCard = ({
           ''
         )}
         <ReviewContent>
-          <Typography fontWeight={700} align={'center'}>
+          <Typography
+            fontWeight={700}
+            align={'center'}
+            sx={{ wordBreak: 'break-word' }}
+          >
             {title}
           </Typography>
           <Typography

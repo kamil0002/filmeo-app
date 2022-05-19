@@ -20,10 +20,13 @@ const MovieCardGrid = ({ movies, heading, backgroundColor, allMovies }) => {
         </Typography>
         <GridContainer
           allmovies={allMovies ? 1 : 0}
+          justifyContent="center"
           container
-          spacing={4}
+          rowSpacing={4}
+          columnSpacing={{ xs: 2, md: 3, lg: 4 }}
           marginTop={4}
-          paddingX={allMovies ? 6 : 2}
+          width="100%"
+          paddingX={allMovies ? 3 : 2}
         >
           {movies.map((movie) => (
             <Grid item key={movie.id}>
@@ -56,12 +59,11 @@ const OuterWrapper = styled.div`
 const Wrapper = styled.section`
   background-color: ${({ backgroundColor }) => backgroundColor};
   padding: 3rem 0;
+  margin: auto;
 `;
 
 const GridContainer = styled(Grid)`
   && {
-    justify-content: center;
-
     margin-bottom: ${({ allmovies }) => (allmovies ? '3rem' : 0)};
   }
 `;
