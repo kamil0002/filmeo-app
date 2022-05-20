@@ -83,9 +83,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('user_token')->plainTextToken;
 
-        // TODO ENABLE EMAIL
-        //* Send Welcome Mail To a User
-        //Mail::to($request['email'])->send(new WelcomeMail($request['name']));
+        Mail::to($request['email'])->send(new WelcomeMail($request['name']));
 
         return response([
             'status' => 'success',

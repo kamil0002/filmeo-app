@@ -46,7 +46,7 @@ const Register = () => {
       if (register.data.status !== 'success') {
         throw new Error(register.data.message);
       }
-      Cookies.set('token', register.data.token, { path: '' });
+      Cookies.set('token', register.data.token, { path: '', expires: 1 });
       dispatch(setUser(register.data.data));
       setSuccessMessage(
         'Twoje konto zostało utworzone, zostajesz automatycznie zalogowany.'

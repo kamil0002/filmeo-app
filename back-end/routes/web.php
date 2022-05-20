@@ -14,13 +14,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('/filmy', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('/profil', function () {
-    return view('welcome');
+    return view('index');
 });
+
+Route::get('/logowanie', function () {
+    return view('index');
+});
+
+Route::get('/rejestracja', function () {
+    return view('index');
+});
+

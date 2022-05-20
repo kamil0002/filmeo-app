@@ -38,7 +38,7 @@ const Login = () => {
       if (login.data.statusCode === 401) {
         throw new Error(login.data.message);
       }
-      Cookies.set('token', login.data.token, { path: '' });
+      Cookies.set('token', login.data.token, { path: '', expires: 1 });
       dispatch(setUser(login.data.data));
       setSuccessMessage('Pomyślnie zalogowano.');
       setTimeout(() => {
