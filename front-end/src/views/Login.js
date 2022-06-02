@@ -33,6 +33,12 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setProcessing(true);
+      for (const el in data) {
+        if (data[el].includes('<script>')) {
+          setErrMessage('Podano niedozwolony znak w haśle!');
+          return;
+        }
+      }
       await axios.get('/sanctum/csrf-cookie');
       const login = await axios.post('/api/v1/login', data);
       if (login.data.statusCode === 401) {

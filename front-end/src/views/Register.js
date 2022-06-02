@@ -32,6 +32,13 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
+      for (const el in data) {
+        if (data[el].includes('<script>')) {
+          setErrMessage('Podano niedozwolony znak w haśle!');
+          return;
+        }
+      }
+
       if (data.password !== data.password_confirmation) {
         throw new Error('Hasła nie pasują do siebie!');
       }
@@ -81,36 +88,42 @@ const Register = () => {
               ...register('name', {
                 required: true,
                 minLength: 2,
+                maxLength: 30,
+                pattern: /^((?!<script>).)*$/i,
               }),
             }}
             id="name"
             label="Imię"
             isValid={errors.name ? true : false}
-            helperText="Nie podane imienia"
+            helperText="Podaj poprawne dane, maks. długość 30 znaków"
           />
           <FormInput
             validator={{
               ...register('surname', {
                 required: true,
                 minLength: 2,
+                maxLength: 30,
+                pattern: /^((?!<script>).)*$/i,
               }),
             }}
             id="surname"
             label="Nazwisko"
             isValid={errors.surname ? true : false}
-            helperText="Nie podane nazwisko"
+            helperText="Podaj poprawne dane, maks. długość 30 znaków"
           />
           <FormInput
             validator={{
               ...register('address', {
                 required: true,
                 minLength: 2,
+                maxlength: 40,
+                pattern: /^((?!<script>).)*$/i,
               }),
             }}
             id="address"
             label="Adres zamieszkania"
             isValid={errors.address ? true : false}
-            helperText="Nie podane adresu"
+            helperText="Podaj poprawny adres, maks. długość 40 znaków"
           />
           <FormInput
             validator={{

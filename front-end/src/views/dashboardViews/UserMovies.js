@@ -7,12 +7,14 @@ import RentedMovie from 'components/RentedMovieCard/RentedMovieCard';
 import responsive from 'theme/responsive';
 import axios from 'axios';
 import { FormControlLabel, Switch } from '@mui/material';
+import { TextField } from '@mui/material';
 
 const UserMovies = () => {
   const [rentedMovies, setRentedMovies] = useState(null);
   const [filteredMovies, setFilteredMovies] = useState(null);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
   const [showExpired, setShowExpired] = useState(true);
+  const [searchText, setSearchText] = useState('');
 
   const handleMoviesDisplay = () => {
     setShowExpired(!showExpired);
@@ -22,6 +24,18 @@ const UserMovies = () => {
     );
 
     setFilteredMovies(movies);
+  };
+
+  const handleMoviesSearch = (text) => {
+    if (!text) {
+      setFilteredMovies(rentedMovies);
+      setShowExpired(true);
+    } else
+      setFilteredMovies((prevState) =>
+        prevState.filter((movie) =>
+          movie.title.toLowerCase().includes(text.toLowerCase())
+        )
+      );
   };
 
   useEffect(async () => {
@@ -44,17 +58,31 @@ const UserMovies = () => {
       <Typography fontSize={24} fontWeight={700}>
         Wypożyczone Filmy
       </Typography>
-      <FormControlLabel
-        sx={{ marginBottom: 4 }}
-        control={
-          <Switch
-            checked={showExpired}
-            onChange={handleMoviesDisplay}
-            name="expired rentals"
+      <NavWrapper>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showExpired}
+              onChange={handleMoviesDisplay}
+              name="expired rentals"
+            />
+          }
+          label="Pokaż wygaśnięte"
+        />
+        <Form>
+          <TextField
+            variant="standard"
+            sx={{ width: '150px' }}
+            id="name"
+            label="Nazwa"
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+              handleMoviesSearch(e.target.value);
+            }}
           />
-        }
-        label="Pokaż wygaśnięte"
-      />
+        </Form>
+      </NavWrapper>
       {spinnerVisible && <Spinner />}
       {filteredMovies && (
         <GridContainer container columnSpacing={3} rowSpacing={3}>
@@ -140,5 +168,27 @@ const GridContainer = styled(Grid)`
 const GridItem = styled(Grid)`
   && {
     max-width: 250px;
+  }
+`;
+
+const NavWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 1.5rem;
+
+  @media ${responsive.tablet} {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 0;
+  }
+`;
+
+const Form = styled.form`
+  margin-bottom: 1.6rem;
+  margin-top: 0.6rem;
+
+  @media ${responsive.tablet} {
+    margin-left: 3rem;
+    margin-top: 0;
   }
 `;

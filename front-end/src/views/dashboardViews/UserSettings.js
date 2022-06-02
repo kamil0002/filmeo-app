@@ -49,6 +49,9 @@ const UserSettings = () => {
 
   const changeUserData = async (data) => {
     try {
+      for (const el in data) {
+        console.log(el);
+      }
       if (userAge(data.birth_date) < 12) {
         throw new Error('Podaj poprawną datę urodzenia!');
       }
@@ -71,7 +74,12 @@ const UserSettings = () => {
 
   const changeUserPassword = async (data) => {
     try {
-      console.log(data);
+      for (const el in data) {
+        if (data[el].includes('<script>')) {
+          setErrMessage('Podano niedozwolony znak w haśle!');
+          return;
+        }
+      }
       setProcessingPasswordChange(true);
       const res = await axios.put('/api/v1/updateMyPassword', data);
 
@@ -113,25 +121,29 @@ const UserSettings = () => {
             ...registerData('name', {
               required: true,
               minLength: 2,
+              maxLength: 30,
+              pattern: /^((?!<script>).)*$/i,
             }),
           }}
           id="name"
           label="Imię"
           isValid={errors1.name ? true : false}
-          helperText="Nie podane imienia"
+          helperText="Podaj poprawne dane, maks. długość 30 znaków"
         />
         <FormInput
           settings="true"
           validator={{
             ...registerData('surname', {
               required: true,
+              maxLength: 30,
               minLength: 2,
+              pattern: /^((?!<script>).)*$/i,
             }),
           }}
           id="surname"
           label="Nazwisko"
           isValid={errors1.surname ? true : false}
-          helperText="Nie podane nazwisko"
+          helperText="Podaj poprawne dane, maks. długość 30 znaków"
         />
         <FormInput
           settings="true"
@@ -139,12 +151,14 @@ const UserSettings = () => {
             ...registerData('address', {
               required: true,
               minLength: 2,
+              maxLength: 40,
+              pattern: /^((?!<script>).)*$/i,
             }),
           }}
           id="address"
           label="Adres zamieszkania"
           isValid={errors1.address ? true : false}
-          helperText="Nie podane adresu"
+          helperText="Podaj poprawny adres, maks. długość 40 znaków"
         />
         <FormInput
           settings="true"
