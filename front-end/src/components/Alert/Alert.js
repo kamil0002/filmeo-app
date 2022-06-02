@@ -3,9 +3,9 @@ import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
 import { Alert as AlertComponent } from '@mui/material';
 
-const Alert = ({ type, children, videoError }) => {
+const Alert = ({ type, children, err }) => {
   return (
-    <StyledAlert videoError={videoError} variant="filled" severity={type}>
+    <StyledAlert err={err} variant="filled" severity={type}>
       {children}
     </StyledAlert>
   );
@@ -28,7 +28,7 @@ const StyledAlert = styled(AlertComponent)`
     z-index: 10000;
     width: 80vmin;
     position: fixed;
-    top: ${({ videoError }) => (videoError ? 0 : '76px')};
+    top: ${({ err }) => (err ? 0 : '76px')};
     left: 50%;
     transform: translateX(-50%);
     animation: ${showAlert} 500ms ease-out;
@@ -38,11 +38,11 @@ const StyledAlert = styled(AlertComponent)`
 
 Alert.propTypes = {
   type: PropTypes.oneOf(['success', 'error']),
-  videoError: PropTypes.string,
+  err: PropTypes.string,
   children: PropTypes.string.isRequired,
 };
 
 Alert.defaultProps = {
   type: 'error',
-  videoError: '',
+  err: '',
 };
