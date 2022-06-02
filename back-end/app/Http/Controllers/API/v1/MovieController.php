@@ -49,18 +49,18 @@ class MovieController extends Controller
     private function updateRules()
     {
         return [
-            'title' => 'bail|string|unique:movies',
+            'title' => 'bail|string',
+            'age_limit' => 'numeric',
             'description' => 'string',
             'short_description' => 'string',
             'director' => 'string',
             'release_date' => 'date|before:today',
             'running_time' => 'numeric',
             'poster' => 'string',
-            'movie_link' => 'string',
-            'trailer_link' => 'string',
-            'details_link' => 'string',
+            'movie_url' => 'string',
+            'trailer_url' => 'string',
+            'details_url' => 'string',
             'cost' => 'numeric',
-            'genres' => 'array|min:1'
         ];
     }
 
@@ -243,17 +243,32 @@ class MovieController extends Controller
         $validator = Validator::make($request->all(), $this->updateRules());
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return ErrorController::handleError($validator->errors(), 400);
         }
 
-        $request['title'] && $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
+        $request['title'] && $request['slug'] && $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
 
-        $movie->update($request->all());
+        $movie->update([
+            'title' => $request['title'],
+            'age_limit' => intval($request['age_limit']),
+            'description' => $request['description'],
+            'short_description' => $request['short_description'],
+            'director' => $request['director'],
+            'release_date' => $request['release_date'],
+            'running_time' => intval($request['ruunning_time']),
+            'poster' => $movie->poster,
+            'movie_url' => $request['movie_url'],
+            'trailer_url' => $request['trailer_url'],
+            'details_url' => $request['details_url'],
+            'cost' => intval($request['cost']),
+        ]);
+
+        $updatedMovie = Movie::where('id', '=', $movieId)->get()[0];
 
         return response([
             'status' => 'success',
             'data' => [
-                $movie
+                $updatedMovie
             ]
         ]);
     }

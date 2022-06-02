@@ -166,7 +166,7 @@ const DbData = ({ handleClose }) => {
 const Wrapper = styled.div`
   min-height: calc(100vh - 76px);
   position: relative;
-  z-index: 1000;
+  z-index: 100;
 `;
 
 const ContentWrapper = styled.div``;
@@ -181,10 +181,12 @@ const Form = styled.form`
 `;
 
 const Close = styled(CloseIcon)`
-  position: absolute;
-  right: 2%;
-  top: 2%;
-  cursor: pointer;
+  && {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    cursor: pointer;
+  }
 `;
 
 const FormWrapper = styled.div`

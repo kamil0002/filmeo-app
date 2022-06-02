@@ -225,6 +225,7 @@ const Navigation = ({ display }) => {
 export default Navigation;
 
 const Wrapper = styled.div`
+  z-index: 1000000000000;
   background: linear-gradient(
     116.82deg,
     rgba(236, 239, 241, 0.85) 0%,

@@ -9,8 +9,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled as styledMUI } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { Button, Grid, TextField } from '@mui/material';
+import { Alert, Button, Grid, TextField } from '@mui/material';
 import Typography from 'components/Typography/Typography';
+import clearAsyncMessages from 'utils/clearAsyncMessages';
+import axios from 'axios';
 
 const StyledTableCell = styledMUI(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -24,6 +26,8 @@ const StyledTableCell = styledMUI(TableCell)(({ theme }) => ({
 
 const TableComponent = ({ rows, dataType, headings }) => {
   const [selectedID, setSelectedID] = useState(null);
+  const [errMessage, setErrMessage] = useState(null);
+
   const [formData, setFormData] = useState({
     title: '',
     director: '',
@@ -38,19 +42,22 @@ const TableComponent = ({ rows, dataType, headings }) => {
   });
 
   const handleRowSelect = (row) => {
-    setFormData({
-      title: row.title,
-      director: row.director,
-      running_time: row.running_time,
-      description: row.description,
-      short_description: row.short_description,
-      cost: row.cost,
-      age_limit: row.age_limit,
-      release_date: row.release_date,
-      trailer_url: row.trailer_url,
-      movie_url: row.movie_url,
-    });
+    setFormData(row);
     setSelectedID(row.id);
+  };
+
+  const handleMovieUpdate = async () => {
+    try {
+      const updatedMovie = await axios.put(
+        `/api/v1/movies/${formData.id}`,
+        formData
+      );
+      console.log(updatedMovie);
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(null, setErrMessage, null);
+    }
   };
 
   const handleFormDataChange = (e) => {
@@ -62,6 +69,7 @@ const TableComponent = ({ rows, dataType, headings }) => {
 
   return (
     <>
+      {errMessage && <Alert>{errMessage}</Alert>}
       <TableContainer
         component={Paper}
         sx={{
@@ -108,7 +116,7 @@ const TableComponent = ({ rows, dataType, headings }) => {
                 ))
               : rows.map((row) => (
                   <StyledTableRow
-                    key={row.name}
+                    key={row.title}
                     sx={{
                       '&:last-child td, &:last-child th': {
                         border: 0,
@@ -381,6 +389,7 @@ const TableComponent = ({ rows, dataType, headings }) => {
             size="large"
             variant="contained"
             sx={{ marginTop: 8, marginBottom: 10 }}
+            onClick={handleMovieUpdate}
           >
             Zapisz
           </Button>
