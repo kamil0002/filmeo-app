@@ -38,7 +38,6 @@ Route::post('/movies/genre/{genre}', [MovieController::class, 'createMovie']);
 Route::get('/movies', [MovieController::class, 'getMovies']);
 Route::get('/movies/slug/{movieSlug}', [MovieController::class, 'getMovieBySlug']);
 Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
-Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']); //* -
 
 //* top 5
 Route::get('/top-5-frequently-rented', [MovieController::class, 'frequentlyRented']);
@@ -74,29 +73,30 @@ Route::middleware('auth:sanctum')->group(function () {
 
   //* Upload Photo
   Route::post('/uploadAvatar', [ImageController::class, 'uploadAvatar']);
-  
+
   //* Messages
   Route::post('/message', [ChatController::class, 'sendMessage']);
 
-  
+
   //* Only Admin func
-  Route::middleware('restrictToAdmin')->group(function() {
+  Route::middleware('restrictToAdmin')->group(function () {
     Route::delete('/admin/movies/{movieId}', [MovieController::class, 'deleteMovie']);
     Route::put('/admin/add-moderator', [AdminController::class, 'addModerator']);
     Route::put('/admin/delete-moderator', [AdminController::class, 'deleteModerator']);
     Route::put('/admin/ban', [AdminController::class, 'banUser']);
     Route::put('/admin/unban', [AdminController::class, 'unbanUser']);
+    Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
   });
 
   //* Admin and Moderator func
-  Route::middleware('restrictToModerator')->group(function() {
+  Route::middleware('restrictToModerator')->group(function () {
     Route::put('/admin/unmute', [AdminController::class, 'unmuteUser']);
     Route::put('/admin/mute', [AdminController::class, 'muteUser']);
   });
 
   //* Only User and Moderator func
 
-  Route::middleware('userModeratorFunc')->group(function() {
+  Route::middleware('userModeratorFunc')->group(function () {
     //* Movie video
     Route::get('/rentals/{rentalId}/movies/{movieSlug}/video', [MovieController::class, 'getMovieVideo']);
 

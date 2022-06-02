@@ -36,86 +36,90 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   };
 
   return (
-    <Wrapper>
-      {errMessage && <Alert>{errMessage}</Alert>}
-      {successMessage && <Alert type="success">{successMessage}</Alert>}
-      <StyledPaper>
-        {user?.role === 'administrator' && (
-          <>
-            {viewDb && <DbData handleClose={() => setViewDb(false)} />}
-            <ViewDataButton color="primary" onClick={() => setViewDb(true)}>
-              Podgląd danych
-            </ViewDataButton>
-          </>
-        )}
-        <Sidebar>
-          <User>
-            <ChangeAvatarInput
-              onChange={imageChangeHandler}
-              type="file"
-              id="file-input"
-            />
-            <AvatarWrapper htmlFor="file-input">
-              <ChangePhotoIcon />
-              <Avatar
-                src={`http://127.0.0.1:8000/images/avatars/${user?.avatar}`}
-                alt="user"
-              />
-            </AvatarWrapper>
-            <UserName marginTop={2} fontFamily="Poppins" fontWeight={500}>
-              {user.name} {user.surname}
-            </UserName>
-          </User>
-          <Navigation>
-            <NavigationList>
-              {user.role !== 'administrator' && (
-                <>
-                  <NavigationItem
-                    currentView={currentView === 'movies'}
-                    onClick={() => handleViewChange('movies')}
-                  >
-                    <img src=".././images/nav-movie.svg" />
-                    <span>Filmy</span>
-                  </NavigationItem>
-                  <NavigationItem
-                    currentView={currentView === 'reviews'}
-                    onClick={() => handleViewChange('reviews')}
-                  >
-                    <img src=".././images/nav-reviews.svg" />
-                    <span>Oceny</span>
-                  </NavigationItem>
-                  <NavigationItem
-                    currentView={currentView === 'stats'}
-                    onClick={() => handleViewChange('stats')}
-                  >
-                    <img src=".././images/nav-stats.svg" />
-                    <span>Wydatki</span>
-                  </NavigationItem>
-                </>
-              )}
-              <NavigationItem
-                currentView={currentView === 'settings'}
-                onClick={() => handleViewChange('settings')}
-              >
-                <img src=".././images/nav-settings.svg" />
-                <span>Ustawienia</span>
-              </NavigationItem>
-              {user.role === 'moderator' ||
-                (user.role === 'administrator' && (
-                  <NavigationItem
-                    currentView={currentView === 'admin'}
-                    onClick={() => handleViewChange('admin')}
-                  >
-                    <img src=".././images/nav-admin.svg" />
-                    <span>Panel Admina</span>
-                  </NavigationItem>
-                ))}
-            </NavigationList>
-          </Navigation>
-        </Sidebar>
-        <Content>{children}</Content>
-      </StyledPaper>
-    </Wrapper>
+    <>
+      {user?.role === 'administrator' && (
+        <>{viewDb && <DbData handleClose={() => setViewDb(false)} />}</>
+      )}
+      {!viewDb && (
+        <Wrapper>
+          {errMessage && <Alert>{errMessage}</Alert>}
+          {successMessage && <Alert type="success">{successMessage}</Alert>}
+          <StyledPaper>
+            <>
+              <ViewDataButton color="primary" onClick={() => setViewDb(true)}>
+                Podgląd danych
+              </ViewDataButton>
+              <Sidebar>
+                <User>
+                  <ChangeAvatarInput
+                    onChange={imageChangeHandler}
+                    type="file"
+                    id="file-input"
+                  />
+                  <AvatarWrapper htmlFor="file-input">
+                    <ChangePhotoIcon />
+                    <Avatar
+                      src={`http://127.0.0.1:8000/images/avatars/${user?.avatar}`}
+                      alt="user"
+                    />
+                  </AvatarWrapper>
+                  <UserName marginTop={2} fontFamily="Poppins" fontWeight={500}>
+                    {user.name} {user.surname}
+                  </UserName>
+                </User>
+                <Navigation>
+                  <NavigationList>
+                    {user.role !== 'administrator' && (
+                      <>
+                        <NavigationItem
+                          currentView={currentView === 'movies'}
+                          onClick={() => handleViewChange('movies')}
+                        >
+                          <img src=".././images/nav-movie.svg" />
+                          <span>Filmy</span>
+                        </NavigationItem>
+                        <NavigationItem
+                          currentView={currentView === 'reviews'}
+                          onClick={() => handleViewChange('reviews')}
+                        >
+                          <img src=".././images/nav-reviews.svg" />
+                          <span>Oceny</span>
+                        </NavigationItem>
+                        <NavigationItem
+                          currentView={currentView === 'stats'}
+                          onClick={() => handleViewChange('stats')}
+                        >
+                          <img src=".././images/nav-stats.svg" />
+                          <span>Wydatki</span>
+                        </NavigationItem>
+                      </>
+                    )}
+                    <NavigationItem
+                      currentView={currentView === 'settings'}
+                      onClick={() => handleViewChange('settings')}
+                    >
+                      <img src=".././images/nav-settings.svg" />
+                      <span>Ustawienia</span>
+                    </NavigationItem>
+                    {user.role === 'moderator' ||
+                      (user.role === 'administrator' && (
+                        <NavigationItem
+                          currentView={currentView === 'admin'}
+                          onClick={() => handleViewChange('admin')}
+                        >
+                          <img src=".././images/nav-admin.svg" />
+                          <span>Panel Admina</span>
+                        </NavigationItem>
+                      ))}
+                  </NavigationList>
+                </Navigation>
+              </Sidebar>
+              <Content>{children}</Content>
+            </>
+          </StyledPaper>
+        </Wrapper>
+      )}
+    </>
   );
 };
 

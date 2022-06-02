@@ -1,15 +1,17 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'utils/axios';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
-import { Paper } from '@mui/material';
+import { TextField } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Table from 'components/Table/Table';
+import responsive from 'theme/responsive';
 
 const moviesHeadings = [
   'ID',
@@ -42,16 +44,43 @@ const usersHeadings = [
 
 const DbData = ({ handleClose }) => {
   const [movies, setMovies] = useState(null);
+  const [filteredMovies, setFilteredMovies] = useState(null);
   const [users, setUsers] = useState(null);
+  const [filteredUsers, setFilteredUsers] = useState(null);
   const [currentView, setCurrentView] = useState('users');
+  const [searchedUser, setSearchedUser] = useState('');
+  const [searchedMovie, setSearchedMovie] = useState('');
 
   useEffect(async () => {
     const movies = await axios.get('/api/v1/movies');
     setMovies(movies.data.data[0]);
+    setFilteredMovies(movies.data.data[0]);
     const users = await axios.get('/api/v1/users');
     setUsers(users.data.data[0]);
-    console.log(movies, users);
+    setFilteredUsers(users.data.data[0]);
   }, []);
+
+  const handleUserSearch = (text) => {
+    if (!text) {
+      setFilteredUsers(users);
+    } else
+      setFilteredUsers(
+        users.filter((user) =>
+          user.surname.toLowerCase().includes(text.toLowerCase())
+        )
+      );
+  };
+
+  const handleMovieSearch = (text) => {
+    if (!text) {
+      setFilteredMovies(movies);
+    } else
+      setFilteredMovies(
+        movies.filter((movie) =>
+          movie.title.toLowerCase().includes(text.toLowerCase())
+        )
+      );
+  };
 
   return (
     <Wrapper>
@@ -83,28 +112,74 @@ const DbData = ({ handleClose }) => {
         </FormControl>
       </FormWrapper>
       <Close onClick={handleClose} />
-      {users?.length > 0 &&
-        movies?.length > 0 &&
-        (currentView === 'users' ? (
-          <Table dataType="users" rows={users} headings={usersHeadings} />
-        ) : (
-          <Table dataType="movies" rows={movies} headings={moviesHeadings} />
-        ))}
+      <ContentWrapper>
+        {currentView === 'users' && (
+          <Form>
+            <TextField
+              variant="standard"
+              sx={{ width: '200px', marginLeft: 4 }}
+              id="name"
+              label="Nazwisko użytkownika"
+              value={searchedUser}
+              onChange={(e) => {
+                setSearchedUser(e.target.value);
+                handleUserSearch(e.target.value);
+              }}
+            />
+          </Form>
+        )}
+        {currentView === 'movies' && (
+          <Form>
+            <TextField
+              variant="standard"
+              sx={{ width: '200px', marginLeft: 4 }}
+              id="name"
+              label="Nazwa filmu"
+              value={searchedMovie}
+              onChange={(e) => {
+                setSearchedMovie(e.target.value);
+                handleMovieSearch(e.target.value);
+              }}
+            />
+          </Form>
+        )}
+        {filteredUsers?.length > 0 &&
+          filteredMovies?.length > 0 &&
+          (currentView === 'users' ? (
+            <Table
+              dataType="users"
+              rows={filteredUsers}
+              headings={usersHeadings}
+            />
+          ) : (
+            <Table
+              dataType="movies"
+              rows={filteredMovies}
+              headings={moviesHeadings}
+            />
+          ))}
+      </ContentWrapper>
     </Wrapper>
   );
 };
 
-const Wrapper = styled(Paper)`
-  position: fixed;
-  margin-top: 38px;
-  min-width: 90vw;
-  min-height: 90vh;
-  top: 50%;
-  right: 2%;
-  left: 2%;
-  transform: translateY(-50%);
+const Wrapper = styled.div`
+  min-height: calc(100vh - 76px);
+  position: relative;
   z-index: 1000;
 `;
+
+const ContentWrapper = styled.div``;
+
+const Form = styled.form`
+  width: 90vw;
+  margin: 0.6rem auto 1.6rem auto;
+
+  @media ${responsive.tablet} {
+    margin-top: 0;
+  }
+`;
+
 const Close = styled(CloseIcon)`
   position: absolute;
   right: 2%;
@@ -116,7 +191,7 @@ const FormWrapper = styled.div`
   && {
     display: flex;
     justify-content: center;
-    margin: 3rem auto;
+    padding-top: 3.5rem;
   }
 `;
 

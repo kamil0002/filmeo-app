@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import Spinner from 'components/Spinner/Spinner';
 import Typography from 'components/Typography/Typography';
@@ -15,6 +16,7 @@ const UserMovies = () => {
   const [spinnerVisible, setSpinnerVisible] = useState(false);
   const [showExpired, setShowExpired] = useState(true);
   const [searchText, setSearchText] = useState('');
+  const user = useSelector((state) => state.auth.user);
 
   const handleMoviesDisplay = () => {
     setShowExpired(!showExpired);
@@ -69,19 +71,22 @@ const UserMovies = () => {
           }
           label="Pokaż wygaśnięte"
         />
-        <Form>
-          <TextField
-            variant="standard"
-            sx={{ width: '150px' }}
-            id="name"
-            label="Nazwa"
-            value={searchText}
-            onChange={(e) => {
-              setSearchText(e.target.value);
-              handleMoviesSearch(e.target.value);
-            }}
-          />
-        </Form>
+        {user}
+        {user?.role !== 'administrator' && (
+          <Form>
+            <TextField
+              variant="standard"
+              sx={{ width: '150px' }}
+              id="name"
+              label="Nazwa"
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                handleMoviesSearch(e.target.value);
+              }}
+            />
+          </Form>
+        )}
       </NavWrapper>
       {spinnerVisible && <Spinner />}
       {filteredMovies && (
