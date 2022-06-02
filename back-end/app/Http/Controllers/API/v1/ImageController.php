@@ -11,7 +11,7 @@ use App\Http\Controllers\API\v1\ErrorController;
 
 class ImageController extends Controller
 {
-    
+
     /**
      * rules
      *
@@ -23,34 +23,40 @@ class ImageController extends Controller
             'avatar' => 'required|image|mimes:jpeg,png,jpg|max:800',
         ];
     }
-    
+
     /**
      * uploadAvatar
      *
      * @param  mixed $request
      * @return json nowa ścieżka do avataru
      */
-    public function uploadAvatar(Request $request) {
+    public function uploadAvatar(Request $request)
+    {
 
         $file = $request->hasFile('avatar');
 
         $validator = Validator::make($request->all(), $this->rules());
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return ErrorController::handleError('Niepoprawne zdjęcie, dostępne formaty to: jpeg,png,jpg, a maksymalny rozmiar to 800px.', 400, 'failed');
         }
 
-        if(!$file) {
+        if (!$file) {
             return ErrorController::handleError('Niepoprawne zdjęcie', 400, 'failed');
         }
 
 
-        if($file) {
+
+        if ($file) {
             $avatar = $request->file('avatar');
 
+            if (strlen($avatar->getClientOriginalName()) > 100) {
+                return ErrorController::handleError('Zbyt długa nazwa zdjęcia', 400, 'failed');
+            }
+
             //* Create Random File Name
-            $fileName = time().$avatar->getClientOriginalName();
-    
+            $fileName = time() . $avatar->getClientOriginalName();
+
 
             //* Save File To appropriate folder
             $avatar->move(public_path('images/avatars'), $fileName);
