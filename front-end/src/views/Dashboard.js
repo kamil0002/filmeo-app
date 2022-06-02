@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [currentView, setCurrentView] = useState(
     user?.role === 'administrator' ? 'admin' : 'movies'
   );
+
   const { search } = useLocation();
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);

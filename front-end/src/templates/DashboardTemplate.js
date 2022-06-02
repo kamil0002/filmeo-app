@@ -3,18 +3,21 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Alert from 'components/Alert/Alert';
-import { Paper, Typography } from '@mui/material';
+import { Paper, Typography, Button } from '@mui/material';
 import responsive from 'theme/responsive';
 import { PhotoCamera } from '@mui/icons-material';
 import axios from 'utils/axios';
 import { setUserPhoto } from 'slices/authSlice';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
+import DbData from 'views/DbData';
 
 const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   const [successMessage, setSuccessMessage] = useState(null);
+  const [viewDb, setViewDb] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+
   const imageChangeHandler = async (e) => {
     try {
       const formData = new FormData();
@@ -37,6 +40,14 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
       {errMessage && <Alert>{errMessage}</Alert>}
       {successMessage && <Alert type="success">{successMessage}</Alert>}
       <StyledPaper>
+        {user?.role === 'administrator' && (
+          <>
+            {viewDb && <DbData handleClose={() => setViewDb(false)} />}
+            <ViewDataButton color="primary" onClick={() => setViewDb(true)}>
+              Podgląd danych
+            </ViewDataButton>
+          </>
+        )}
         <Sidebar>
           <User>
             <ChangeAvatarInput
@@ -124,6 +135,7 @@ const StyledPaper = styled(Paper)`
     box-shadow: 2px 4px 30px rgba(0, 0, 0, 0.25);
     display: flex;
     justify-content: center;
+    position: relative;
 
     @media ${responsive.laptop} {
       width: 80%;
@@ -309,6 +321,14 @@ const Content = styled.div`
 
   @media ${responsive.tablet} {
     width: calc(100% - 200px);
+  }
+`;
+
+const ViewDataButton = styled(Button)`
+  && {
+    position: absolute;
+    top: 2%;
+    right: 3%;
   }
 `;
 
