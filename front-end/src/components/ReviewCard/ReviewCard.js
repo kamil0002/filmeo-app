@@ -8,6 +8,11 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import { Tooltip } from '@mui/material';
 import Alert from 'components/Alert/Alert';
 import axios from 'utils/axios';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const ReviewCard = ({
   profile,
@@ -20,9 +25,19 @@ const ReviewCard = ({
   verified,
   reviewId,
 }) => {
+  const [open, setOpen] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccesMessage] = useState(null);
+  const [reviewToDelete, setReviewToDelete] = useState(null);
   const user = useSelector((state) => state.auth.user);
+
+  const handleClose = (e) => {
+    if (e.target.dataset.value === 'accept') {
+      deleteReview(reviewToDelete);
+    }
+    setReviewToDelete(null);
+    setOpen(false);
+  };
 
   const deleteReview = async (id) => {
     try {
@@ -42,8 +57,33 @@ const ReviewCard = ({
     }
   };
 
+  const handleClickOpen = (reviewId) => {
+    setReviewToDelete(reviewId);
+    setOpen(true);
+  };
+
   return (
     <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">Usuwanie opinii</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Czy na pewno chcesz usunać opinię?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose} data-value="accept">
+            Tak
+          </Button>
+          <Button onClick={handleClose} autoFocus data-value="decline">
+            Nie
+          </Button>
+        </DialogActions>
+      </Dialog>
       {successMessage && <Alert type="success">{successMessage}</Alert>}
       {errMessage && <Alert>{errMessage}</Alert>}
       <Paper
@@ -58,7 +98,7 @@ const ReviewCard = ({
         {(user?.role === 'administrator' || user?.role === 'moderator') &&
           !profile && (
             <DeleteButton
-              onClick={() => deleteReview(reviewId)}
+              onClick={() => handleClickOpen(reviewId)}
               color="error"
               variant="text"
             >
@@ -108,7 +148,7 @@ const ReviewCard = ({
             sx={{ display: 'flex', justifyContent: 'flex-end' }}
           />
           {profile && (
-            <Button onClick={() => deleteReview(reviewId)} variant="text">
+            <Button onClick={() => handleClickOpen(reviewId)} variant="text">
               Usuń
             </Button>
           )}
