@@ -14,9 +14,11 @@ import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
 import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
+import AddMovie from 'views/AddMovie';
 
 const AdminPanel = () => {
   const [selectMod, setSelectMod] = useState('');
+  const [addMovieFormVisible, setAddMovieFormVisible] = useState(false);
   const [processingUserBan, setProcessingUserBan] = useState(false);
   const [processingUserUnban, setProcessingUserUnban] = useState(false);
   const [processingAddModerator, setProcessingAddModerator] = useState(false);
@@ -41,6 +43,10 @@ const AdminPanel = () => {
     handleSubmit: handleSubmitAddModerator,
     formState: { errors: errors2 },
   } = useForm({ shouldFocusError: false });
+
+  const handleMovieAddFormDisplay = () => {
+    setAddMovieFormVisible(true);
+  };
 
   useEffect(async () => {
     try {
@@ -169,11 +175,23 @@ const AdminPanel = () => {
   };
 
   return (
-    <>
+    <Wrapper>
+      {addMovieFormVisible && (
+        <AddMovie setFormInvisible={() => setAddMovieFormVisible(false)} />
+      )}
       {errMessage && <Alert>{errMessage}</Alert>}
       {successMessage && <Alert type="success">{successMessage}</Alert>}
-      <DeleteMovieWrapper>
-        <Typography fontWeight={700}>Panel Admina</Typography>
+      <Typography fontSize={24} fontWeight={700}>
+        Panel Admina
+      </Typography>
+      <MovieActionsWrapper>
+        <StyledButton
+          variant="outlined"
+          sx={{ marginLeft: 2, marginBottom: -3.5 }}
+          onClick={handleMovieAddFormDisplay}
+        >
+          Dodaj film
+        </StyledButton>
         <StyledForm>
           <Typography marginTop={3}>Usuwanie Filmów</Typography>
           <FormControl sx={{ marginY: 2 }}>
@@ -207,7 +225,7 @@ const AdminPanel = () => {
             oraz recenzjami!
           </Typography>
         </StyledForm>
-      </DeleteMovieWrapper>
+      </MovieActionsWrapper>
       <BlockUserWrapper>
         <Typography marginTop={3}>Zablokuj użytkownika</Typography>
         <Form
@@ -314,7 +332,7 @@ const AdminPanel = () => {
           {processingDeleteMod && <ProcessingSpinner spinnerDark={true} />}
         </StyledButton>
       </DeleteModeratorWrapper>
-    </>
+    </Wrapper>
   );
 };
 
@@ -345,6 +363,13 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const Wrapper = styled.div`
+  margin: auto;
+  @media ${responsive.tablet} {
+    margin-left: 2rem;
+  }
+`;
+
 const StyledSelect = styled(Select)`
   && {
     width: 150px;
@@ -360,7 +385,7 @@ const BlockUserWrapper = styled.div`
   margin-top: 5rem;
 `;
 
-const DeleteMovieWrapper = styled.div``;
+const MovieActionsWrapper = styled.div``;
 
 const AddModeratorWrapper = styled(BlockUserWrapper)``;
 
