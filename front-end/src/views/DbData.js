@@ -60,6 +60,25 @@ const DbData = ({ handleClose }) => {
     setFilteredUsers(users.data.data[0]);
   }, []);
 
+  const getChangedRow = (changedMovie) => {
+    let newMovies = [];
+    filteredMovies.forEach((movie) => {
+      if (movie.id === changedMovie.id) newMovies.push(changedMovie);
+      else newMovies.push(movie);
+    });
+
+    setFilteredMovies(newMovies);
+
+    newMovies = [];
+
+    movies.forEach((movie) => {
+      if (movie.id === changedMovie.id) newMovies.push(changedMovie);
+      else newMovies.push(movie);
+    });
+
+    setMovies(newMovies);
+  };
+
   const handleUserSearch = (text) => {
     if (!text) {
       setFilteredUsers(users);
@@ -154,6 +173,7 @@ const DbData = ({ handleClose }) => {
           ) : (
             <Table
               dataType="movies"
+              getChangedRow={getChangedRow}
               rows={filteredMovies}
               headings={moviesHeadings}
             />

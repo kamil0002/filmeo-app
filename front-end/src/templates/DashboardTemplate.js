@@ -34,10 +34,9 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
       clearAsyncMessages(setSuccessMessage, setErrMessage);
     }
   };
-
   return (
     <>
-      {user?.role === 'administrator' && (
+      {user && user?.role === 'administrator' && (
         <>{viewDb && <DbData handleClose={() => setViewDb(false)} />}</>
       )}
       {!viewDb && (
@@ -331,7 +330,7 @@ const Content = styled.div`
 const ViewDataButton = styled(Button)`
   && {
     position: absolute;
-    top: 2%;
+    top: 4%;
     right: 3%;
   }
 `;

@@ -9,7 +9,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled as styledMUI } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { Alert, Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
+import Alert from 'components/Alert/Alert';
 import Typography from 'components/Typography/Typography';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
 import axios from 'axios';
@@ -24,9 +25,12 @@ const StyledTableCell = styledMUI(TableCell)(({ theme }) => ({
   },
 }));
 
-const TableComponent = ({ rows, dataType, headings }) => {
+const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
   const [selectedID, setSelectedID] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  const [showForm, setshowForm] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -43,6 +47,7 @@ const TableComponent = ({ rows, dataType, headings }) => {
 
   const handleRowSelect = (row) => {
     setFormData(row);
+    setshowForm(true);
     setSelectedID(row.id);
   };
 
@@ -52,11 +57,14 @@ const TableComponent = ({ rows, dataType, headings }) => {
         `/api/v1/movies/${formData.id}`,
         formData
       );
-      console.log(updatedMovie);
+      getChangedRow(updatedMovie.data.data[0]);
+      setSuccessMessage('Pomyślnie zmieniono dane.');
     } catch (err) {
       setErrMessage(err.message);
+      setErrMessage('Błąd podczas zmiany danych');
     } finally {
-      clearAsyncMessages(null, setErrMessage, null);
+      clearAsyncMessages(setSuccessMessage, setErrMessage, null);
+      setshowForm(false);
     }
   };
 
@@ -70,6 +78,7 @@ const TableComponent = ({ rows, dataType, headings }) => {
   return (
     <>
       {errMessage && <Alert>{errMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
       <TableContainer
         component={Paper}
         sx={{
@@ -78,6 +87,7 @@ const TableComponent = ({ rows, dataType, headings }) => {
           marginLeft: 'auto',
           marginRight: 'auto',
           marginTop: 5,
+          marginBottom: 2,
         }}
       >
         <Table sx={{ overflow: 'scroll' }} aria-label="customized table">
@@ -156,7 +166,7 @@ const TableComponent = ({ rows, dataType, headings }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {dataType === 'movies' && (
+      {dataType === 'movies' && showForm && (
         <Form>
           <Typography sx={{ fontWeight: 700, fontSize: 24, my: 5 }}>
             Aktualizacja filmu
@@ -419,10 +429,9 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-// const InputsWrapper = styled.div``;
-
 TableComponent.propTypes = {
   rows: PropTypes.array,
   dataType: PropTypes.string,
   headings: PropTypes.array,
+  getChangedRow: PropTypes.func,
 };

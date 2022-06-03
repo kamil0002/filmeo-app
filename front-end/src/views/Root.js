@@ -31,6 +31,7 @@ const Root = () => {
       Cookies.remove('token', { path: '' });
     }
   }, []);
+
   return (
     <>
       <GlobalStyles movieView={location.pathname.endsWith('ogladaj') ? 1 : 0} />

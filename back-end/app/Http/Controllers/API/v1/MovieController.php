@@ -255,7 +255,7 @@ class MovieController extends Controller
             'short_description' => $request['short_description'],
             'director' => $request['director'],
             'release_date' => $request['release_date'],
-            'running_time' => intval($request['ruunning_time']),
+            'running_time' => intval($request['running_time']),
             'poster' => $movie->poster,
             'movie_url' => $request['movie_url'],
             'trailer_url' => $request['trailer_url'],
