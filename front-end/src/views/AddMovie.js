@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from 'components/Typography/Typography';
-import responsive from 'theme/responsive';
 import { Button, Grid, TextField } from '@mui/material';
 import { setAddMovieViewVisible } from 'slices/moviesSlice';
+import axios from 'axios';
 
 const AddMovie = () => {
-  const [processing, setProcessing] = useState(false);
+  const [availableGenres, setAvailableGenres] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
     genres: '',
@@ -27,6 +27,15 @@ const AddMovie = () => {
   });
 
   const dispatch = useDispatch();
+
+  useEffect(async () => {
+    try {
+      const genres = await axios.get('/api/v1/genres');
+      setAvailableGenres(genres.data.data[0]);
+    } catch (err) {
+      console.err(err.message);
+    }
+  }, []);
 
   const handleFormDataChange = (e) => {
     setFormData((prevState) => ({
@@ -59,7 +68,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -79,18 +88,36 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
-            <TextField
-              variant="filled"
-              sx={{ width: '90%' }}
-              id="genres"
-              name="genres"
-              label="Gatunki"
-              onChange={handleFormDataChange}
-              value={formData.genres}
-            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'stretch',
+                alignItems: 'stretch',
+                width: '90%',
+              }}
+            >
+              <TextField
+                variant="filled"
+                sx={{ width: '90%' }}
+                id="genres"
+                name="genres"
+                label="Gatunki"
+                onChange={handleFormDataChange}
+                value={formData.genres}
+              />
+              <AvailableGenresElement>
+                Maks 3 z{' '}
+                {availableGenres.map(
+                  (g, i) =>
+                    `${g.name}${i === availableGenres.length - 1 ? '' : ', '}`
+                )}
+                <b> oddzielone ,</b>
+              </AvailableGenresElement>
+            </div>
           </Grid>
           <Grid
             item
@@ -99,7 +126,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -119,7 +146,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -140,7 +167,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -162,7 +189,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -184,7 +211,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -204,7 +231,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -224,7 +251,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <div
@@ -256,7 +283,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -276,7 +303,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -296,7 +323,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <TextField
@@ -316,7 +343,7 @@ const AddMovie = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-start',
             }}
           >
             <div
@@ -331,7 +358,7 @@ const AddMovie = () => {
               <label style={{ fontSize: 14, color: '#828282' }}>Plakat</label>
               <TextField
                 variant="filled"
-                sx={{ width: '90%' }}
+                sx={{ width: '100%' }}
                 id="poster"
                 name="poster"
                 type="file"
@@ -378,6 +405,11 @@ const Close = styled(CloseIcon)`
     top: 2%;
     cursor: pointer;
   }
+`;
+
+const AvailableGenresElement = styled.span`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.darkGray};
 `;
 
 export default AddMovie;
