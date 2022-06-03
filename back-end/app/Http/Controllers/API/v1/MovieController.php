@@ -26,18 +26,18 @@ class MovieController extends Controller
     {
         return [
             'title' => 'bail|required|string|unique:movies',
-            'age_limit' => 'required|numeric|min:1',
-            'description' => 'required|string',
-            'short_description' => 'required|string',
+            'age_limit' => 'required|min:1',
+            'description' => 'required|string|min:50|max:200',
+            'short_description' => 'required|string|min:30|max:120',
             'director' => 'required|string',
             'release_date' => 'required|date|before:today',
-            'running_time' => 'required|numeric',
-            'poster' => 'required|string',
-            'movie_link' => 'required|string',
-            'trailer_link' => 'required|string',
-            'details_link' => 'required|string',
-            'cost' => 'required|numeric',
-            'genres' => 'required|array|min:1'
+            'running_time' => 'required',
+            'movie_url' => 'required|string',
+            'trailer_url' => 'required|string',
+            'details_url' => 'required|string',
+            'cost' => 'required',
+            'genres' => 'required',
+            'poster' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ];
     }
 
@@ -156,27 +156,56 @@ class MovieController extends Controller
      */
     public function createMovie(Request $request)
     {
+        $file = $request->hasFile('poster');
+
+        if (!$file) {
+            return ErrorController::handleError('Niepoprawne zdjęcie', 400, 'failed');
+        }
 
         $validator = Validator::make($request->all(), $this->createRules());
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 200 znaków, krótki opis między 30 i 120 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
         }
 
         $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
-
         $genresIds = [];
 
+        $request->genres = explode(',', $request->genres);
         //Loop over all genres and find their ids
         foreach ($request->genres as $movieGenre) {
             $genre = Genre::where('name', '=', $movieGenre)->select('id')->get();
             array_push($genresIds, $genre[0]->id);
         }
 
+        $poster = $request->file('poster');
+
+        $fileName = time() . $poster->getClientOriginalName();
+        error_log(strlen($fileName));
+        if (strlen($fileName) > 110) {
+            return ErrorController::handleError('Zbyt długa nazwa zdjęcia', 400);
+        }
+
+        error_log('test');
+        $poster->move(public_path('images/movies'), $fileName);
+
         // Find Genres in Genres table
         $genres = Genre::find($genresIds);
-
-        $movie = Movie::create($request->all());
+        $movie = Movie::create([
+            'title' => $request->title,
+            'age_limit' => intval($request->age_limit),
+            'slug' => $request->slug,
+            'description' => $request->description,
+            'short_description' => $request->short_description,
+            'director' => $request->director,
+            'release_date' => $request->release_date,
+            'running_time' => intval($request->running_time),
+            'poster' => $fileName,
+            'movie_url' => $request->movie_url,
+            'trailer_url' => $request->trailer_url,
+            'details_url' => $request->details_url,
+            'cost' => intval($request->cost)
+        ]);
 
         // Assign appropriate genres to movie
         $movie->genres()->attach($genres);

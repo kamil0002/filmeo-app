@@ -59,7 +59,12 @@ const MovieCardItem = ({
           <Typography color="text.secondary" marginBottom={2}>{`${genres.join(
             ' '
           )}, ${time}m`}</Typography>
-          <Typography fontSize={12.5} variant="body2" color="text.secondary">
+          <Typography
+            fontSize={12.5}
+            variant="body2"
+            color="text.secondary"
+            sx={{ wordBreak: 'break-word' }}
+          >
             {description}
           </Typography>
         </CardContent>

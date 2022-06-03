@@ -167,7 +167,9 @@ const MovieDetails = () => {
               >
                 Opis fabuły
               </Typography>
-              <Typography fontSize="inherit">{movie.description}</Typography>
+              <Typography fontSize="inherit" sx={{ wordBreak: 'break-word' }}>
+                {movie.description}
+              </Typography>
             </MovieDescription>
           </MovieData>
           <MovieTrailer url={movie.trailer_url} />

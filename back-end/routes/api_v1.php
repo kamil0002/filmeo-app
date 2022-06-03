@@ -34,7 +34,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 //* Movie
-Route::post('/movies/genre/{genre}', [MovieController::class, 'createMovie']);
 Route::get('/movies', [MovieController::class, 'getMovies']);
 Route::get('/movies/slug/{movieSlug}', [MovieController::class, 'getMovieBySlug']);
 Route::get('/movies/{movieId}', [MovieController::class, 'getMovie']);
@@ -44,7 +43,6 @@ Route::get('/top-5-frequently-rented', [MovieController::class, 'frequentlyRente
 Route::get('/top-5-rated', [MovieController::class, 'topRated']);
 Route::get('/last-added-movies', [MovieController::class, 'lastAdded']);
 
-Route::get('/movies', [MovieController::class, 'getMovies']);
 
 //* Genre
 Route::post('/genres', [GenreController::class, 'createGenre']); //* -
@@ -86,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/admin/ban', [AdminController::class, 'banUser']);
     Route::put('/admin/unban', [AdminController::class, 'unbanUser']);
     Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
+    Route::post('/movies', [MovieController::class, 'createMovie']);
   });
 
   //* Admin and Moderator func

@@ -37,7 +37,7 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
       clearAsyncMessages(setSuccessMessage, setErrMessage);
     }
   };
-  console.log(formVisible);
+
   return (
     <>
       {user && user?.role === 'administrator' && (
