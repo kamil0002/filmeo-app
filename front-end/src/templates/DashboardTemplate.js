@@ -10,12 +10,15 @@ import axios from 'utils/axios';
 import { setUserPhoto } from 'slices/authSlice';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
 import DbData from 'views/DbData';
+import AddMovie from 'views/AddMovie';
 
 const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [viewDb, setViewDb] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const user = useSelector((state) => state.auth.user);
+  const formVisible = useSelector((state) => state.movies.addMovieViewVisible);
+
   const dispatch = useDispatch();
 
   const imageChangeHandler = async (e) => {
@@ -34,12 +37,14 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
       clearAsyncMessages(setSuccessMessage, setErrMessage);
     }
   };
+  console.log(formVisible);
   return (
     <>
       {user && user?.role === 'administrator' && (
         <>{viewDb && <DbData handleClose={() => setViewDb(false)} />}</>
       )}
-      {!viewDb && (
+      {formVisible && <AddMovie />}
+      {((!viewDb && !formVisible) || (!formVisible && !viewDb)) && (
         <Wrapper>
           {errMessage && <Alert>{errMessage}</Alert>}
           {successMessage && <Alert type="success">{successMessage}</Alert>}

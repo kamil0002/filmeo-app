@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -14,11 +15,10 @@ import axios from 'utils/axios';
 import Alert from 'components/Alert/Alert';
 import clearAsyncMessages from 'utils/clearAsyncMessages';
 import ProcessingSpinner from 'components/ProcessingSpinner/ProcessingSpinner';
-import AddMovie from 'views/AddMovie';
+import { setAddMovieViewVisible } from 'slices/moviesSlice';
 
 const AdminPanel = () => {
   const [selectMod, setSelectMod] = useState('');
-  const [addMovieFormVisible, setAddMovieFormVisible] = useState(false);
   const [processingUserBan, setProcessingUserBan] = useState(false);
   const [processingUserUnban, setProcessingUserUnban] = useState(false);
   const [processingAddModerator, setProcessingAddModerator] = useState(false);
@@ -32,6 +32,8 @@ const AdminPanel = () => {
   const [movies, setMovies] = useState([]);
   const [moderators, setModerators] = useState([]);
 
+  const dispatch = useDispatch();
+
   const {
     register: registerUserBlock,
     handleSubmit: handleSubmitUserBlock,
@@ -43,10 +45,6 @@ const AdminPanel = () => {
     handleSubmit: handleSubmitAddModerator,
     formState: { errors: errors2 },
   } = useForm({ shouldFocusError: false });
-
-  const handleMovieAddFormDisplay = () => {
-    setAddMovieFormVisible(true);
-  };
 
   useEffect(async () => {
     try {
@@ -175,164 +173,165 @@ const AdminPanel = () => {
   };
 
   return (
-    <Wrapper>
-      {addMovieFormVisible && (
-        <AddMovie setFormInvisible={() => setAddMovieFormVisible(false)} />
-      )}
-      {errMessage && <Alert>{errMessage}</Alert>}
-      {successMessage && <Alert type="success">{successMessage}</Alert>}
-      <Typography fontSize={24} fontWeight={700}>
-        Panel Admina
-      </Typography>
-      <MovieActionsWrapper>
-        <StyledButton
-          variant="outlined"
-          sx={{ marginLeft: 2, marginBottom: -3.5 }}
-          onClick={handleMovieAddFormDisplay}
-        >
-          Dodaj film
-        </StyledButton>
-        <StyledForm>
-          <Typography marginTop={3}>Usuwanie Filmów</Typography>
-          <FormControl sx={{ marginY: 2 }}>
-            <InputLabel id="movie">Film</InputLabel>
-            <StyledSelect
-              labelId="movie"
-              id="movie-select"
-              value={selectedMovie}
-              label="Film"
-              inputProps={{
-                MenuProps: { disableScrollLock: true },
-              }}
-              onChange={(e) => setSelectedMovie(e.target.value)}
+    <>
+      <Wrapper>
+        {errMessage && <Alert>{errMessage}</Alert>}
+        {successMessage && <Alert type="success">{successMessage}</Alert>}
+        <Typography fontSize={24} fontWeight={700}>
+          Panel Admina
+        </Typography>
+        <MovieActionsWrapper>
+          <StyledButton
+            variant="outlined"
+            sx={{ marginLeft: 2, marginBottom: -3.5 }}
+            onClick={() => dispatch(setAddMovieViewVisible(true))}
+          >
+            Dodaj film
+          </StyledButton>
+          <StyledForm>
+            <Typography marginTop={3}>Usuwanie Filmów</Typography>
+            <FormControl sx={{ marginY: 2 }}>
+              <InputLabel id="movie">Film</InputLabel>
+              <StyledSelect
+                labelId="movie"
+                id="movie-select"
+                value={selectedMovie}
+                label="Film"
+                inputProps={{
+                  MenuProps: { disableScrollLock: true },
+                }}
+                onChange={(e) => setSelectedMovie(e.target.value)}
+              >
+                {movies.map((movie) => (
+                  <MenuItem key={movie.id} value={movie.id}>
+                    {movie.title}
+                  </MenuItem>
+                ))}
+              </StyledSelect>
+            </FormControl>
+            <StyledButton onClick={deleteMovie} variant="outlined">
+              Usuń film
+              {processingDeleteMovie && (
+                <ProcessingSpinner spinnerDark={true} />
+              )}
+            </StyledButton>
+            <Typography
+              color="#C02020"
+              sx={{ marginTop: 2, fontWeight: 600, fontSize: 11 }}
             >
-              {movies.map((movie) => (
-                <MenuItem key={movie.id} value={movie.id}>
-                  {movie.title}
+              Uwaga! Film zostanie usunięty łącznie z wszystkimi wypożyczeniami
+              oraz recenzjami!
+            </Typography>
+          </StyledForm>
+        </MovieActionsWrapper>
+        <BlockUserWrapper>
+          <Typography marginTop={3}>Zablokuj użytkownika</Typography>
+          <Form
+            submitFn={handleSubmitUserBlock(blockUser)}
+            buttonText="Wykonaj"
+            buttonType="outlined"
+            spinnerDark={true}
+            processing={processingUserBan}
+          >
+            <FormInput
+              validator={{
+                ...registerUserBlock('email', {
+                  required: true,
+                  pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
+                }),
+              }}
+              id="email"
+              label="Adres E-Mail"
+              type="email"
+              isValid={errors1.email ? true : false}
+              helperText="Adres E-mail nie poprawny"
+            />
+          </Form>
+        </BlockUserWrapper>
+        <UnblockUserWrapper>
+          <Typography marginTop={3} marginBottom={3}>
+            Odblokuj użytkownika
+          </Typography>
+          <FormControl>
+            <InputLabel id="blocked-user">Wybierz</InputLabel>
+
+            <StyledSelect
+              labelId="blocked-user"
+              id="blocked-users"
+              value={selectUnban}
+              label="Wybierz"
+              inputProps={{ MenuProps: { disableScrollLock: true } }}
+              onChange={(e) => setSelectUnban(e.target.value)}
+            >
+              {bannedUsers.map((user) => (
+                <MenuItem key={user.id} value={user.id}>
+                  {user.name} {user.surname} ({user.email}, {user.id})
                 </MenuItem>
               ))}
             </StyledSelect>
           </FormControl>
-          <StyledButton onClick={deleteMovie} variant="outlined">
-            Usuń film
-            {processingDeleteMovie && <ProcessingSpinner spinnerDark={true} />}
+          <StyledButton onClick={unbanUser} variant="outlined">
+            Wykonaj
+            {processingUserUnban && <ProcessingSpinner spinnerDark={true} />}
           </StyledButton>
-          <Typography
-            color="#C02020"
-            sx={{ marginTop: 2, fontWeight: 600, fontSize: 11 }}
+        </UnblockUserWrapper>
+        <AddModeratorWrapper>
+          <Typography marginTop={3}>Dodaj moderatora</Typography>
+          <Form
+            submitFn={handleSubmitAddModerator(addModerator)}
+            buttonText="Dodaj"
+            buttonType="outlined"
+            processing={processingAddModerator}
+            spinnerDark={true}
           >
-            Uwaga! Film zostanie usunięty łącznie z wszystkimi wypożyczeniami
-            oraz recenzjami!
+            <FormInput
+              validator={{
+                ...registerAddModerator('email', {
+                  required: true,
+                  pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
+                }),
+              }}
+              id="email"
+              label="Adres E-Mail"
+              type="email"
+              isValid={errors2.email ? true : false}
+              helperText="Adres E-mail nie poprawny"
+            />
+          </Form>
+        </AddModeratorWrapper>
+        <DeleteModeratorWrapper>
+          <Typography marginTop={3} marginBottom={3}>
+            Usuń moderatora
           </Typography>
-        </StyledForm>
-      </MovieActionsWrapper>
-      <BlockUserWrapper>
-        <Typography marginTop={3}>Zablokuj użytkownika</Typography>
-        <Form
-          submitFn={handleSubmitUserBlock(blockUser)}
-          buttonText="Wykonaj"
-          buttonType="outlined"
-          spinnerDark={true}
-          processing={processingUserBan}
-        >
-          <FormInput
-            validator={{
-              ...registerUserBlock('email', {
-                required: true,
-                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
-              }),
-            }}
-            id="email"
-            label="Adres E-Mail"
-            type="email"
-            isValid={errors1.email ? true : false}
-            helperText="Adres E-mail nie poprawny"
-          />
-        </Form>
-      </BlockUserWrapper>
-      <UnblockUserWrapper>
-        <Typography marginTop={3} marginBottom={3}>
-          Odblokuj użytkownika
-        </Typography>
-        <FormControl>
-          <InputLabel id="blocked-user">Wybierz</InputLabel>
+          <FormControl>
+            <InputLabel id="moderators">Wybierz</InputLabel>
 
-          <StyledSelect
-            labelId="blocked-user"
-            id="blocked-users"
-            value={selectUnban}
-            label="Wybierz"
-            inputProps={{ MenuProps: { disableScrollLock: true } }}
-            onChange={(e) => setSelectUnban(e.target.value)}
+            <StyledSelect
+              labelId="moderator"
+              id="modeerator"
+              value={selectMod}
+              label="Wybierz"
+              inputProps={{ MenuProps: { disableScrollLock: true } }}
+              onChange={(e) => setSelectMod(e.target.value)}
+            >
+              {moderators.map((user) => (
+                <MenuItem key={user.id} value={user.id}>
+                  {user.name} {user.surname} ({user.email}, {user.id})
+                </MenuItem>
+              ))}
+            </StyledSelect>
+          </FormControl>
+          <StyledButton
+            onClick={deleteMod}
+            sx={{ marginTop: 2 }}
+            variant="outlined"
           >
-            {bannedUsers.map((user) => (
-              <MenuItem key={user.id} value={user.id}>
-                {user.name} {user.surname} ({user.email}, {user.id})
-              </MenuItem>
-            ))}
-          </StyledSelect>
-        </FormControl>
-        <StyledButton onClick={unbanUser} variant="outlined">
-          Wykonaj
-          {processingUserUnban && <ProcessingSpinner spinnerDark={true} />}
-        </StyledButton>
-      </UnblockUserWrapper>
-      <AddModeratorWrapper>
-        <Typography marginTop={3}>Dodaj moderatora</Typography>
-        <Form
-          submitFn={handleSubmitAddModerator(addModerator)}
-          buttonText="Dodaj"
-          buttonType="outlined"
-          processing={processingAddModerator}
-          spinnerDark={true}
-        >
-          <FormInput
-            validator={{
-              ...registerAddModerator('email', {
-                required: true,
-                pattern: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i,
-              }),
-            }}
-            id="email"
-            label="Adres E-Mail"
-            type="email"
-            isValid={errors2.email ? true : false}
-            helperText="Adres E-mail nie poprawny"
-          />
-        </Form>
-      </AddModeratorWrapper>
-      <DeleteModeratorWrapper>
-        <Typography marginTop={3} marginBottom={3}>
-          Usuń moderatora
-        </Typography>
-        <FormControl>
-          <InputLabel id="moderators">Wybierz</InputLabel>
-
-          <StyledSelect
-            labelId="moderator"
-            id="modeerator"
-            value={selectMod}
-            label="Wybierz"
-            inputProps={{ MenuProps: { disableScrollLock: true } }}
-            onChange={(e) => setSelectMod(e.target.value)}
-          >
-            {moderators.map((user) => (
-              <MenuItem key={user.id} value={user.id}>
-                {user.name} {user.surname} ({user.email}, {user.id})
-              </MenuItem>
-            ))}
-          </StyledSelect>
-        </FormControl>
-        <StyledButton
-          onClick={deleteMod}
-          sx={{ marginTop: 2 }}
-          variant="outlined"
-        >
-          Wykonaj
-          {processingDeleteMod && <ProcessingSpinner spinnerDark={true} />}
-        </StyledButton>
-      </DeleteModeratorWrapper>
-    </Wrapper>
+            Wykonaj
+            {processingDeleteMod && <ProcessingSpinner spinnerDark={true} />}
+          </StyledButton>
+        </DeleteModeratorWrapper>
+      </Wrapper>
+    </>
   );
 };
 
