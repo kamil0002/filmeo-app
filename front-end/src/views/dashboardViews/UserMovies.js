@@ -71,8 +71,7 @@ const UserMovies = () => {
           }
           label="Pokaż wygaśnięte"
         />
-        {user}
-        {user?.role !== 'administrator' && (
+        {user && user?.role !== 'administrator' && (
           <Form>
             <TextField
               variant="standard"

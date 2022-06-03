@@ -11,58 +11,59 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 
 class RentalController extends Controller
-{    
+{
     /**
      * getCheckoutSession
      *
      * @param  mixed $movieId id filmu
      * @return object sesja transakcji
      */
-    public function getCheckoutSession(int $movieId, int $rentalId) {
+    public function getCheckoutSession(int $movieId, int $rentalId)
+    {
 
         $movie = Movie::find($movieId);
-        if($rentalId !== -1) {
-            $successURL = 'http://localhost:8000/profil?movie='.$movie->id.'&rental='.$rentalId;
-        }
-        else {
-            $successURL = 'http://localhost:8000/filmy?movie='.$movie->id;
+        if ($rentalId !== -1) {
+            $successURL = 'http://localhost:8000/profil?movie=' . $movie->id . '&rental=' . $rentalId;
+        } else {
+            $successURL = 'http://localhost:8000/filmy?movie=' . $movie->id;
         }
 
-        
+
         $stripe = new \Stripe\StripeClient(env('STRIPE_API_KEY'));
 
         $session = $stripe->checkout->sessions->create([
-        'payment_method_types' => ['card'],
-        'mode' => 'payment',
-        'success_url' => $successURL,
-        'cancel_url' => 'http://localhost:8000/filmy/'.$movie->slug.'payment_failed',
-        'customer_email' => auth()->user()->email,
-        'line_items' => [[
-            'price_data' => [
-                'currency' => 'pln',
-                'unit_amount' => $movie->cost * 100,
-                'product_data' => [
-                    'name' => $movie->title,
-                    'images' => ['https://thumbs.dreamstime.com/b/retro-cinema-video-camera-text-place-movie-poster-placard-banner-film-vector-illustration-flat-style-98856046.jpg'],
-                    'description' => $movie->short_description,
+            'payment_method_types' => ['card'],
+            'mode' => 'payment',
+            'success_url' => $successURL,
+            'cancel_url' => 'http://localhost:8000/filmy/' . $movie->slug . 'payment_failed',
+            'customer_email' => auth()->user()->email,
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'pln',
+                    'unit_amount' => $movie->cost * 100,
+                    'product_data' => [
+                        'name' => $movie->title,
+                        'images' => ['https://thumbs.dreamstime.com/b/retro-cinema-video-camera-text-place-movie-poster-placard-banner-film-vector-illustration-flat-style-98856046.jpg'],
+                        'description' => $movie->short_description,
+                    ],
                 ],
-            ],
-            'quantity' => 1
-        ]],
+                'quantity' => 1
+            ]],
         ]);
 
 
         return $session;
     }
-    
+
     /**
      * rentMovie
      *
      * @param  mixed $movieId id filmu
      * @return json wiadomość z komunikatem
      */
-    public function rentMovie(Request $request) {
-        $movie = Movie::where('id','=',$request['movieId'])->get()[0];
+    public function rentMovie(Request $request)
+    {
+        $movie = Movie::where('id', '=', $request['movieId'])->get()[0];
         error_log($movie);
 
         $userId = auth()->user()->id;
@@ -70,19 +71,18 @@ class RentalController extends Controller
         //* Check if current movie is owned by a user
         $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
 
-        foreach($rentals as $rental) {
-            foreach($rental->movies as $rentedMovie) {
-                if($rentedMovie->id === $movie->id) {
-                    error_log($rentedMovie->id.' -> '.$movie->id);
+        foreach ($rentals as $rental) {
+            foreach ($rental->movies as $rentedMovie) {
+                if ($rentedMovie->id === $movie->id) {
+                    error_log($rentedMovie->id . ' -> ' . $movie->id);
                     return ErrorController::handleError('Ten film jest już przez Ciebie wypożyczony!', 400, 'failed');
-
                 }
             }
         }
 
-        
+
         $rentedTo = date('Y-m-d H:i:s', strtotime('+48 hours'));
-        
+
         $rental = Rental::create([
             'user_id' => $userId,
             'expire_date' => $rentedTo,
@@ -90,20 +90,20 @@ class RentalController extends Controller
         ]);
 
         Payment::create([
-                'user_id' => $userId,
-                'rental_id' => $rental->id,
-                'amount' => $movie->cost,
-            ]);
+            'user_id' => $userId,
+            'rental_id' => $rental->id,
+            'amount' => $movie->cost,
+        ]);
 
         $rental->movies()->attach($movie);
 
         return response([
             'status' => 'success',
-            'message' => 'Film został wypożyczony. Miłego oglądania!' ,
-        ],201);
+            'message' => 'Film został wypożyczony. Miłego oglądania!',
+        ], 201);
     }
 
-    
+
     /**
      * renewRental
      *
@@ -111,7 +111,8 @@ class RentalController extends Controller
      * @param  mixed $movieId id filmu
      * @return json wiadomość z komunikatem
      */
-    public function renewRental(Request $request) {
+    public function renewRental(Request $request)
+    {
 
         $rentalId = $request['rentalId'];
         $movieId = $request['movieId'];
@@ -121,24 +122,23 @@ class RentalController extends Controller
         $rental = Rental::where('id', '=', $rentalId)->get()[0];
 
         $movieCost = Movie::find($movieId)->cost;
-        
-        if(!$rental) {
+
+        if (!$rental) {
             return ErrorController::handleError('Ten film nie został przez Ciebie wcześniej wypożyczony', 400, 'failed');
         }
 
 
-        if($userId !== $rental->user_id) {
+        if ($userId !== $rental->user_id) {
             return ErrorController::handleError('Ten film nie należy do Ciebie!', 400);
         }
 
-        if($rental->active) {
+        if ($rental->active) {
             return ErrorController::handleError('Aktualnie posiadasz już ten film w swojej kolekcji, odnów go po czasie wygaśnięcia.', 400, 'failed');
-
         }
 
         $rentedTo = date('Y-m-d H:i:s', strtotime('+48 hours'));
-        
-        if(!$rental->active) {
+
+        if (!$rental->active) {
             $rental->update([
                 'active' => true,
                 'expire_date' => $rentedTo,
@@ -158,13 +158,14 @@ class RentalController extends Controller
         ];
     }
 
-    
+
     /**
      * getUserMovies
      *
      * @return json ilość wyników, filmy użytkownika
      */
-    public function getUserMovies() {
+    public function getUserMovies()
+    {
 
         $movies = Movie::whereHas('rentals')->with('rentals')->get();
         $userMovies = [];
@@ -173,18 +174,18 @@ class RentalController extends Controller
 
         $today = date('Y-m-d H:m:s');
 
-        foreach($movies as $movie) {
-            foreach($movie->rentals as $rental) {
+        foreach ($movies as $movie) {
+            foreach ($movie->rentals as $rental) {
 
-                if($rental->user_id === $userId) {;
+                if ($rental->user_id === $userId) {;
                     //* If rental expired make active status as false
                     error_log($rental->expire_date < $today);
-                    if($rental->expire_date < $today) {
+                    if ($rental->expire_date < $today) {
                         error_log($rental);
                         $rental->update([
                             'active' => false
                         ]);
-                    }    
+                    }
 
                     $movie = Movie::find($movie->id);
                     $reviews = Review::where('movie_id', '=', $movie->id)->select('rating')->get();
@@ -201,7 +202,7 @@ class RentalController extends Controller
                 }
             }
         }
-        
+
         return [
             'status' => 'success',
             'results' => count($userMovies),
@@ -211,14 +212,15 @@ class RentalController extends Controller
         ];
     }
 
-    public function hasMovie(int $movieId) {
+    public function hasMovie(int $movieId)
+    {
         $hasUserMovie = false;
         $userId = auth()->user()->id;
         $rentals = Rental::where('user_id', '=', $userId)->with('movies')->get();
 
-        
-        foreach($rentals as $rental) {
-            if($rental->movies[0]->id === $movieId) {
+
+        foreach ($rentals as $rental) {
+            if ($rental->movies[0]->id === $movieId) {
                 $hasUserMovie = true;
                 break;
             }
@@ -227,6 +229,5 @@ class RentalController extends Controller
         return response([
             'owned' => $hasUserMovie
         ]);
-        
     }
 }

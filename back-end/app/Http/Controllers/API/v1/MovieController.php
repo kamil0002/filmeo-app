@@ -25,13 +25,13 @@ class MovieController extends Controller
     private function createRules()
     {
         return [
-            'title' => 'bail|required|string|unique:movies',
-            'age_limit' => 'required|min:1',
-            'description' => 'required|string|min:50|max:200',
-            'short_description' => 'required|string|min:30|max:120',
+            'title' => 'required|string|unique:movies',
+            'age_limit' => 'required',
+            'description' => 'required|string|min:50|max:650',
+            'short_description' => 'required|string|min:30|max:150',
             'director' => 'required|string',
             'release_date' => 'required|date|before:today',
-            'running_time' => 'required',
+            'running_time' => 'required|string',
             'movie_url' => 'required|string',
             'trailer_url' => 'required|string',
             'details_url' => 'required|string',
@@ -49,18 +49,17 @@ class MovieController extends Controller
     private function updateRules()
     {
         return [
-            'title' => 'bail|string',
-            'age_limit' => 'numeric',
-            'description' => 'string',
-            'short_description' => 'string',
-            'director' => 'string',
-            'release_date' => 'date|before:today',
-            'running_time' => 'numeric',
-            'poster' => 'string',
-            'movie_url' => 'string',
-            'trailer_url' => 'string',
-            'details_url' => 'string',
-            'cost' => 'numeric',
+            'title' => 'required|string',
+            'age_limit' => 'required|numeric',
+            'description' => 'required|string|min:50|max:650',
+            'short_description' => 'required|string|min:30|max:150',
+            'director' => 'required|string',
+            'release_date' => 'required|date|before:today',
+            'running_time' => 'required|numeric',
+            'movie_url' => 'required|string',
+            'trailer_url' => 'required|string',
+            'details_url' => 'required|string',
+            'cost' => 'required|numeric',
         ];
     }
 
@@ -161,11 +160,10 @@ class MovieController extends Controller
         if (!$file) {
             return ErrorController::handleError('Niepoprawne zdjęcie', 400, 'failed');
         }
-
         $validator = Validator::make($request->all(), $this->createRules());
 
         if ($validator->fails()) {
-            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 200 znaków, krótki opis między 30 i 120 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
+            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 650 znaków, krótki opis między 30 i 150 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
         }
 
         $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
@@ -272,7 +270,7 @@ class MovieController extends Controller
         $validator = Validator::make($request->all(), $this->updateRules());
 
         if ($validator->fails()) {
-            return ErrorController::handleError($validator->errors(), 400);
+            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 650 znaków, krótki opis między 30 i 150 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
         }
 
         $request['title'] && $request['slug'] && $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);

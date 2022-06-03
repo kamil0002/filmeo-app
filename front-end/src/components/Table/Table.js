@@ -43,6 +43,7 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
     release_date: '',
     trailer_url: '',
     movie_url: '',
+    details_url: '',
   });
 
   const handleRowSelect = (row) => {
@@ -57,11 +58,14 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
         `/api/v1/movies/${formData.id}`,
         formData
       );
+
+      if (updatedMovie.data.status !== 'success') {
+        throw new Error(updatedMovie.data.message);
+      }
       getChangedRow(updatedMovie.data.data[0]);
       setSuccessMessage('Pomyślnie zmieniono dane.');
     } catch (err) {
       setErrMessage(err.message);
-      setErrMessage('Błąd podczas zmiany danych');
     } finally {
       clearAsyncMessages(setSuccessMessage, setErrMessage, null);
       setshowForm(false);
@@ -392,6 +396,26 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
                 label="URL filmu"
                 onChange={handleFormDataChange}
                 value={formData.movie_url}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={11}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextField
+                variant="filled"
+                sx={{ width: '90%' }}
+                id="details_url"
+                name="details_url"
+                label="URL do detali"
+                onChange={handleFormDataChange}
+                value={formData.details_url}
               />
             </Grid>
           </Grid>

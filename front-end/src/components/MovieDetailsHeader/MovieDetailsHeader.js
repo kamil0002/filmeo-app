@@ -77,6 +77,7 @@ export default MovieDetailsHeader;
 
 const Wrapper = styled.div`
   width: 100%;
+  z-index: 30;
   height: 75vh;
   position: relative;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 9vw), 0 100%);

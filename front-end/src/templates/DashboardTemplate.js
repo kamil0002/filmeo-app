@@ -50,9 +50,11 @@ const DashboardTemplate = ({ children, handleViewChange, currentView }) => {
           {successMessage && <Alert type="success">{successMessage}</Alert>}
           <StyledPaper>
             <>
-              <ViewDataButton color="primary" onClick={() => setViewDb(true)}>
-                Podgląd danych
-              </ViewDataButton>
+              {user && user?.role === 'administrator' && (
+                <ViewDataButton color="primary" onClick={() => setViewDb(true)}>
+                  Podgląd danych
+                </ViewDataButton>
+              )}
               <Sidebar>
                 <User>
                   <ChangeAvatarInput

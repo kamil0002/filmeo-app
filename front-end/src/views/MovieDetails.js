@@ -336,7 +336,6 @@ const MovieInformationWrapper = styled.div`
   position: relative;
 
   background: rgb(230, 230, 230);
-  z-index: -1;
   flex-basis: 50%;
   padding-top: 100px;
   padding-bottom: 90px;

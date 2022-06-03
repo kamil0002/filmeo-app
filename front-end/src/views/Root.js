@@ -28,7 +28,7 @@ const Root = () => {
       const user = await axios.get('/api/v1/isLoggedIn');
       dispatch(setUser(user.data));
     } catch (err) {
-      Cookies.remove('token', { path: '' });
+      console.error('Not logged in!');
     }
   }, []);
 

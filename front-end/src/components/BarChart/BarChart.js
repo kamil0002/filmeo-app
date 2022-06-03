@@ -94,5 +94,5 @@ const BarChart = ({ data }) => {
 export default BarChart;
 
 BarChart.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.any,
 };
