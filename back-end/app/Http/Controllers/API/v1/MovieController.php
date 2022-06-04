@@ -27,7 +27,7 @@ class MovieController extends Controller
         return [
             'title' => 'required|string|unique:movies',
             'age_limit' => 'required',
-            'description' => 'required|string|min:50|max:650',
+            'description' => 'required|string|min:50|max:1000',
             'short_description' => 'required|string|min:30|max:150',
             'director' => 'required|string',
             'release_date' => 'required|date|before:today',
@@ -46,20 +46,38 @@ class MovieController extends Controller
      *
      * @return array walidacja dla aktualizowania filmu
      */
-    private function updateRules()
+    private function updateWithImgRules()
     {
         return [
             'title' => 'required|string',
             'age_limit' => 'required|numeric',
-            'description' => 'required|string|min:50|max:650',
-            'short_description' => 'required|string|min:30|max:150',
+            'description' => 'required|string|min:50|max:1000',
+            'short_description' => 'required|string|min:30|max:180',
             'director' => 'required|string',
             'release_date' => 'required|date|before:today',
             'running_time' => 'required|numeric',
             'movie_url' => 'required|string',
             'trailer_url' => 'required|string',
             'details_url' => 'required|string',
-            'cost' => 'required|numeric',
+            'cost' => 'required',
+            'poster' => 'image|mimes:jpeg,png,jpg|max:1024',
+        ];
+    }
+
+    private function updateWithoutImgRules()
+    {
+        return [
+            'title' => 'required|string',
+            'age_limit' => 'required|numeric',
+            'description' => 'required|string|min:50|max:1000',
+            'short_description' => 'required|string|min:30|max:180',
+            'director' => 'required|string',
+            'release_date' => 'required|date|before:today',
+            'running_time' => 'required|numeric',
+            'movie_url' => 'required|string',
+            'trailer_url' => 'required|string',
+            'details_url' => 'required|string',
+            'cost' => 'required',
         ];
     }
 
@@ -160,10 +178,11 @@ class MovieController extends Controller
         if (!$file) {
             return ErrorController::handleError('Niepoprawne zdjęcie', 400, 'failed');
         }
+
         $validator = Validator::make($request->all(), $this->createRules());
 
         if ($validator->fails()) {
-            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 650 znaków, krótki opis między 30 i 150 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
+            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 1000 znaków, krótki opis między 30 i 150 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
         }
 
         $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
@@ -184,7 +203,6 @@ class MovieController extends Controller
             return ErrorController::handleError('Zbyt długa nazwa zdjęcia', 400);
         }
 
-        error_log('test');
         $poster->move(public_path('images/movies'), $fileName);
 
         // Find Genres in Genres table
@@ -267,29 +285,66 @@ class MovieController extends Controller
             return ErrorController::handleError('Film o podanym ID nie istnieje', 404);
         }
 
-        $validator = Validator::make($request->all(), $this->updateRules());
+        $file = $request->hasFile('poster');
+        error_log($file);
+
+        if ($file) {
+            $validator = Validator::make($request->all(), $this->updateWithImgRules());
+        }
+
+        if (!$file) {
+            $validator = Validator::make($request->all(), $this->updateWithoutImgRules());
+        }
 
         if ($validator->fails()) {
-            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 650 znaków, krótki opis między 30 i 150 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
+            return ErrorController::handleError('Zadbaj o poprawne dane, data, opis między 50 a 1000 znaków, krótki opis między 30 i 180 znaków oraz obrazek o maksymalnej rozdzielczości 1024px oraz unikalny tytuł!', 400);
         }
 
         $request['title'] && $request['slug'] && $request['slug'] = SlugService::createSlug(Movie::class, 'slug', $request->title);
 
-        $movie->update([
-            'title' => $request['title'],
-            'age_limit' => intval($request['age_limit']),
-            'description' => $request['description'],
-            'short_description' => $request['short_description'],
-            'director' => $request['director'],
-            'release_date' => $request['release_date'],
-            'running_time' => intval($request['running_time']),
-            'poster' => $movie->poster,
-            'movie_url' => $request['movie_url'],
-            'trailer_url' => $request['trailer_url'],
-            'details_url' => $request['details_url'],
-            'cost' => intval($request['cost']),
-        ]);
 
+        if ($file) {
+            $poster = $request->file('poster');
+
+            if (strlen($poster->getClientOriginalName()) > 100) {
+                return ErrorController::handleError('Zbyt długa nazwa zdjęcia', 400, 'failed');
+            }
+
+            $fileName = time() . $poster->getClientOriginalName();
+
+            $poster->move(public_path('images/movies'), $fileName);
+
+            $movie->update([
+                'title' => $request['title'],
+                'age_limit' => intval($request['age_limit']),
+                'description' => $request['description'],
+                'short_description' => $request['short_description'],
+                'director' => $request['director'],
+                'release_date' => $request['release_date'],
+                'running_time' => intval($request['running_time']),
+                'poster' => $movie->poster,
+                'movie_url' => $request['movie_url'],
+                'trailer_url' => $request['trailer_url'],
+                'details_url' => $request['details_url'],
+                'cost' => intval($request['cost']),
+                'poster' => $fileName,
+            ]);
+        } else {
+            $movie->update([
+                'title' => $request['title'],
+                'age_limit' => intval($request['age_limit']),
+                'description' => $request['description'],
+                'short_description' => $request['short_description'],
+                'director' => $request['director'],
+                'release_date' => $request['release_date'],
+                'running_time' => intval($request['running_time']),
+                'poster' => $movie->poster,
+                'movie_url' => $request['movie_url'],
+                'trailer_url' => $request['trailer_url'],
+                'details_url' => $request['details_url'],
+                'cost' => intval($request['cost']),
+            ]);
+        }
         $updatedMovie = Movie::where('id', '=', $movieId)->get()[0];
 
         return response([

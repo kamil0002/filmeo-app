@@ -60,7 +60,7 @@ const AddMovie = () => {
           throw new Error('Uzupełnij poprawnie dane!');
         }
       }
-      console.log(formData);
+
       const data = new FormData();
       formData['genres'] = formData['genres'].trim();
       formData['genres'] = formData['genres'].split(',');

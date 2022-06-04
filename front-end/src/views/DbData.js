@@ -27,6 +27,7 @@ const moviesHeadings = [
   'Liczba wypożyczeń',
   'Ilość ocen',
   'Koszt',
+  'Plakat',
 ];
 
 const usersHeadings = [

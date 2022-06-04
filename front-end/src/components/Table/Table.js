@@ -29,6 +29,7 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
   const [selectedID, setSelectedID] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [poster, setPoster] = useState(null);
 
   const [showForm, setshowForm] = useState(false);
 
@@ -54,10 +55,33 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
 
   const handleMovieUpdate = async () => {
     try {
-      const updatedMovie = await axios.put(
-        `/api/v1/movies/${formData.id}`,
-        formData
-      );
+      for (const el in formData) {
+        if (formData[el] === '') {
+          throw new Error('Uzupełnij dane!');
+        }
+      }
+
+      let updatedMovie;
+      if (!poster) {
+        updatedMovie = await axios.put(
+          `/api/v1/movies/${formData.id}`,
+          formData
+        );
+      }
+
+      if (poster) {
+        const dataWithImg = new FormData();
+
+        for (const el in formData) {
+          dataWithImg.append(el, formData[el]);
+        }
+        console.log(poster);
+        dataWithImg.append('poster', poster);
+        updatedMovie = await axios.post(
+          `/api/v1/movies/withImg/${formData.id}`,
+          dataWithImg
+        );
+      }
 
       if (updatedMovie.data.status !== 'success') {
         throw new Error(updatedMovie.data.message);
@@ -165,6 +189,17 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
                     <TableCell align="center">{row.rentals_number}</TableCell>
                     <TableCell align="center">{row.rating_quantity}</TableCell>
                     <TableCell align="center">{row.cost} zł</TableCell>
+                    <TableCell align="center">
+                      <img
+                        style={{
+                          width: '70px',
+                          height: '35px',
+                          objectFit: 'cover',
+                        }}
+                        src={`http://127.0.0.1:8000/images/movies/${row.poster}`}
+                        alt="plakat"
+                      />
+                    </TableCell>
                   </StyledTableRow>
                 ))}
           </TableBody>
@@ -417,6 +452,36 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
                 onChange={handleFormDataChange}
                 value={formData.details_url}
               />
+            </Grid>
+            <Grid
+              item
+              xs={11}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'stretch',
+                  alignItems: 'stretch',
+                  width: '90%',
+                }}
+              >
+                <label style={{ fontSize: 14, color: '#828282' }}>Plakat</label>
+                <TextField
+                  variant="filled"
+                  sx={{ width: '100%' }}
+                  id="poster"
+                  name="poster"
+                  type="file"
+                  onChange={(e) => setPoster(e.target.files[0])}
+                />
+              </div>
             </Grid>
           </Grid>
           <Button

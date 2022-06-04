@@ -84,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/admin/ban', [AdminController::class, 'banUser']);
     Route::put('/admin/unban', [AdminController::class, 'unbanUser']);
     Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
+    Route::post('/movies/withImg/{movieId}', [MovieController::class, 'updateMovie']);
     Route::post('/movies', [MovieController::class, 'createMovie']);
   });
 
