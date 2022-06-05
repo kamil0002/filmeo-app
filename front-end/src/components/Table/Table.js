@@ -39,7 +39,7 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
   const [formDataUser, setFormDataUser] = useState({
     name: '',
     surname: '',
-    birthdate: '',
+    birth_date: '',
     address: '',
     email: '',
   });
@@ -611,6 +611,27 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
                 label="Adres"
                 onChange={(e) => handleFormDataChange(e, false)}
                 value={formDataUser.address}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={11}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextField
+                variant="filled"
+                sx={{ width: '90%', mx: 'auto' }}
+                id="birth_date"
+                name="birth_date"
+                label="Data urodzenia"
+                type="date"
+                onChange={(e) => handleFormDataChange(e, false)}
+                value={formDataUser.birth_date}
               />
             </Grid>
             <Grid
