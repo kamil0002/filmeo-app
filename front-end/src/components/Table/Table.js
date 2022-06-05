@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -27,11 +28,21 @@ const StyledTableCell = styledMUI(TableCell)(({ theme }) => ({
 
 const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
   const [selectedID, setSelectedID] = useState(null);
+  const [selectedUserID, setSelectedUserID] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [poster, setPoster] = useState(null);
 
   const [showForm, setshowForm] = useState(false);
+  const [showFormUser, setshowFormUser] = useState(false);
+
+  const [formDataUser, setFormDataUser] = useState({
+    name: '',
+    surname: '',
+    birthdate: '',
+    address: '',
+    email: '',
+  });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -51,6 +62,28 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
     setFormData(row);
     setshowForm(true);
     setSelectedID(row.id);
+  };
+
+  const handleRowSelectUser = (row) => {
+    setFormDataUser(row);
+    setshowFormUser(true);
+    setSelectedUserID(row.id);
+  };
+
+  const handleUserUpdate = async () => {
+    try {
+      const updatedUser = await axios.put(
+        `/api/v1/updateUser/${formDataUser.id}`,
+        formDataUser
+      );
+
+      getChangedRow(updatedUser.data.data[0]);
+    } catch (err) {
+      setErrMessage(err.message);
+    } finally {
+      clearAsyncMessages(setSuccessMessage, setErrMessage, null);
+      setshowFormUser(false);
+    }
   };
 
   const handleMovieUpdate = async () => {
@@ -96,11 +129,19 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
     }
   };
 
-  const handleFormDataChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+  const handleFormDataChange = (e, movies = true) => {
+    if (!movies) {
+      setFormDataUser((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
+    if (movies) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
   };
 
   return (
@@ -130,28 +171,35 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
           </TableHead>
           <TableBody>
             {dataType === 'users'
-              ? rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell align="center" component="th" scope="row">
-                      {row.id}
-                    </TableCell>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.surname}</TableCell>
-                    <TableCell align="center">{row.role}</TableCell>
-                    <TableCell align="center">
-                      {row.banned ? 'Tak' : 'Nie'}
-                    </TableCell>
-                    <TableCell align="center">
-                      {row.muted ? 'Tak' : 'Nie'}
-                    </TableCell>
-                    <TableCell align="center">{row.address}</TableCell>
-                    <TableCell align="center">{row.birth_date}</TableCell>
-                    <TableCell align="center">{row.email}</TableCell>
-                  </TableRow>
-                ))
+              ? rows.map(
+                  (row) =>
+                    row.role !== 'administrator' && (
+                      <StyledTableRow
+                        onClick={() => handleRowSelectUser(row)}
+                        selected={selectedUserID === row.id}
+                        key={row.id}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell align="center" component="th" scope="row">
+                          {row.id}
+                        </TableCell>
+                        <TableCell align="center">{row.name}</TableCell>
+                        <TableCell align="center">{row.surname}</TableCell>
+                        <TableCell align="center">{row.role}</TableCell>
+                        <TableCell align="center">
+                          {row.banned ? 'Tak' : 'Nie'}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.muted ? 'Tak' : 'Nie'}
+                        </TableCell>
+                        <TableCell align="center">{row.address}</TableCell>
+                        <TableCell align="center">{row.birth_date}</TableCell>
+                        <TableCell align="center">{row.email}</TableCell>
+                      </StyledTableRow>
+                    )
+                )
               : rows.map((row) => (
                   <StyledTableRow
                     key={row.title}
@@ -489,6 +537,110 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
             variant="contained"
             sx={{ marginTop: 8, marginBottom: 10 }}
             onClick={handleMovieUpdate}
+          >
+            Zapisz
+          </Button>
+        </Form>
+      )}
+      {dataType === 'users' && showFormUser && (
+        <Form>
+          <Typography sx={{ fontWeight: 700, fontSize: 24, my: 5 }}>
+            Aktualizacja użytkownika
+          </Typography>
+          <Grid
+            container
+            sx={{ maxWidth: 1000 }}
+            rowSpacing={3.5}
+            columnSpacing={3}
+          >
+            <Grid
+              item
+              xs={11}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextField
+                variant="filled"
+                sx={{ width: '90%', mx: 'auto' }}
+                id="name"
+                name="name"
+                label="Imię"
+                onChange={(e) => handleFormDataChange(e, false)}
+                value={formDataUser.name}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={11}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextField
+                variant="filled"
+                sx={{ width: '90%', mx: 'auto' }}
+                id="surname"
+                name="surname"
+                label="Nazwisko"
+                onChange={(e) => handleFormDataChange(e, false)}
+                value={formDataUser.surname}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={11}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextField
+                variant="filled"
+                sx={{ width: '90%', mx: 'auto' }}
+                id="address"
+                name="address"
+                label="Adres"
+                onChange={(e) => handleFormDataChange(e, false)}
+                value={formDataUser.address}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={11}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextField
+                variant="filled"
+                sx={{ width: '90%', mx: 'auto' }}
+                id="email"
+                type="email"
+                required
+                name="email"
+                label="Adres e-mail"
+                onChange={(e) => handleFormDataChange(e, false)}
+                value={formDataUser.email}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            size="large"
+            variant="contained"
+            sx={{ marginTop: 8, marginBottom: 10 }}
+            onClick={handleUserUpdate}
           >
             Zapisz
           </Button>

@@ -60,7 +60,7 @@ const DbData = ({ handleClose }) => {
     setFilteredUsers(users.data.data[0]);
   }, []);
 
-  const getChangedRow = (changedMovie) => {
+  const getChangedMovie = (changedMovie) => {
     let newMovies = [];
     filteredMovies.forEach((movie) => {
       if (movie.id === changedMovie.id) newMovies.push(changedMovie);
@@ -77,6 +77,25 @@ const DbData = ({ handleClose }) => {
     });
 
     setMovies(newMovies);
+  };
+
+  const getChangedUser = (changedUser) => {
+    let newUsers = [];
+    filteredUsers.forEach((user) => {
+      if (user.id === changedUser.id) newUsers.push(changedUser);
+      else newUsers.push(user);
+    });
+
+    setFilteredUsers(newUsers);
+
+    newUsers = [];
+
+    users.forEach((user) => {
+      if (user.id === changedUser.id) newUsers.push(changedUser);
+      else newUsers.push(user);
+    });
+
+    setUsers(newUsers);
   };
 
   const handleUserSearch = (text) => {
@@ -169,11 +188,12 @@ const DbData = ({ handleClose }) => {
               dataType="users"
               rows={filteredUsers}
               headings={usersHeadings}
+              getChangedRow={getChangedUser}
             />
           ) : (
             <Table
               dataType="movies"
-              getChangedRow={getChangedRow}
+              getChangedRow={getChangedMovie}
               rows={filteredMovies}
               headings={moviesHeadings}
             />

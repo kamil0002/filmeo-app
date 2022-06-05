@@ -12,13 +12,14 @@ use App\Http\Controllers\API\v1\ErrorController;
 class UserController extends Controller
 {
 
-    
+
     /**
      * updateRules
      *
      * @return array walidacja dla aktualizacji danych użytkownika
      */
-    private function updateRules() {
+    private function updateRules()
+    {
         return [
             'name' => 'string',
             'surname' => 'string',
@@ -27,17 +28,17 @@ class UserController extends Controller
             'email' => 'email',
         ];
     }
-    
+
     /**
      * getAllUsers
      *
      * @return json wszystkich użytkowników
      */
-    public function getAllUsers(Request $request) {
-        if($request->moderators) {
+    public function getAllUsers(Request $request)
+    {
+        if ($request->moderators) {
             $users = User::where('role', '=', 'moderator')->get();
-        }
-        else $users = User::all();
+        } else $users = User::all();
 
         return response([
             'status' => 'success',
@@ -46,17 +47,18 @@ class UserController extends Controller
             ]
         ]);
     }
-    
+
     /**
      * getUser
      *
      * @param  mixed $userId id użytkownika
      * @return json użytkownika o id $userId
      */
-    public function getUser($userId) {
+    public function getUser($userId)
+    {
         $user = User::find($userId);
 
-        if(!$user) {
+        if (!$user) {
             return ErrorController::handleError('Nie znaleziono podanego użytkownika', 404, 'failed');
         }
 
@@ -67,35 +69,68 @@ class UserController extends Controller
             ]
         ]);
     }
-    
+
     /**
      * updateUserData
      *
      * @param  mixed $request
      * @return json zaaktualizowanego użytkownika
      */
-    public function updateUserData(Request $request) {
+    public function updateUserData(Request $request)
+    {
 
-    if($request['password'] || $request['password_confirmation']) {
-        return ErrorController::handleError('Ten route nie służy do zmiany hasła!', 400);
+        if ($request['password'] || $request['password_confirmation']) {
+            return ErrorController::handleError('Ten route nie służy do zmiany hasła!', 400);
+        }
+
+        $user = auth()->user();
+
+        $validator = Validator::make($request->all(), $this->updateRules());
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+
+        $user->update($request->all());
+
+        return response([
+            'status' => 'succes',
+            'data' => [
+                $user
+            ]
+        ]);
     }
 
-    $user = auth()->user();
+    /**
+     * updateUserData
+     *
+     * @param  mixed $request
+     * @return json zaaktualizowanego użytkownika
+     */
+    public function updateUserDataById(Request $request, int $id)
+    {
 
-    $validator = Validator::make($request->all(), $this->updateRules());
+        $user = User::where('id', '=', $id)->get()[0];
 
-    if($validator->fails()) {
-        return response()->json($validator->errors(), 400);
-    }
+        if (!$user) {
+            return ErrorController::handleError('Nie ma takiego użytkownika!', 404);
+        }
 
-    
-    $user->update($request->all());
+        $validator = Validator::make($request->all(), $this->updateRules());
 
-    return response([
-        'status' => 'succes',
-        'data' => [
-            $user
-        ]
-    ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+
+        $user->update($request->all());
+
+        return response([
+            'status' => 'succes',
+            'data' => [
+                $user
+            ]
+        ]);
     }
 }

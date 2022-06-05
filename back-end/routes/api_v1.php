@@ -86,6 +86,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/movies/{movieId}', [MovieController::class, 'updateMovie']);
     Route::post('/movies/withImg/{movieId}', [MovieController::class, 'updateMovie']);
     Route::post('/movies', [MovieController::class, 'createMovie']);
+    Route::put('/updateUser/{id}', [UserController::class, 'updateUserDataById']);
   });
 
   //* Admin and Moderator func
