@@ -198,7 +198,6 @@ class MovieController extends Controller
         $poster = $request->file('poster');
 
         $fileName = time() . $poster->getClientOriginalName();
-        error_log(strlen($fileName));
         if (strlen($fileName) > 110) {
             return ErrorController::handleError('Zbyt długa nazwa zdjęcia', 400);
         }
@@ -286,7 +285,6 @@ class MovieController extends Controller
         }
 
         $file = $request->hasFile('poster');
-        error_log($file);
 
         if ($file) {
             $validator = Validator::make($request->all(), $this->updateWithImgRules());

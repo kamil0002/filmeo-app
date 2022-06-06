@@ -49,7 +49,6 @@ const Register = () => {
       setProcessing(true);
       await axios.get('/sanctum/csrf-cookie');
       const register = await axios.post('/api/v1/register', data);
-      console.log(register);
       if (register.data.status !== 'success') {
         throw new Error(register.data.message);
       }

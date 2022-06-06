@@ -30,11 +30,9 @@ const Dashboard = () => {
     try {
       if (search.length !== 0) {
         const searchParams = new URLSearchParams(search);
-        console.log(searchParams);
 
         const movieId = +searchParams.get('movie');
         const rentalId = +searchParams.get('rental');
-        console.log(movieId, rentalId);
         const res = await axios.patch('api/v1/renewRental', {
           movieId,
           rentalId,

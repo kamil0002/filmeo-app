@@ -64,7 +64,6 @@ class RentalController extends Controller
     public function rentMovie(Request $request)
     {
         $movie = Movie::where('id', '=', $request['movieId'])->get()[0];
-        error_log($movie);
 
         $userId = auth()->user()->id;
 
@@ -74,7 +73,6 @@ class RentalController extends Controller
         foreach ($rentals as $rental) {
             foreach ($rental->movies as $rentedMovie) {
                 if ($rentedMovie->id === $movie->id) {
-                    error_log($rentedMovie->id . ' -> ' . $movie->id);
                     return ErrorController::handleError('Ten film jest już przez Ciebie wypożyczony!', 400, 'failed');
                 }
             }
@@ -179,9 +177,7 @@ class RentalController extends Controller
 
                 if ($rental->user_id === $userId) {;
                     //* If rental expired make active status as false
-                    error_log($rental->expire_date < $today);
                     if ($rental->expire_date < $today) {
-                        error_log($rental);
                         $rental->update([
                             'active' => false
                         ]);

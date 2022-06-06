@@ -76,8 +76,12 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
         `/api/v1/updateUser/${formDataUser.id}`,
         formDataUser
       );
+      if (updatedUser.data.status !== 'success') {
+        throw new Error(updatedUser.data.message);
+      }
 
       getChangedRow(updatedUser.data.data[0]);
+      setSuccessMessage('Pomyślnie zmieniono dane.');
     } catch (err) {
       setErrMessage(err.message);
     } finally {
@@ -108,7 +112,6 @@ const TableComponent = ({ rows, dataType, headings, getChangedRow }) => {
         for (const el in formData) {
           dataWithImg.append(el, formData[el]);
         }
-        console.log(poster);
         dataWithImg.append('poster', poster);
         updatedMovie = await axios.post(
           `/api/v1/movies/withImg/${formData.id}`,

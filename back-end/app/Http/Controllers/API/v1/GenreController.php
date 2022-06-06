@@ -35,9 +35,6 @@ class GenreController extends Controller
 
         $genres =  Genre::select($filters)->get();
 
-        error_log($request->fields);
-        error_log('name');
-
         if(!$genres) {
             return ErrorController::handleError('Nie znaleziono żadnych wyników', 404);
         }

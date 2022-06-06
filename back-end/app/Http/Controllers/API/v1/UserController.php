@@ -113,6 +113,13 @@ class UserController extends Controller
 
         $user = User::where('id', '=', $id)->get()[0];
 
+        $emailExistsInDb = User::where('email', '=', $request['email'])->get();
+
+        if (count($emailExistsInDb) > 0 && $emailExistsInDb[0]['id'] !== $id) {
+            return ErrorController::handleError('Użytkownik o podanym adresie email istnieje w bazie danych!', 500);
+            return;
+        }
+
         if (!$user) {
             return ErrorController::handleError('Nie ma takiego użytkownika!', 404);
         }
@@ -127,7 +134,7 @@ class UserController extends Controller
         $user->update($request->all());
 
         return response([
-            'status' => 'succes',
+            'status' => 'success',
             'data' => [
                 $user
             ]

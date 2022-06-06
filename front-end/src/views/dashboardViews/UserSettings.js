@@ -50,7 +50,10 @@ const UserSettings = () => {
   const changeUserData = async (data) => {
     try {
       for (const el in data) {
-        console.log(el);
+        if (data[el] === '' || data[el].includes('<script>')) {
+          setErrMessage('Uzupełnij dane!');
+          return;
+        }
       }
       if (userAge(data.birth_date) < 12) {
         throw new Error('Podaj poprawną datę urodzenia!');

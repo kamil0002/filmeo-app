@@ -22,8 +22,6 @@ class WelcomeMail extends Mailable
     public function __construct($name)
     {
         $this->name = $name;
-        error_log($this->name);
-        error_log($name);
     }
 
     /**

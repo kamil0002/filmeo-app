@@ -27,7 +27,6 @@ const Movies = () => {
         const searchParams = new URLSearchParams(search);
 
         const movieId = +searchParams.get('movie');
-        console.log(movieId);
         const res = await axios.post('api/v1/rentMovie', {
           movieId,
         });
